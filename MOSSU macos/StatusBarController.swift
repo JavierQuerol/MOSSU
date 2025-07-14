@@ -7,29 +7,68 @@ class StatusBarController {
         statusItem = NSStatusBar.system.statusItem(withLength: 18)
         statusItem.button?.title = ""
         statusItem.button?.image = NSImage(named: "AppIcon")
-        statusItem.button?.image?.size = NSSize(width: 28, height: 28)
+        statusItem.button?.image?.size = NSSize(width: 18, height: 18)
     }
 
-    func update(validToken: Bool,
-                text: String?,
-                office: Office?,
-                lastUpdate: Date?,
-                name: String,
-                paused: Bool,
-                authSelector: Selector,
-                pauseSelector: Selector,
-                holidaySelector: Selector,
-                updateSelector: Selector) {
+    func update(validToken: Bool, text: String?, office: Office?, lastUpdate: Date?, name: String, paused: Bool, holidayEndDate: Date?, authSelector: Selector, pauseSelector: Selector, holidaySelector: Selector, updateSelector: Selector) {
         NSApp.setActivationPolicy(.accessory)
-        statusItem.configureMenus(validToken: validToken,
-                                  text: text,
-                                  office: office,
-                                  lastUpdate: lastUpdate,
-                                  name: name,
-                                  paused: paused,
-                                  authSelector: authSelector,
-                                  pauseSelector: pauseSelector,
-                                  holidaySelector: holidaySelector,
-                                  updateSelector: updateSelector)
+            var composedText: String?
+            if let office = office {
+                statusItem.button?.image = office.barIconImage
+                composedText = "\(name) está \(office.text)"
+            } else {
+                statusItem.button?.image = NSImage(named: "AppIcon")
+                composedText = text
+            }
+            statusItem.button?.title = ""
+            
+            let menu = NSMenu()
+            
+            if !validToken {
+                let status = NSMenuItem(title: "🔴 Requiere autorización", action: authSelector, keyEquivalent: "")
+                menu.addItem(status)
+            }
+            
+            menu.addItem(NSMenuItem.separator())
+            
+            if let composedText = composedText {
+                let versionItem = NSMenuItem(title: composedText, action: nil, keyEquivalent: "")
+                menu.addItem(versionItem)
+            }
+            
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "es_ES")
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            let dateString = formatter.string(from: lastUpdate ?? Date())
+            let lastUpdate = NSMenuItem(title: "Actualizado el \(dateString)", action: nil , keyEquivalent: "")
+            menu.addItem(lastUpdate)
+            
+            menu.addItem(NSMenuItem.separator())
+            
+            let pausedText = paused ? "▶️ Reanudar actualizaciones" : "⏸️ Pausar actualizaciones"
+            let pausedItem = NSMenuItem(title: pausedText, action: pauseSelector, keyEquivalent: "")
+            menu.addItem(pausedItem)
+        
+            if let endDate = holidayEndDate, paused {
+                formatter.timeStyle = .none
+                let endString = formatter.string(from: endDate)
+                let holidayInfo = NSMenuItem(title: "🌴 Vacaciones hasta \(endString)", action: nil, keyEquivalent: "")
+                menu.addItem(holidayInfo)
+            } else {
+                let holidaysModeText = "🌴 Activar modo vacaciones"
+                let holidaysModeItem = NSMenuItem(title: holidaysModeText, action: holidaySelector, keyEquivalent: "")
+                menu.addItem(holidaysModeItem)
+            }
+            
+            menu.addItem(NSMenuItem.separator())
+            
+            let updateItem = NSMenuItem(title: "Buscar actualizaciones…", action: updateSelector, keyEquivalent: "")
+            menu.addItem(updateItem)
+
+            menu.addItem(NSMenuItem.separator())
+
+            menu.addItem(NSMenuItem(title: "Salir", action: #selector(NSApplication.terminate(_:)), keyEquivalent: ""))
+            statusItem.menu = menu
     }
 }

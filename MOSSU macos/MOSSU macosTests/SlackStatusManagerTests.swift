@@ -16,4 +16,17 @@ final class SlackStatusManagerTests: XCTestCase {
         manager.sendHoliday()
         XCTAssertTrue(manager.paused)
     }
+    
+    func testSendHolidayWithDateStoresEndDate() {
+            let manager = SlackStatusManager()
+            let date = Date().addingTimeInterval(3600)
+            manager.sendHoliday(until: date)
+            guard let storedDate = manager.holidayEndDate else {
+                XCTFail("holidayEndDate should not be nil")
+                return
+            }
+
+            XCTAssertEqual(storedDate.timeIntervalSinceReferenceDate, date.timeIntervalSinceReferenceDate, accuracy: 1)
+            XCTAssertTrue(manager.paused)
+        }
 }
