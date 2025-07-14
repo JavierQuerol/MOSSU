@@ -35,7 +35,7 @@ extension NSScreen {
 }
 
 extension NSImage {
-    static func imageFromEmoji(_ emoji: String, size: CGFloat = 18) -> NSImage {
+    static func imageFromEmoji(_ emoji: String, size: CGFloat = 14) -> NSImage {
         let font = NSFont.systemFont(ofSize: size)
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font
@@ -49,70 +49,5 @@ extension NSImage {
         image.unlockFocus()
 
         return image
-    }
-}
-
-extension NSStatusItem {
-    func configureMenus(validToken: Bool,
-                        text: String?,
-                        office: Office?,
-                        lastUpdate: Date?,
-                        name: String,
-                        paused: Bool,
-                        authSelector: Selector,
-                        pauseSelector: Selector,
-                        holidaySelector: Selector,
-                        updateSelector: Selector) {
-        var composedText: String?
-        if let office = office {
-            button?.image = office.barIconImage
-            composedText = "\(name) está \(office.text)"
-        } else {
-            button?.image = NSImage(named: "AppIcon")
-            composedText = text
-        }
-        button?.title = ""
-        
-        let menu = NSMenu()
-        
-        if !validToken {
-            let status = NSMenuItem(title: "🔴 Requiere autorización", action: authSelector, keyEquivalent: "")
-            menu.addItem(status)
-        }
-        
-        menu.addItem(NSMenuItem.separator())
-        
-        if let composedText = composedText {
-            let versionItem = NSMenuItem(title: composedText, action: nil, keyEquivalent: "")
-            menu.addItem(versionItem)
-        }
-        
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "es_ES")
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        let dateString = formatter.string(from: lastUpdate ?? Date())
-        let lastUpdate = NSMenuItem(title: "Actualizado el \(dateString)", action: nil , keyEquivalent: "")
-        menu.addItem(lastUpdate)
-        
-        menu.addItem(NSMenuItem.separator())
-        
-        let pausedText = paused ? "▶️ Reanudar actualizaciones" : "⏸️ Pausar actualizaciones"
-        let pausedItem = NSMenuItem(title: pausedText, action: pauseSelector, keyEquivalent: "")
-        menu.addItem(pausedItem)
-        
-        let holidaysModeText = "🌴 Activar modo vacaciones"
-        let holidaysModeItem = NSMenuItem(title: holidaysModeText, action: holidaySelector, keyEquivalent: "")
-        menu.addItem(holidaysModeItem)
-        
-        menu.addItem(NSMenuItem.separator())
-        
-        let updateItem = NSMenuItem(title: "Buscar actualizaciones…", action: updateSelector, keyEquivalent: "")
-        menu.addItem(updateItem)
-
-        menu.addItem(NSMenuItem.separator())
-
-        menu.addItem(NSMenuItem(title: "Salir", action: #selector(NSApplication.terminate(_:)), keyEquivalent: ""))
-        self.menu = menu
     }
 }

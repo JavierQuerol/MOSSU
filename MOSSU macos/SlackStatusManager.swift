@@ -8,13 +8,16 @@ protocol SlackStatusManagerDelegate: AnyObject {
 
 class SlackStatusManager: NSObject {
     weak var delegate: SlackStatusManagerDelegate?
-
-    var token: String?
     var name: String = "El muchacho"
     var paused: Bool = false
     var lastUpdate: Date?
+    var holidayEndDate: Date?
+    private var holidayTimer: Timer?
     var currentOffice: Office? {
         didSet { delegate?.slackStatusManager(self, didUpdate: currentOffice) }
+    }
+    var token: String? {
+        didSet { UserDefaults.standard.set(token, forKey: "token") }
     }
 
     private let locationManager = CLLocationManager()
@@ -43,8 +46,8 @@ class SlackStatusManager: NSObject {
                 let office = Office.given(emoji: status)
                 self.currentOffice = office
             case .failure:
-                UserDefaults.standard.removeObject(forKey: "token")
                 self.token = nil
+                UserDefaults.standard.removeObject(forKey: "token")
             }
             self.reachability.startInternetTracking { [weak self] hasInternet in
                 guard let self = self else { return }
@@ -57,18 +60,51 @@ class SlackStatusManager: NSObject {
 
     func sendHoliday() {
         paused = true
+        holidayEndDate = nil
+        holidayTimer?.invalidate()
         sendToSlack(office: holiday)
+    }
+    
+    func sendHoliday(until endDate: Date) {
+        paused = true
+        scheduleHolidayTimer()
+        sendToSlack(office: holiday)
+        holidayEndDate = endDate
+    }
+    
+    private func scheduleHolidayTimer() {
+        holidayTimer?.invalidate()
+        guard let endDate = holidayEndDate else { return }
+        let interval = endDate.timeIntervalSinceNow
+        if interval > 0 {
+            holidayTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+                guard let self = self else { return }
+                self.paused = false
+                self.holidayEndDate = nil
+                self.startTracking()
+            }
+        } else {
+            paused = false
+            holidayEndDate = nil
+            startTracking()
+        }
     }
 
     func togglePause() {
         paused.toggle()
         if !paused {
+            holidayEndDate = nil
             startTracking()
         }
     }
 
     private func sendToSlack(office: Office) {
         locationManager.stopUpdatingLocation()
+        
+        if Date() <= holidayEndDate ?? Date(timeIntervalSinceNow: -10000000) {
+            print("Not checking status, holiday not over yet")
+            return
+        }
         if currentOffice != nil {
             let weekday = Calendar.current.component(.weekday, from: Date())
             let hour = Calendar.current.component(.hour, from: Date())
@@ -90,11 +126,14 @@ class SlackStatusManager: NSObject {
             guard let self = self else { return }
             print("actualizado correctamente a \(office.text)")
             self.lastUpdate = Date()
-            if error == nil, self.currentOffice != office {
+            guard error == nil else {
+                self.token = nil
+                UserDefaults.standard.removeObject(forKey: "token")
+                return
+            }
+            if self.currentOffice != office {
                 self.currentOffice = office
                 self.delegate?.slackStatusManager(self, showMessage: office.text)
-            } else {
-                self.token = nil
             }
         }
     }

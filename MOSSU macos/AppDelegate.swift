@@ -41,7 +41,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 print("Received token from url: \(token ?? "nil")")
                 
                 if let token = token {
-                    UserDefaults.standard.set(token, forKey: "token")
                     slackManager.token = token
                     slackManager.requestAuthorization()
                     slackManager.currentOffice = nil
@@ -79,20 +78,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func setHoliday() {
         let alert = NSAlert()
-        alert.messageText = "¿Hasta qué día estás de vacaciones?"
-        alert.informativeText = "Las notificaciones estarán pausadas hasta la fecha seleccionada."
+        alert.messageText = "Modo vacaciones"
+        alert.informativeText = "Selecciona hasta cuándo quieres pausar las notificaciones"
+        let datePicker = NSDatePicker(frame: NSRect(x: 0, y: 0, width: 150, height: 150))
+        datePicker.datePickerElements = [.yearMonthDay]
+        datePicker.dateValue = Date().addingTimeInterval(86400)
+        datePicker.datePickerStyle = .clockAndCalendar
+        alert.accessoryView = datePicker
         alert.addButton(withTitle: "Aceptar")
         alert.addButton(withTitle: "Cancelar")
-
-        let datePicker = NSDatePicker(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
-        datePicker.datePickerElements = [.yearMonthDay]
-        datePicker.dateValue = Date().addingTimeInterval(24 * 60 * 60)
-        alert.accessoryView = datePicker
-
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
-            notifier.mute(until: datePicker.dateValue)
-            slackManager.sendHoliday()
+            slackManager.sendHoliday(until: datePicker.dateValue)
+            updateStatusMenu(office: holiday)
         }
     }
 
@@ -121,6 +119,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                    lastUpdate: slackManager.lastUpdate,
                                    name: slackManager.name,
                                    paused: slackManager.paused,
+                                   holidayEndDate: slackManager.holidayEndDate,
                                    authSelector: #selector(showAuth),
                                    pauseSelector: #selector(pauseOrResumeUpdates),
                                    holidaySelector: #selector(setHoliday),
