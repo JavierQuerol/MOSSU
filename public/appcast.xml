@@ -3,7 +3,7 @@
 	<channel>
 		<title>MOSSU</title>
 		<item>
-			<enclosure url="https://mossu.vercel.app/MOSSU.zip" sparkle:version="1.0" sparkle:shortVersionString="1.0" type="application/octet-stream" sparkle:edSignature="6bqEFqnz8Lz1oWjZADw0/ALsFMC03WCQy8ygPmQF14rb///ZZ/3CCOQ2TXlWKRoueLnW+m1Tv+yZSXjymNVJAQ==" length="2040521"/>
+			<enclosure url="https://mossu.vercel.app/MOSSU.zip" sparkle:version="1.0" sparkle:shortVersionString="1.0" type="application/octet-stream" sparkle:edSignature="bUT2nX4ZgAGVnuYyTCx2XN8vxnauyGszPKn9h+JVP5Ph4lFmqpvIA4iSTIDYExoAxoq/FwQzE0piKs6dvTteCg==" length="2043535"/>
 		</item>
 	</channel>
 </rss>
