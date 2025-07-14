@@ -1,0 +1,11 @@
+{
+  "name": "slack-oauth-vercel",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "scripts": {
+    "test": "node --experimental-test-module-mocks --test"
+  }
+}
