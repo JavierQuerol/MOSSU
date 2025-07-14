@@ -78,7 +78,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func setHoliday() {
-        slackManager.sendHoliday()
+        let alert = NSAlert()
+        alert.messageText = "¿Hasta qué día estás de vacaciones?"
+        alert.informativeText = "Las notificaciones estarán pausadas hasta la fecha seleccionada."
+        alert.addButton(withTitle: "Aceptar")
+        alert.addButton(withTitle: "Cancelar")
+
+        let datePicker = NSDatePicker(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+        datePicker.datePickerElements = [.yearMonthDay]
+        datePicker.dateValue = Date().addingTimeInterval(24 * 60 * 60)
+        alert.accessoryView = datePicker
+
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            notifier.mute(until: datePicker.dateValue)
+            slackManager.sendHoliday()
+        }
     }
 
     @objc func pauseOrResumeUpdates() {
