@@ -59,6 +59,7 @@ extension NSStatusItem {
                         lastUpdate: Date?,
                         name: String,
                         paused: Bool,
+                        holidayEndDate: Date?,
                         authSelector: Selector,
                         pauseSelector: Selector,
                         holidaySelector: Selector,
@@ -100,6 +101,12 @@ extension NSStatusItem {
         let pausedText = paused ? "▶️ Reanudar actualizaciones" : "⏸️ Pausar actualizaciones"
         let pausedItem = NSMenuItem(title: pausedText, action: pauseSelector, keyEquivalent: "")
         menu.addItem(pausedItem)
+
+        if let endDate = holidayEndDate, paused {
+            let endString = formatter.string(from: endDate)
+            let holidayInfo = NSMenuItem(title: "Vacaciones hasta \(endString)", action: nil, keyEquivalent: "")
+            menu.addItem(holidayInfo)
+        }
         
         let holidaysModeText = "🌴 Activar modo vacaciones"
         let holidaysModeItem = NSMenuItem(title: holidaysModeText, action: holidaySelector, keyEquivalent: "")

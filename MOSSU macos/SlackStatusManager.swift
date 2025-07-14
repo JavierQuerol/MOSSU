@@ -12,6 +12,8 @@ class SlackStatusManager: NSObject {
     var token: String?
     var name: String = "El muchacho"
     var paused: Bool = false
+    var holidayEndDate: Date?
+    private var holidayTimer: Timer?
     var lastUpdate: Date?
     var currentOffice: Office? {
         didSet { delegate?.slackStatusManager(self, didUpdate: currentOffice) }
@@ -57,7 +59,34 @@ class SlackStatusManager: NSObject {
 
     func sendHoliday() {
         paused = true
+        holidayEndDate = nil
+        holidayTimer?.invalidate()
         sendToSlack(office: holiday)
+    }
+
+    func sendHoliday(until endDate: Date) {
+        paused = true
+        holidayEndDate = endDate
+        scheduleHolidayTimer()
+        sendToSlack(office: holiday)
+    }
+
+    private func scheduleHolidayTimer() {
+        holidayTimer?.invalidate()
+        guard let endDate = holidayEndDate else { return }
+        let interval = endDate.timeIntervalSinceNow
+        if interval > 0 {
+            holidayTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+                guard let self = self else { return }
+                self.paused = false
+                self.holidayEndDate = nil
+                self.startTracking()
+            }
+        } else {
+            paused = false
+            holidayEndDate = nil
+            startTracking()
+        }
     }
 
     func togglePause() {
