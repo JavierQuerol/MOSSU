@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+	<channel>
+		<title>MOSSU</title>
+		<item>
+			<enclosure url="https://mossu.vercel.app/MOSSU.zip" sparkle:version="1.0" sparkle:shortVersionString="1.0" type="application/octet-stream" sparkle:edSignature="eJOl3upFtgmds3EIeNBQ4/ukfaUzvqFQ/YoEVud9qwG0nDClRvLgXumSoVu5GE9pCmxwZT+u/VsYe6y+gjqCBA==" length="2040523"/>
+		</item>
+	</channel>
+</rss>

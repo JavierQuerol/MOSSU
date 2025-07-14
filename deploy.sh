@@ -1,0 +1,57 @@
+#!/bin/bash
+
+set -e
+
+APP_NAME="MOSSU"
+SCHEME="MOSSU"
+CONFIGURATION="Release"
+ARCHIVE_PATH="build/${APP_NAME}.xcarchive"
+EXPORT_PATH="build/export"
+APP_PATH="${EXPORT_PATH}/${APP_NAME}.app"
+ZIP_PATH="public/${APP_NAME}.zip"
+SIGN_IDENTITY="Apple Development: Javier Querol Morata (VWXPT76R65)"
+DEPLOYMENT_SERVER="Vercel"
+
+echo "🛠 Archivando la app..."
+xcodebuild -quiet -scheme "$SCHEME" \
+  -configuration "$CONFIGURATION" \
+  -archivePath "$ARCHIVE_PATH" \
+  -sdk macosx \
+  clean archive
+
+echo "📦 Exportando la app desde el archive..."
+mkdir -p "$EXPORT_PATH"
+cp -R "$ARCHIVE_PATH/Products/Applications/${APP_NAME}.app" "$EXPORT_PATH"
+
+echo "🔏 Firmando la app (si procede)..."
+codesign --deep --force --verify \
+  --sign "$SIGN_IDENTITY" "$APP_PATH"
+
+echo "📁 Comprimendo la app para Sparkle..."
+ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
+
+echo "🔐 Generando firma con Sparkle..."
+SIGNATURE=$(sign_update "$ZIP_PATH")
+
+echo "✅ Firma generada: $SIGNATURE"
+
+# (Opcional) Generar feed.xml
+cat <<EOF > public/appcast.xml
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+	<channel>
+		<title>MOSSU</title>
+		<item>
+			<enclosure url="https://mossu.vercel.app/${APP_NAME}.zip" sparkle:version="1.0" sparkle:shortVersionString="1.0" type="application/octet-stream" $SIGNATURE/>
+		</item>
+	</channel>
+</rss>
+EOF
+
+echo "🚀 Todo listo. Archivo zip y appcast generados en 'public/'"
+echo "⬆ Actualizando el repo con la app y el appcast"
+git add .
+git commit -m "new version of $APP_NAME"
+git push
+
+echo "Servidor $DEPLOYMENT_SERVER actualizado "

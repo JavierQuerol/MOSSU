@@ -1,0 +1,591 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		960A08F328CB86250060F5DE /* Office.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F228CB86250060F5DE /* Office.swift */; };
+		960A08F528CB872E0060F5DE /* Slack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F428CB872E0060F5DE /* Slack.swift */; };
+		960A08FA28D06F290060F5DE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F928D06F290060F5DE /* Reachability.swift */; };
+		96341E272E22611A004D8BB6 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 96341E262E22611A004D8BB6 /* Sparkle */; };
+		966B512628D2435600CEDFB1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966B512528D2435600CEDFB1 /* Extensions.swift */; };
+		9675F0402E1FCE0800ED9A69 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9675F03F2E1FCE0500ED9A69 /* Constants.swift */; };
+		96A55E4A2E2479A50035AA17 /* OfficeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A55E382E2478DC0035AA17 /* OfficeTests.swift */; };
+		96A55E4B2E2479C70035AA17 /* SlackStatusManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A55E392E2478DC0035AA17 /* SlackStatusManagerTests.swift */; };
+		96B02EB32E23A994007FE3E8 /* SlackStatusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */; };
+		96B02EB42E23A994007FE3E8 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB02E23A994007FE3E8 /* NotificationManager.swift */; };
+		96B02EB52E23A994007FE3E8 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB22E23A994007FE3E8 /* StatusBarController.swift */; };
+		96ED6A7528C61540001226F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED6A7428C61540001226F1 /* AppDelegate.swift */; };
+		96ED6A7728C61545001226F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96ED6A7628C61545001226F1 /* Assets.xcassets */; };
+		96F0057D2E1D66EF00AF482C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F0057C2E1D66ED00AF482C /* main.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		96A55E452E24796E0035AA17 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 96ED6A6928C61540001226F1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 96ED6A7028C61540001226F1;
+			remoteInfo = SSU;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		960A08F228CB86250060F5DE /* Office.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Office.swift; sourceTree = "<group>"; };
+		960A08F428CB872E0060F5DE /* Slack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slack.swift; sourceTree = "<group>"; };
+		960A08F828CF4D360060F5DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		960A08F928D06F290060F5DE /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		966B512528D2435600CEDFB1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		9675F03F2E1FCE0500ED9A69 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		96A55E382E2478DC0035AA17 /* OfficeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeTests.swift; sourceTree = "<group>"; };
+		96A55E392E2478DC0035AA17 /* SlackStatusManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlackStatusManagerTests.swift; sourceTree = "<group>"; };
+		96A55E412E24796E0035AA17 /* MOSSUTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MOSSUTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		96B02EB02E23A994007FE3E8 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlackStatusManager.swift; sourceTree = "<group>"; };
+		96B02EB22E23A994007FE3E8 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
+		96B02EB62E23AF7E007FE3E8 /* callback.test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = callback.test.js; sourceTree = "<group>"; };
+		96B02EB82E23AF7E007FE3E8 /* callback.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = callback.js; sourceTree = "<group>"; };
+		96B02EBC2E23AF7E007FE3E8 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
+		96B02EBD2E23AF7E007FE3E8 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		96B02EBE2E23AF7E007FE3E8 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		96B02EBF2E23AF7E007FE3E8 /* appcast.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
+		96B02EC02E23AF7E007FE3E8 /* MOSSU.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = MOSSU.zip; sourceTree = "<group>"; };
+		96B02EC12E23AF7E007FE3E8 /* redirect.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = redirect.html; sourceTree = "<group>"; };
+		96B02EC32E23AF7E007FE3E8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		96EBC54C2E23246C00FBCE24 /* MOSSU.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MOSSU.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		96ED6A7428C61540001226F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		96ED6A7628C61545001226F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		96ED6A7B28C61545001226F1 /* MOSSU.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MOSSU.entitlements; sourceTree = "<group>"; };
+		96F0057C2E1D66ED00AF482C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		96A55E3E2E24796E0035AA17 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96ED6A6E28C61540001226F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96341E272E22611A004D8BB6 /* Sparkle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		96A55E3A2E2478DC0035AA17 /* MOSSU macosTests */ = {
+			isa = PBXGroup;
+			children = (
+				96A55E382E2478DC0035AA17 /* OfficeTests.swift */,
+				96A55E392E2478DC0035AA17 /* SlackStatusManagerTests.swift */,
+			);
+			path = "MOSSU macosTests";
+			sourceTree = "<group>";
+		};
+		96B02EB72E23AF7E007FE3E8 /* __tests__ */ = {
+			isa = PBXGroup;
+			children = (
+				96B02EB62E23AF7E007FE3E8 /* callback.test.js */,
+			);
+			path = __tests__;
+			sourceTree = "<group>";
+		};
+		96B02EB92E23AF7E007FE3E8 /* oauth */ = {
+			isa = PBXGroup;
+			children = (
+				96B02EB72E23AF7E007FE3E8 /* __tests__ */,
+				96B02EB82E23AF7E007FE3E8 /* callback.js */,
+			);
+			path = oauth;
+			sourceTree = "<group>";
+		};
+		96B02EBA2E23AF7E007FE3E8 /* slack */ = {
+			isa = PBXGroup;
+			children = (
+				96B02EB92E23AF7E007FE3E8 /* oauth */,
+			);
+			path = slack;
+			sourceTree = "<group>";
+		};
+		96B02EBB2E23AF7E007FE3E8 /* api */ = {
+			isa = PBXGroup;
+			children = (
+				96B02EBA2E23AF7E007FE3E8 /* slack */,
+			);
+			path = api;
+			sourceTree = "<group>";
+		};
+		96B02EC22E23AF7E007FE3E8 /* public */ = {
+			isa = PBXGroup;
+			children = (
+				96B02EBF2E23AF7E007FE3E8 /* appcast.xml */,
+				96B02EC02E23AF7E007FE3E8 /* MOSSU.zip */,
+				96B02EC12E23AF7E007FE3E8 /* redirect.html */,
+			);
+			path = public;
+			sourceTree = "<group>";
+		};
+		96ED6A6828C61540001226F1 = {
+			isa = PBXGroup;
+			children = (
+				96ED6A7328C61540001226F1 /* MOSSU macos */,
+				96EBC54C2E23246C00FBCE24 /* MOSSU.app */,
+				96B02EBB2E23AF7E007FE3E8 /* api */,
+				96B02EC22E23AF7E007FE3E8 /* public */,
+				96B02EBC2E23AF7E007FE3E8 /* deploy.sh */,
+				96B02EBD2E23AF7E007FE3E8 /* LICENSE */,
+				96B02EBE2E23AF7E007FE3E8 /* package.json */,
+				96B02EC32E23AF7E007FE3E8 /* README.md */,
+				96A55E412E24796E0035AA17 /* MOSSUTests.xctest */,
+			);
+			sourceTree = "<group>";
+		};
+		96ED6A7328C61540001226F1 /* MOSSU macos */ = {
+			isa = PBXGroup;
+			children = (
+				960A08F828CF4D360060F5DE /* Info.plist */,
+				96ED6A7428C61540001226F1 /* AppDelegate.swift */,
+				96B02EB02E23A994007FE3E8 /* NotificationManager.swift */,
+				96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */,
+				96B02EB22E23A994007FE3E8 /* StatusBarController.swift */,
+				960A08F928D06F290060F5DE /* Reachability.swift */,
+				960A08F228CB86250060F5DE /* Office.swift */,
+				9675F03F2E1FCE0500ED9A69 /* Constants.swift */,
+				960A08F428CB872E0060F5DE /* Slack.swift */,
+				966B512528D2435600CEDFB1 /* Extensions.swift */,
+				96F0057C2E1D66ED00AF482C /* main.swift */,
+				96ED6A7628C61545001226F1 /* Assets.xcassets */,
+				96ED6A7B28C61545001226F1 /* MOSSU.entitlements */,
+				96A55E3A2E2478DC0035AA17 /* MOSSU macosTests */,
+			);
+			path = "MOSSU macos";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		96A55E402E24796E0035AA17 /* MOSSUTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 96A55E472E24796E0035AA17 /* Build configuration list for PBXNativeTarget "MOSSUTests" */;
+			buildPhases = (
+				96A55E3D2E24796E0035AA17 /* Sources */,
+				96A55E3E2E24796E0035AA17 /* Frameworks */,
+				96A55E3F2E24796E0035AA17 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				96A55E462E24796E0035AA17 /* PBXTargetDependency */,
+			);
+			name = MOSSUTests;
+			packageProductDependencies = (
+			);
+			productName = MOSSUTests;
+			productReference = 96A55E412E24796E0035AA17 /* MOSSUTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		96ED6A7028C61540001226F1 /* MOSSU */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 96ED6A7E28C61545001226F1 /* Build configuration list for PBXNativeTarget "MOSSU" */;
+			buildPhases = (
+				96ED6A6D28C61540001226F1 /* Sources */,
+				96ED6A6E28C61540001226F1 /* Frameworks */,
+				96ED6A6F28C61540001226F1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MOSSU;
+			productName = SSU;
+			productReference = 96EBC54C2E23246C00FBCE24 /* MOSSU.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		96ED6A6928C61540001226F1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					96A55E402E24796E0035AA17 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 96ED6A7028C61540001226F1;
+					};
+					96ED6A7028C61540001226F1 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 96ED6A6C28C61540001226F1 /* Build configuration list for PBXProject "MOSSU" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 96ED6A6828C61540001226F1;
+			packageReferences = (
+				96341E252E22611A004D8BB6 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
+			productRefGroup = 96ED6A6828C61540001226F1;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				96ED6A7028C61540001226F1 /* MOSSU */,
+				96A55E402E24796E0035AA17 /* MOSSUTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		96A55E3F2E24796E0035AA17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96ED6A6F28C61540001226F1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96ED6A7728C61545001226F1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		96A55E3D2E24796E0035AA17 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96A55E4B2E2479C70035AA17 /* SlackStatusManagerTests.swift in Sources */,
+				96A55E4A2E2479A50035AA17 /* OfficeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96ED6A6D28C61540001226F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96ED6A7528C61540001226F1 /* AppDelegate.swift in Sources */,
+				96F0057D2E1D66EF00AF482C /* main.swift in Sources */,
+				966B512628D2435600CEDFB1 /* Extensions.swift in Sources */,
+				960A08F528CB872E0060F5DE /* Slack.swift in Sources */,
+				960A08F328CB86250060F5DE /* Office.swift in Sources */,
+				960A08FA28D06F290060F5DE /* Reachability.swift in Sources */,
+				9675F0402E1FCE0800ED9A69 /* Constants.swift in Sources */,
+				96B02EB32E23A994007FE3E8 /* SlackStatusManager.swift in Sources */,
+				96B02EB42E23A994007FE3E8 /* NotificationManager.swift in Sources */,
+				96B02EB52E23A994007FE3E8 /* StatusBarController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		96A55E462E24796E0035AA17 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 96ED6A7028C61540001226F1 /* MOSSU */;
+			targetProxy = 96A55E452E24796E0035AA17 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		96A55E482E24796E0035AA17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4385X6LBF4;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.javierquerol.MOSSUTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MOSSU.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MOSSU";
+			};
+			name = Debug;
+		};
+		96A55E492E24796E0035AA17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4385X6LBF4;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.javierquerol.MOSSUTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MOSSU.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MOSSU";
+			};
+			name = Release;
+		};
+		96ED6A7C28C61545001226F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 4385X6LBF4;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		96ED6A7D28C61545001226F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4385X6LBF4;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		96ED6A7F28C61545001226F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "MOSSU macos/MOSSU.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 4385X6LBF4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MOSSU macos/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.javierquerol.mossu;
+				PRODUCT_NAME = MOSSU;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		96ED6A8028C61545001226F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "MOSSU macos/MOSSU.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 4385X6LBF4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MOSSU macos/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.javierquerol.mossu;
+				PRODUCT_NAME = MOSSU;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		96A55E472E24796E0035AA17 /* Build configuration list for PBXNativeTarget "MOSSUTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				96A55E482E24796E0035AA17 /* Debug */,
+				96A55E492E24796E0035AA17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		96ED6A6C28C61540001226F1 /* Build configuration list for PBXProject "MOSSU" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				96ED6A7C28C61545001226F1 /* Debug */,
+				96ED6A7D28C61545001226F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		96ED6A7E28C61545001226F1 /* Build configuration list for PBXNativeTarget "MOSSU" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				96ED6A7F28C61545001226F1 /* Debug */,
+				96ED6A8028C61545001226F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		96341E252E22611A004D8BB6 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		96341E262E22611A004D8BB6 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96341E252E22611A004D8BB6 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 96ED6A6928C61540001226F1 /* Project object */;
+}
