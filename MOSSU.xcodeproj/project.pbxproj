@@ -199,7 +199,7 @@
 				96ED6A6D28C61540001226F1 /* Sources */,
 				96ED6A6E28C61540001226F1 /* Frameworks */,
 				96ED6A6F28C61540001226F1 /* Resources */,
-				9662601E2E27A8B1002253FE /* ShellScript */,
+				966260202E27BD25002253FE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -270,7 +270,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9662601E2E27A8B1002253FE /* ShellScript */ = {
+		966260202E27BD25002253FE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -282,11 +282,10 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(PROJECT_DIR)/$(INFOPLIST_FILE)",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "INFO_PLIST=\"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n\n# Obtener el valor actual o usar 0 si no existe\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFO_PLIST\" 2>/dev/null)\nif [[ $? -ne 0 ]]; then\n  buildNumber=0\nfi\n\n# Incrementar y escribir\nnewBuildNumber=$((buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $newBuildNumber\" \"$INFO_PLIST\" 2>/dev/null || \\\n/usr/libexec/PlistBuddy -c \"Add :CFBundleVersion string $newBuildNumber\" \"$INFO_PLIST\"\n\necho \"Nuevo build: $newBuildNumber\"\n";
+			shellScript = "#!/bin/bash\nxcrun agvtool bump -all\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -516,12 +515,13 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.javierquerol.mossu;
 				PRODUCT_NAME = MOSSU;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -549,12 +549,13 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.javierquerol.mossu;
 				PRODUCT_NAME = MOSSU;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};

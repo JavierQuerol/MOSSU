@@ -17,13 +17,13 @@
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>5</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
 	<string>https://mossu.vercel.app/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>0COFNzWLdS4OfTVzionon0LXc5U21sszAxDjs0AQyMY=</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
 </dict>
 </plist>
