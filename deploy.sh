@@ -34,7 +34,7 @@ ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 echo "🚮 Borrando el fichero appcast.xml"
 rm -f "$PUBLIC_PATH/appcast.xml"
 
-echo "🔐 Generando firma con Sparkle..."
+echo "🔐 Firmando y generando el appcast con Sparkle..."
 APPCAST=$(generate_appcast "$PUBLIC_PATH")
 
 echo "✅ Appcast actualizado: $APPCAST"
