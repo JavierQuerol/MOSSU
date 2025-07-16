@@ -31,23 +31,10 @@ echo "📁 Comprimendo la app para Sparkle..."
 ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
 echo "🔐 Generando firma con Sparkle..."
-SIGNATURE=$(sign_update "$ZIP_PATH")
+APPCAST=$(generate_appcast "$ZIP_PATH")
+#SIGNATURE=$(sign_update "$ZIP_PATH")
 
-echo "✅ Firma generada: $SIGNATURE"
-
-# (Opcional) Generar feed.xml
-cat <<EOF > public/appcast.xml
-<?xml version="1.0" standalone="yes"?>
-<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
-	<channel>
-		<title>MOSSU</title>
-		<item>
-			<enclosure url="https://mossu.vercel.app/${APP_NAME}.zip" sparkle:version="1.0" sparkle:shortVersionString="1.0" type="application/octet-stream" $SIGNATURE/>
-		</item>
-	</channel>
-</rss>
-EOF
-
+echo "✅ Appcast actualizado: $APPCAST"
 echo "🚀 Todo listo. Archivo zip y appcast generados en 'public/'"
 echo "⬆ Actualizando el repo con la app y el appcast"
 git add .
