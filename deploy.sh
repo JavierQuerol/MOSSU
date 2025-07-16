@@ -33,7 +33,6 @@ ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
 echo "🔐 Generando firma con Sparkle..."
 APPCAST=$(generate_appcast "$PUBLIC_PATH")
-#SIGNATURE=$(sign_update "$ZIP_PATH")
 
 echo "✅ Appcast actualizado: $APPCAST"
 echo "🚀 Todo listo. Archivo zip y appcast generados en 'public/'"
