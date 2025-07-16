@@ -32,7 +32,7 @@ echo "📁 Comprimendo la app para Sparkle..."
 ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
 echo "🔐 Generando firma con Sparkle..."
-rm "$PUBLIC_PATH/appcast.xml"
+rm -f "$PUBLIC_PATH/appcast.xml"
 APPCAST=$(generate_appcast "$PUBLIC_PATH")
 
 echo "✅ Appcast actualizado: $APPCAST"
