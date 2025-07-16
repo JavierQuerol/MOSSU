@@ -8,7 +8,8 @@ CONFIGURATION="Release"
 ARCHIVE_PATH="build/${APP_NAME}.xcarchive"
 EXPORT_PATH="build/export"
 APP_PATH="${EXPORT_PATH}/${APP_NAME}.app"
-ZIP_PATH="public/${APP_NAME}.zip"
+PUBLIC_PATH="public"
+ZIP_PATH="${PUBLIC_PATH}/${APP_NAME}.zip"
 SIGN_IDENTITY="Apple Development: Javier Querol Morata (VWXPT76R65)"
 DEPLOYMENT_SERVER="Vercel"
 
@@ -31,7 +32,7 @@ echo "📁 Comprimendo la app para Sparkle..."
 ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
 echo "🔐 Generando firma con Sparkle..."
-APPCAST=$(generate_appcast "$ZIP_PATH")
+APPCAST=$(generate_appcast "$PUBLIC_PATH")
 #SIGNATURE=$(sign_update "$ZIP_PATH")
 
 echo "✅ Appcast actualizado: $APPCAST"
