@@ -22,10 +22,11 @@ NEW_MINOR=$((MINOR + 1))
 NEW_VERSION="$MAJOR.$NEW_MINOR"
 
 echo "Bumping version from $CURRENT_VERSION to $NEW_VERSION"
-/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $NEW_VERSION" "$PLIST_PATH" #> /dev/null
+#/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $NEW_VERSION" "$PLIST_PATH" #> /dev/null
 
 # 2. Incrementar build number con agvtool
 xcrun agvtool bump -all > /dev/null
+xcrun agvtool new-marketing-version "$NEW_VERSION" > /dev/null
 
 # 3. (Opcional) Confirmar los cambios
 NEW_BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
