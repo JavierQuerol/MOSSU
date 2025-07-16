@@ -129,7 +129,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func sendNotification(text: String) {
-        print("Enviado notificación: \(text)")
+        print("Enviado notificación : \(text)")
         notifier.send(text: text)
     }
 }
