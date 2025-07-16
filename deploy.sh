@@ -31,8 +31,10 @@ codesign --deep --force --verify \
 echo "📁 Comprimendo la app para Sparkle..."
 ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
-echo "🔐 Generando firma con Sparkle..."
+echo "🚮 Borrando el fichero appcast.xml"
 rm -f "$PUBLIC_PATH/appcast.xml"
+
+echo "🔐 Generando firma con Sparkle..."
 APPCAST=$(generate_appcast "$PUBLIC_PATH")
 
 echo "✅ Appcast actualizado: $APPCAST"
