@@ -2,12 +2,12 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
-            <title>1.1</title>
+            <title>1.2</title>
             <pubDate>Sun, 13 Jul 2025 01:34:26 +0200</pubDate>
             <sparkle:version>1</sparkle:version>
             <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="2043797" type="application/octet-stream" sparkle:edSignature="aOry/mdNz1dWhIHIoYWA4xaBW80ENgCuTDENu/Mjs4wtKH24Rwcumg9Uax3xYs7QLKdGRZBFU1mxSObzRxRlBQ=="/>
+            <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="2043783" type="application/octet-stream" sparkle:edSignature="qg+UpAsAt7iFwiv4grHelCndthFlzsbaKDNvPQm3PgCS7nVcKzITLI1iAARTybx6NOHwyd0dMxhSUyxANFY+Dg=="/>
         </item>
     </channel>
 </rss>
