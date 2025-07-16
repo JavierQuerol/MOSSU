@@ -21,9 +21,9 @@
             <title>1.2</title>
             <pubDate>Sun, 13 Jul 2025 01:34:26 +0200</pubDate>
             <sparkle:version>1</sparkle:version>
-            <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
+            <sparkle:shortVersionString>1.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="2043784" type="application/octet-stream" sparkle:edSignature="le73856NoSZJ2R7JD1kUKfGOAZY+HnZVeXZurbUv8kSC63PtxHuVr3Dvu5m1dq+QJ92i2d1SDYb+1WriQvN2DQ=="/>
+            <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="2043788" type="application/octet-stream" sparkle:edSignature="2bhGk1lWN9b5YxcYHkbHTVx0hM0dM9HouReBqgST2VjLkdYzIk5Pums5X3ORNalDgyCFhxo1DHENGeawADVkCQ=="/>
         </item>
     </channel>
 </rss>
