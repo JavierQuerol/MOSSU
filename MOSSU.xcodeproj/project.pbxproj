@@ -86,6 +86,7 @@
 			children = (
 				96A55E382E2478DC0035AA17 /* OfficeTests.swift */,
 				96A55E392E2478DC0035AA17 /* SlackStatusManagerTests.swift */,
+				96A55E412E24796E0035AA17 /* MOSSUTests.xctest */,
 			);
 			path = "MOSSU macosTests";
 			sourceTree = "<group>";
@@ -144,7 +145,6 @@
 				96B02EBD2E23AF7E007FE3E8 /* LICENSE */,
 				96B02EBE2E23AF7E007FE3E8 /* package.json */,
 				96B02EC32E23AF7E007FE3E8 /* README.md */,
-				96A55E412E24796E0035AA17 /* MOSSUTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -199,6 +199,7 @@
 				96ED6A6D28C61540001226F1 /* Sources */,
 				96ED6A6E28C61540001226F1 /* Frameworks */,
 				96ED6A6F28C61540001226F1 /* Resources */,
+				9662601E2E27A8B1002253FE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -267,6 +268,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9662601E2E27A8B1002253FE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/$(INFOPLIST_FILE)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "INFO_PLIST=\"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n\n# Obtener el valor actual o usar 0 si no existe\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFO_PLIST\" 2>/dev/null)\nif [[ $? -ne 0 ]]; then\n  buildNumber=0\nfi\n\n# Incrementar y escribir\nnewBuildNumber=$((buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $newBuildNumber\" \"$INFO_PLIST\" 2>/dev/null || \\\n/usr/libexec/PlistBuddy -c \"Add :CFBundleVersion string $newBuildNumber\" \"$INFO_PLIST\"\n\necho \"Nuevo build: $newBuildNumber\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		96A55E3D2E24796E0035AA17 /* Sources */ = {
@@ -479,7 +501,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 4385X6LBF4;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -512,7 +534,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 4385X6LBF4;
 				ENABLE_HARDENED_RUNTIME = YES;
