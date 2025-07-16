@@ -20,7 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarController = StatusBarController()
         updateStatusMenu()
         slackManager.delegate = self
-        //UserDefaults.standard.removeObject(forKey: "token")
+//        UserDefaults.standard.removeObject(forKey: "token")
+//        UserDefaults.standard.removeObject(forKey: "mutedUntil")
         if let token = UserDefaults.standard.string(forKey: "token") {
             slackManager.token = token
             slackManager.getCurrentStatus(token: token)
@@ -44,6 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     slackManager.token = token
                     slackManager.requestAuthorization()
                     slackManager.currentOffice = nil
+                    slackManager.getCurrentStatus(token: token)
                     startTracking()
                 }
             }
@@ -127,6 +129,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func sendNotification(text: String) {
+        print("Enviado notificación: \(text)")
         notifier.send(text: text)
     }
 }
@@ -137,7 +140,6 @@ extension AppDelegate: SlackStatusManagerDelegate {
     }
 
     func slackStatusManager(_ manager: SlackStatusManager, showMessage text: String) {
-        print(text)
         sendNotification(text: text)
     }
 }

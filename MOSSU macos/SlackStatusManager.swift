@@ -94,6 +94,7 @@ class SlackStatusManager: NSObject {
         paused.toggle()
         if !paused {
             holidayEndDate = nil
+            UserDefaults.standard.removeObject(forKey: "mutedUntil")
             startTracking()
         }
     }
@@ -124,7 +125,7 @@ class SlackStatusManager: NSObject {
         guard let token = token else { return }
         Slack.update(given: office, token: token) { [weak self] error in
             guard let self = self else { return }
-            print("actualizado correctamente a \(office.text)")
+            print("Slack actualizado correctamente a \(office.text)")
             self.lastUpdate = Date()
             guard error == nil else {
                 self.token = nil
@@ -132,9 +133,9 @@ class SlackStatusManager: NSObject {
                 return
             }
             if self.currentOffice != office {
-                self.currentOffice = office
-                self.delegate?.slackStatusManager(self, showMessage: office.text)
+                self.delegate?.slackStatusManager(self, showMessage: "\(office.text) \(office.emoji)")
             }
+            self.currentOffice = office
         }
     }
 }
@@ -154,6 +155,7 @@ extension SlackStatusManager: CLLocationManagerDelegate {
             return
         }
         let office = Office.given(ssid: Office.SSID.current(), currentLocation: locations.last)
+        print("ubicación actualizada \(office.text)")
         sendToSlack(office: office)
     }
 }
