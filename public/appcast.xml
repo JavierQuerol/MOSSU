@@ -5,10 +5,10 @@
         <item>
             <title>1.4</title>
             <pubDate>Sun, 13 Jul 2025 01:34:26 +0200</pubDate>
-            <sparkle:version>1</sparkle:version>
+            <sparkle:version>1.4</sparkle:version>
             <sparkle:shortVersionString>1.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="2043802" type="application/octet-stream" sparkle:edSignature="Ha5wMMazumZTlvk/9cR7p5MUsul6Glplm0J/L8Rb3lpscpXuipor585BKqAh7pOn2cQkEMIhanTd8nkVIwWCDQ=="/>
+            <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="2043809" type="application/octet-stream" sparkle:edSignature="l3NbBQ85BbPW6uBLKagZANwOTWaJ4cBkw8crtZazxZ4H51V3oTN5L+sBz4EYLdNESoE0dGLmk35dzsbylLvEBw=="/>
         </item>
     </channel>
 </rss>
