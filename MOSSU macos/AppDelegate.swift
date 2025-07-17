@@ -10,15 +10,12 @@ import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow?
-    private var statusBarController: StatusBarController?
+    var slackManager: SlackStatusManager!
     private let notifier = NotificationManager()
-    private let slackManager = SlackStatusManager()
     private let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         window = NSWindow()
-        statusBarController = StatusBarController()
-        updateStatusMenu()
         slackManager.delegate = self
 //        UserDefaults.standard.removeObject(forKey: "token")
 //        UserDefaults.standard.removeObject(forKey: "mutedUntil")
@@ -92,16 +89,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
             slackManager.sendHoliday(until: datePicker.dateValue)
-            updateStatusMenu(office: holiday)
         }
     }
 
     @objc func pauseOrResumeUpdates() {
         slackManager.togglePause()
         print(slackManager.paused ? "Actualización pausada" : "Reanudando actualizaciones")
-        if let office = slackManager.currentOffice {
-            updateStatusMenu(office: office)
-        }
     }
 
     @objc func startTracking() {
@@ -112,22 +105,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         updaterController.checkForUpdates(nil)
     }
     
-    private func updateStatusMenu(text: String? = nil, office: Office? = nil) {
-        print(text ?? office?.text ?? "")
-        guard let statusBarController = self.statusBarController else { return }
-        statusBarController.update(validToken: slackManager.token != nil,
-                                   text: text,
-                                   office: office,
-                                   lastUpdate: slackManager.lastUpdate,
-                                   name: slackManager.name,
-                                   paused: slackManager.paused,
-                                   holidayEndDate: slackManager.holidayEndDate,
-                                   authSelector: #selector(showAuth),
-                                   pauseSelector: #selector(pauseOrResumeUpdates),
-                                   holidaySelector: #selector(setHoliday),
-                                   updateSelector: #selector(checkForUpdates))
-    }
-    
     private func sendNotification(text: String) {
         print("Enviado notificación : \(text)")
         notifier.send(text: text)
@@ -136,7 +113,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 extension AppDelegate: SlackStatusManagerDelegate {
     func slackStatusManager(_ manager: SlackStatusManager, didUpdate office: Office?) {
-        updateStatusMenu(office: office)
     }
 
     func slackStatusManager(_ manager: SlackStatusManager, showMessage text: String) {

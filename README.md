@@ -32,7 +32,7 @@ El endpoint `/api/slack/oauth/callback` intercambia el `code` por el token y red
 
 ## Aplicación de macOS
 
-Abre `SSU.xcodeproj` en Xcode y compila el target **MOSSU macos**. La app utiliza el esquema
+Abre `SSU.xcodeproj` en Xcode y compila el target **MOSSU macos**. La interfaz ahora está implementada en **SwiftUI** y la app utiliza el esquema
 personalizado `mossu://oauth` para recibir el token desde el backend anterior.
 El fichero `Constants.swift` contiene los valores por defecto del `client_id`, los scopes y la URL de redirección.
 
