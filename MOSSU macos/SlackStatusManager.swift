@@ -127,7 +127,11 @@ class SlackStatusManager: NSObject {
         if hasInternet {
             guard let token = token else { return }
             Slack.update(given: office, token: token) { [weak self] error in
-                guard let self = self, error == nil else { return }
+                guard let self = self, error == nil else {
+                    self?.token = nil
+                    UserDefaults.standard.removeObject(forKey: "token")
+                    return
+                }
                 print("Slack actualizado correctamente a \(office.text)")
                 self.lastUpdate = Date()
                 if self.currentOffice != office {

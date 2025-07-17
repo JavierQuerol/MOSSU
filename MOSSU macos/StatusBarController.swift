@@ -27,6 +27,12 @@ class StatusBarController {
             if !validToken {
                 let status = NSMenuItem(title: "🔴 Requiere autorización", action: authSelector, keyEquivalent: "")
                 menu.addItem(status)
+                
+                menu.addItem(NSMenuItem.separator())
+
+                menu.addItem(NSMenuItem(title: "Salir", action: #selector(NSApplication.terminate(_:)), keyEquivalent: ""))
+                statusItem.menu = menu
+                return
             }
             
             menu.addItem(NSMenuItem.separator())

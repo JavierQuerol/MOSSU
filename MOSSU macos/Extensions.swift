@@ -50,4 +50,6 @@ extension NSImage {
 
         return image
     }
+    
+    static let colmenaDefault = imageFromEmoji("🐝")
 }
