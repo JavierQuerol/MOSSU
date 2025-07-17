@@ -22,6 +22,7 @@ class SlackStatusManager: NSObject {
 
     private let locationManager = CLLocationManager()
     private let reachability = Reachability()
+    private var hasInternet = true
 
     override init() {
         super.init()
@@ -51,6 +52,7 @@ class SlackStatusManager: NSObject {
             }
             self.reachability.startInternetTracking { [weak self] hasInternet in
                 guard let self = self else { return }
+                self.hasInternet = hasInternet
                 if hasInternet {
                     self.startTracking()
                 }
@@ -122,20 +124,17 @@ class SlackStatusManager: NSObject {
             }
         }
         
-        guard let token = token else { return }
-        Slack.update(given: office, token: token) { [weak self] error in
-            guard let self = self else { return }
-            print("Slack actualizado correctamente a \(office.text)")
-            self.lastUpdate = Date()
-            guard error == nil else {
-                self.token = nil
-                UserDefaults.standard.removeObject(forKey: "token")
-                return
+        if hasInternet {
+            guard let token = token else { return }
+            Slack.update(given: office, token: token) { [weak self] error in
+                guard let self = self, error == nil else { return }
+                print("Slack actualizado correctamente a \(office.text)")
+                self.lastUpdate = Date()
+                if self.currentOffice != office {
+                    self.delegate?.slackStatusManager(self, showMessage: office.text)
+                }
+                self.currentOffice = office
             }
-            if self.currentOffice != office {
-                self.delegate?.slackStatusManager(self, showMessage: "\(office.text) \(office.emoji)")
-            }
-            self.currentOffice = office
         }
     }
 }

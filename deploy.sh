@@ -14,19 +14,9 @@ ZIP_PATH="${PUBLIC_PATH}/${APP_NAME}.zip"
 SIGN_IDENTITY="Apple Development: Javier Querol Morata (VWXPT76R65)"
 DEPLOYMENT_SERVER="Vercel"
 
-# 2. Incrementar build number con agvtool
 xcrun agvtool bump -all > /dev/null
-
-# 3. (Opcional) Confirmar los cambios
 NEW_BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
 echo "Actualizado en el proyecto y en el target al build: $NEW_BUILD"
-
-/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $NEW_BUILD" "$PLIST_PATH"
-echo "Actualizado el target a la versión: $NEW_BUILD"
-
-xcrun agvtool new-marketing-version "$NEW_BUILD" > /dev/null
-NEW_VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$PLIST_PATH")
-echo "Actualizado el .plist a la versión: $NEW_VERSION"
 
 echo "🛠 Archivando la app..."
 xcodebuild -quiet -scheme "$SCHEME" \
