@@ -1,22 +1,23 @@
 import Cocoa
 import CoreLocation
+import SwiftUI
 
 protocol SlackStatusManagerDelegate: AnyObject {
     func slackStatusManager(_ manager: SlackStatusManager, didUpdate office: Office?)
     func slackStatusManager(_ manager: SlackStatusManager, showMessage text: String)
 }
 
-class SlackStatusManager: NSObject {
+class SlackStatusManager: NSObject, ObservableObject {
     weak var delegate: SlackStatusManagerDelegate?
-    var name: String = "El muchacho"
-    var paused: Bool = false
-    var lastUpdate: Date?
-    var holidayEndDate: Date?
+    @Published var name: String = "El muchacho"
+    @Published var paused: Bool = false
+    @Published var lastUpdate: Date?
+    @Published var holidayEndDate: Date?
     private var holidayTimer: Timer?
-    var currentOffice: Office? {
+    @Published var currentOffice: Office? {
         didSet { delegate?.slackStatusManager(self, didUpdate: currentOffice) }
     }
-    var token: String? {
+    @Published var token: String? {
         didSet { UserDefaults.standard.set(token, forKey: "token") }
     }
 
