@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Redirigiendo a la app...</title>
+  <title>MOSSU</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 	* {
@@ -193,16 +193,16 @@
 	        .content {
 	            position: relative;
 	            z-index: 1;
-	            padding: 4rem 2rem;
+	            padding: 2rem 2rem;
 	            text-align: center;
 	            max-width: 1200px;
-	            margin: 2rem auto;
+	            margin: 0 auto;
 	        }
 
 	        .title {
 	            font-size: 3rem;
-	            font-weight: 700;
-	            margin-bottom: 1rem;
+	            font-weight: 1200;
+	            margin-bottom: 0rem;
 	            background: linear-gradient(135deg, #6366f1, #a855f7, #6366f1);
 	            -webkit-background-clip: text;
 	            -webkit-text-fill-color: transparent;
@@ -221,14 +221,19 @@
 
 	        .card {
 	            background: rgba(15, 15, 35, 0.7);
-	            border: 3px solid rgba(139, 92, 246, 0.2);
+	            border: 1px solid rgba(139, 92, 246, 0.2);
 	            border-radius: 7rem;
-	            padding: 2rem;
-	            margin: 2rem 0;
-	            backdrop-filter: blur(10px);
-	            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.2);
-                margin: 0rem 2rem 0 2rem;
+	            padding: 1rem 4rem;
+	            backdrop-filter: blur(20px);
+	            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+                margin: 2rem auto;
+				display: inline-block;
 	        }
+			
+			.card a {
+			  text-decoration: none;
+			  color: inherit;
+			}
 
 	        .glow-effect {
 	            position: relative;
@@ -275,27 +280,6 @@
 	            }
 	        }
   </style>
-  <script>
-    function redirectAndClose() {
-      const params = new URLSearchParams(window.location.search);
-      const token = params.get("token");
-      const user = params.get("user");
-
-      if (token && user) {
-        // Abrir la app macOS
-        window.location.href = `mossu://oauth?token=${encodeURIComponent(token)}&user=${encodeURIComponent(user)}`;
-
-        // Intentar cerrar la ventana tras 2 segundos
-        setTimeout(() => {
-          window.open('', '_self');
-          window.close();
-        }, 10000);
-      } else {
-        document.body.innerText = "Faltan parámetros en la redirección.";
-      }
-    }
-    window.onload = redirectAndClose;
-  </script>
 </head>
 <body>
 <div class="bg-container"></div>
@@ -413,10 +397,16 @@
     </div>
 	<div class="content">
 	    <img src="icon.png" alt="Icono de MOSSU" style="width: 200px; height: 200px;" />
-        <div class="card">
-			<h1 class="title">Redigiendo a MOSSU</h1>
-            <h2>Puedes cerrar esta página</h2>
-            </div>
+			<h1 class="title">MOSSU</h1>
+			<p>Mercadona Online Slack Status Updater</p>
+		<div class="card">
+			<h2><a href="MOSSU.zip">Descargar</a></h2>
+		</div>
+		<div class="content">
+			<h3>Instrucciones de instalación:</h3>
+		<img src="instructions1.png" style="width: calc(30vw - 4rem); max-width: 100%; margin: 0;" />
+		<img src="instructions2.png" style="width: calc(100vw - 4rem); max-width: 100%; margin: 0;" />
+	</div>
 	  </div>
 </body>
 </html>
