@@ -5,9 +5,6 @@
   <title>Redirigiendo a la app...</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-    * {
-      box-sizing: border-box;
-    }
 	* {
 	            margin: 0;
 	            padding: 0;
@@ -64,7 +61,7 @@
 	            background-size: 50px 50px;
 	        }
 
-	        /* Efecto de partículas flotantes */
+	        /* Efecto de partículas flotantes - MUCHAS MÁS ESTRELLAS */
 	        .floating-particles {
 	            position: fixed;
 	            top: 0;
@@ -77,99 +74,206 @@
 
 	        .particle {
 	            position: absolute;
-	            width: 3px;
-	            height: 3px;
-	            background: rgba(139, 92, 246, 0.6);
 	            border-radius: 50%;
-	            animation: float 20s infinite linear;
+	            animation: float 8s infinite linear;
+	            box-shadow: 0 0 6px currentColor;
 	        }
 
-	        .particle:nth-child(2) {
-	            background: rgba(168, 85, 247, 0.4);
-	            animation-delay: -5s;
+	        /* Diferentes tipos de estrellas */
+	        .particle.star-1 {
 	            width: 1px;
 	            height: 1px;
+	            background: rgba(139, 92, 246, 0.8);
+	            animation-duration: 6s;
 	        }
 
-	        .particle:nth-child(3) {
-	            background: rgba(99, 102, 241, 0.5);
-	            animation-delay: -10s;
-	            width: 3px;
-	            height: 3px;
+	        .particle.star-2 {
+	            width: 2px;
+	            height: 2px;
+	            background: rgba(168, 85, 247, 0.7);
+	            animation-duration: 8s;
 	        }
 
-	        .particle:nth-child(4) {
-	            background: rgba(147, 51, 234, 0.3);
-	            animation-delay: -15s;
+	        .particle.star-3 {
 	            width: 1.5px;
 	            height: 1.5px;
+	            background: rgba(99, 102, 241, 0.9);
+	            animation-duration: 5s;
 	        }
 
+	        .particle.star-4 {
+	            width: 3px;
+	            height: 3px;
+	            background: rgba(147, 51, 234, 0.6);
+	            animation-duration: 10s;
+	        }
+
+	        .particle.star-5 {
+	            width: 1px;
+	            height: 1px;
+	            background: rgba(236, 72, 153, 0.8);
+	            animation-duration: 7s;
+	        }
+
+	        .particle.star-6 {
+	            width: 2.5px;
+	            height: 2.5px;
+	            background: rgba(59, 130, 246, 0.7);
+	            animation-duration: 9s;
+	        }
+
+	        /* Estrellas más brillantes y grandes */
+	        .particle.star-bright {
+	            width: 4px;
+	            height: 4px;
+	            background: rgba(255, 255, 255, 0.9);
+	            animation-duration: 12s;
+	            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+	        }
+
+	        /* Animaciones más rápidas */
 	        @keyframes float {
 	            0% {
-	                transform: translateY(100vh) translateX(0px);
+	                transform: translateY(100vh) translateX(0px) rotate(0deg);
+	                opacity: 0;
+	            }
+	            5% {
+	                opacity: 1;
+	            }
+	            95% {
+	                opacity: 1;
+	            }
+	            100% {
+	                transform: translateY(-100px) translateX(50px) rotate(360deg);
+	                opacity: 0;
+	            }
+	        }
+
+	        /* Animación de parpadeo para algunas estrellas */
+	        .particle.twinkle {
+	            animation: float 8s infinite linear, twinkle 2s infinite ease-in-out;
+	        }
+
+	        @keyframes twinkle {
+	            0%, 100% { opacity: 0.3; }
+	            50% { opacity: 1; }
+	        }
+
+	        /* Estrellas fugaces ocasionales */
+	        .shooting-star {
+	            position: absolute;
+	            width: 2px;
+	            height: 2px;
+	            background: rgba(255, 255, 255, 0.9);
+	            border-radius: 50%;
+	            animation: shoot 3s infinite linear;
+	            opacity: 0;
+	        }
+
+	        @keyframes shoot {
+	            0% {
+	                transform: translateX(-100px) translateY(-100px);
 	                opacity: 0;
 	            }
 	            10% {
 	                opacity: 1;
+	                box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), -20px -20px 10px rgba(255, 255, 255, 0.3);
 	            }
 	            90% {
 	                opacity: 1;
+	                box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), -20px -20px 10px rgba(255, 255, 255, 0.3);
 	            }
 	            100% {
-	                transform: translateY(-100px) translateX(100px);
+	                transform: translateX(100vw) translateY(100vh);
 	                opacity: 0;
 	            }
 	        }
-			.content {
-			            position: relative;
-			            z-index: 1;
-			            padding: 4rem 2rem;
-			            text-align: center;
-			            max-width: 1200px;
-			            margin: 0 auto;
-			        }
 
-			        .title {
-			            font-size: 3rem;
-			            font-weight: 700;
-			            margin-bottom: 1rem;
-			            background: linear-gradient(135deg, #8b5cf6, #a855f7, #6366f1);
-			            -webkit-background-clip: text;
-			            -webkit-text-fill-color: transparent;
-			            background-clip: text;
-			        }
+	        /* Contenido de ejemplo */
+	        .content {
+	            position: relative;
+	            z-index: 1;
+	            padding: 4rem 2rem;
+	            text-align: center;
+	            max-width: 1200px;
+	            margin: 0 auto;
+	        }
 
-			        .subtitle {
-			            font-size: 1.2rem;
-			            color: #9ca3af;
-			            margin-bottom: 2rem;
-			            max-width: 600px;
-			            margin-left: auto;
-			            margin-right: auto;
-			            line-height: 1.6;
-			        }
+	        .title {
+	            font-size: 3rem;
+	            font-weight: 700;
+	            margin-bottom: 1rem;
+	            background: linear-gradient(135deg, #6366f1, #a855f7, #6366f1);
+	            -webkit-background-clip: text;
+	            -webkit-text-fill-color: transparent;
+	            background-clip: text;
+	        }
 
-			        .card {
-						display: inline-block;
-			            background: rgba(15, 15, 35, 0.7);
-			            border: 1px solid rgba(139, 92, 246, 0.2);
-			            border-radius: 1rem;
-			            padding: 2rem;
-			            margin: 2rem 2rem 0 2rem;
-			            backdrop-filter: blur(10px);
-			            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-			        }
+	        .subtitle {
+	            font-size: 1.2rem;
+	            color: #9ca3af;
+	            margin-bottom: 2rem;
+	            max-width: 600px;
+	            margin-left: auto;
+	            margin-right: auto;
+	            line-height: 1.6;
+	        }
 
-			        /* Responsive */
-			        @media (max-width: 768px) {
-			            .title {
-			                font-size: 2rem;
-			            }
-			            .content {
-			                padding: 2rem 1rem;
-			            }
-			        }
+	        .card {
+	            background: rgba(15, 15, 35, 0.7);
+	            border: 1px solid rgba(139, 92, 246, 0.2);
+	            border-radius: 1rem;
+	            padding: 2rem;
+	            margin: 2rem 0;
+	            backdrop-filter: blur(10px);
+	            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                margin: 2rem 2rem 0 2rem;
+	        }
+
+	        .glow-effect {
+	            position: relative;
+	            overflow: hidden;
+	        }
+
+	        .glow-effect::before {
+	            content: '';
+	            position: absolute;
+	            top: -50%;
+	            left: -50%;
+	            width: 200%;
+	            height: 200%;
+	            background: conic-gradient(
+	                from 0deg,
+	                rgba(139, 92, 246, 0.1) 0deg,
+	                rgba(168, 85, 247, 0.2) 60deg,
+	                rgba(99, 102, 241, 0.1) 120deg,
+	                rgba(147, 51, 234, 0.2) 180deg,
+	                rgba(139, 92, 246, 0.1) 240deg,
+	                rgba(168, 85, 247, 0.2) 300deg,
+	                rgba(139, 92, 246, 0.1) 360deg
+	            );
+	            animation: rotate 10s linear infinite;
+	            z-index: -1;
+	        }
+
+	        @keyframes rotate {
+	            0% {
+	                transform: rotate(0deg);
+	            }
+	            100% {
+	                transform: rotate(360deg);
+	            }
+	        }
+
+	        /* Responsive */
+	        @media (max-width: 768px) {
+	            .title {
+	                font-size: 2rem;
+	            }
+	            .content {
+	                padding: 2rem 1rem;
+	            }
+	        }
   </style>
   <script>
     function redirectAndClose() {
@@ -194,24 +298,122 @@
   </script>
 </head>
 <body>
-	<div class="bg-container"></div>
-	    <div class="bg-dots"></div>
-	    <div class="grid-overlay"></div>
+<div class="bg-container"></div>
+    <div class="bg-dots"></div>
+    <div class="grid-overlay"></div>
     
-	    <div class="floating-particles">
-	        <div class="particle" style="left: 10%; animation-duration: 5s;"></div>
-	        <div class="particle" style="left: 20%; animation-duration: 30s;"></div>
-	        <div class="particle" style="left: 30%; animation-duration: 10s;"></div>
-	        <div class="particle" style="left: 40%; animation-duration: 15s;"></div>
-	        <div class="particle" style="left: 50%; animation-duration: 18s;"></div>
-	        <div class="particle" style="left: 60%; animation-duration: 12s;"></div>
-	        <div class="particle" style="left: 70%; animation-duration: 12s;"></div>
-	        <div class="particle" style="left: 80%; animation-duration: 16s;"></div>
-	        <div class="particle" style="left: 90%; animation-duration: 19s;"></div>
-	    </div>
+    <div class="floating-particles">
+        <!-- Grupo 1: Estrellas pequeñas rápidas -->
+        <div class="particle star-1" style="left: 5%; animation-delay: 0s;"></div>
+        <div class="particle star-1" style="left: 15%; animation-delay: -1s;"></div>
+        <div class="particle star-1" style="left: 25%; animation-delay: -2s;"></div>
+        <div class="particle star-1" style="left: 35%; animation-delay: -3s;"></div>
+        <div class="particle star-1" style="left: 45%; animation-delay: -4s;"></div>
+        <div class="particle star-1" style="left: 55%; animation-delay: -5s;"></div>
+        <div class="particle star-1" style="left: 65%; animation-delay: -1.5s;"></div>
+        <div class="particle star-1" style="left: 75%; animation-delay: -2.5s;"></div>
+        <div class="particle star-1" style="left: 85%; animation-delay: -3.5s;"></div>
+        <div class="particle star-1" style="left: 95%; animation-delay: -4.5s;"></div>
+        
+        <!-- Grupo 2: Estrellas medianas -->
+        <div class="particle star-2" style="left: 8%; animation-delay: -0.5s;"></div>
+        <div class="particle star-2" style="left: 18%; animation-delay: -1.5s;"></div>
+        <div class="particle star-2" style="left: 28%; animation-delay: -2.5s;"></div>
+        <div class="particle star-2" style="left: 38%; animation-delay: -3.5s;"></div>
+        <div class="particle star-2" style="left: 48%; animation-delay: -4.5s;"></div>
+        <div class="particle star-2" style="left: 58%; animation-delay: -5.5s;"></div>
+        <div class="particle star-2" style="left: 68%; animation-delay: -1.2s;"></div>
+        <div class="particle star-2" style="left: 78%; animation-delay: -2.2s;"></div>
+        <div class="particle star-2" style="left: 88%; animation-delay: -3.2s;"></div>
+        <div class="particle star-2" style="left: 98%; animation-delay: -4.2s;"></div>
+        
+        <!-- Grupo 3: Estrellas azules -->
+        <div class="particle star-3" style="left: 3%; animation-delay: -0.8s;"></div>
+        <div class="particle star-3" style="left: 13%; animation-delay: -1.8s;"></div>
+        <div class="particle star-3" style="left: 23%; animation-delay: -2.8s;"></div>
+        <div class="particle star-3" style="left: 33%; animation-delay: -3.8s;"></div>
+        <div class="particle star-3" style="left: 43%; animation-delay: -4.8s;"></div>
+        <div class="particle star-3" style="left: 53%; animation-delay: -0.3s;"></div>
+        <div class="particle star-3" style="left: 63%; animation-delay: -1.3s;"></div>
+        <div class="particle star-3" style="left: 73%; animation-delay: -2.3s;"></div>
+        <div class="particle star-3" style="left: 83%; animation-delay: -3.3s;"></div>
+        <div class="particle star-3" style="left: 93%; animation-delay: -4.3s;"></div>
+        
+        <!-- Grupo 4: Estrellas grandes -->
+        <div class="particle star-4" style="left: 10%; animation-delay: -1.2s;"></div>
+        <div class="particle star-4" style="left: 20%; animation-delay: -2.2s;"></div>
+        <div class="particle star-4" style="left: 30%; animation-delay: -3.2s;"></div>
+        <div class="particle star-4" style="left: 40%; animation-delay: -4.2s;"></div>
+        <div class="particle star-4" style="left: 50%; animation-delay: -5.2s;"></div>
+        <div class="particle star-4" style="left: 60%; animation-delay: -0.7s;"></div>
+        <div class="particle star-4" style="left: 70%; animation-delay: -1.7s;"></div>
+        <div class="particle star-4" style="left: 80%; animation-delay: -2.7s;"></div>
+        <div class="particle star-4" style="left: 90%; animation-delay: -3.7s;"></div>
+        
+        <!-- Grupo 5: Estrellas rosas -->
+        <div class="particle star-5" style="left: 7%; animation-delay: -0.4s;"></div>
+        <div class="particle star-5" style="left: 17%; animation-delay: -1.4s;"></div>
+        <div class="particle star-5" style="left: 27%; animation-delay: -2.4s;"></div>
+        <div class="particle star-5" style="left: 37%; animation-delay: -3.4s;"></div>
+        <div class="particle star-5" style="left: 47%; animation-delay: -4.4s;"></div>
+        <div class="particle star-5" style="left: 57%; animation-delay: -5.4s;"></div>
+        <div class="particle star-5" style="left: 67%; animation-delay: -0.9s;"></div>
+        <div class="particle star-5" style="left: 77%; animation-delay: -1.9s;"></div>
+        <div class="particle star-5" style="left: 87%; animation-delay: -2.9s;"></div>
+        <div class="particle star-5" style="left: 97%; animation-delay: -3.9s;"></div>
+        
+        <!-- Grupo 6: Estrellas azul claro -->
+        <div class="particle star-6" style="left: 12%; animation-delay: -0.6s;"></div>
+        <div class="particle star-6" style="left: 22%; animation-delay: -1.6s;"></div>
+        <div class="particle star-6" style="left: 32%; animation-delay: -2.6s;"></div>
+        <div class="particle star-6" style="left: 42%; animation-delay: -3.6s;"></div>
+        <div class="particle star-6" style="left: 52%; animation-delay: -4.6s;"></div>
+        <div class="particle star-6" style="left: 62%; animation-delay: -5.6s;"></div>
+        <div class="particle star-6" style="left: 72%; animation-delay: -0.1s;"></div>
+        <div class="particle star-6" style="left: 82%; animation-delay: -1.1s;"></div>
+        <div class="particle star-6" style="left: 92%; animation-delay: -2.1s;"></div>
+        
+        <!-- Estrellas brillantes especiales -->
+        <div class="particle star-bright" style="left: 25%; animation-delay: -2s;"></div>
+        <div class="particle star-bright" style="left: 55%; animation-delay: -4s;"></div>
+        <div class="particle star-bright" style="left: 75%; animation-delay: -6s;"></div>
+        <div class="particle star-bright" style="left: 45%; animation-delay: -8s;"></div>
+        <div class="particle star-bright" style="left: 85%; animation-delay: -10s;"></div>
+        
+        <!-- Estrellas con parpadeo -->
+        <div class="particle star-2 twinkle" style="left: 14%; animation-delay: -1s;"></div>
+        <div class="particle star-3 twinkle" style="left: 34%; animation-delay: -3s;"></div>
+        <div class="particle star-4 twinkle" style="left: 54%; animation-delay: -5s;"></div>
+        <div class="particle star-5 twinkle" style="left: 74%; animation-delay: -7s;"></div>
+        <div class="particle star-6 twinkle" style="left: 94%; animation-delay: -9s;"></div>
+        <div class="particle star-1 twinkle" style="left: 6%; animation-delay: -2s;"></div>
+        <div class="particle star-2 twinkle" style="left: 26%; animation-delay: -4s;"></div>
+        <div class="particle star-3 twinkle" style="left: 46%; animation-delay: -6s;"></div>
+        <div class="particle star-4 twinkle" style="left: 66%; animation-delay: -8s;"></div>
+        <div class="particle star-5 twinkle" style="left: 86%; animation-delay: -10s;"></div>
+        
+        <!-- Más estrellas adicionales para densidad -->
+        <div class="particle star-1" style="left: 1%; animation-delay: -0.2s;"></div>
+        <div class="particle star-2" style="left: 11%; animation-delay: -1.3s;"></div>
+        <div class="particle star-3" style="left: 21%; animation-delay: -2.7s;"></div>
+        <div class="particle star-4" style="left: 31%; animation-delay: -3.9s;"></div>
+        <div class="particle star-5" style="left: 41%; animation-delay: -4.1s;"></div>
+        <div class="particle star-6" style="left: 51%; animation-delay: -5.3s;"></div>
+        <div class="particle star-1" style="left: 61%; animation-delay: -0.8s;"></div>
+        <div class="particle star-2" style="left: 71%; animation-delay: -1.9s;"></div>
+        <div class="particle star-3" style="left: 81%; animation-delay: -2.4s;"></div>
+        <div class="particle star-4" style="left: 91%; animation-delay: -3.6s;"></div>
+        
+        <!-- Estrellas fugaces -->
+        <div class="shooting-star" style="left: 20%; top: 20%; animation-delay: 0s;"></div>
+        <div class="shooting-star" style="left: 60%; top: 40%; animation-delay: -8s;"></div>
+        <div class="shooting-star" style="left: 80%; top: 10%; animation-delay: -15s;"></div>
+        <div class="shooting-star" style="left: 10%; top: 70%; animation-delay: -22s;"></div>
+        <div class="shooting-star" style="left: 40%; top: 60%; animation-delay: -29s;"></div>
+    </div>
 	<div class="content">
 	    <img src="icon.png" alt="Icono de MOSSU" style="width: 200px; height: 200px;" />
-			<h1>Redigiendo a MOSSU</h1>
+			<h1 class="title">Redigiendo a MOSSU</h1>
 		<div class="card">
 			<h2>Instrucciones de instalación:</h2>
 		</div>
