@@ -7,7 +7,7 @@ class StatusBarController {
         statusItem = NSStatusBar.system.statusItem(withLength: 18)
         statusItem.button?.title = ""
         statusItem.button?.image = NSImage(named: "AppIcon")
-        statusItem.button?.image?.size = NSSize(width: 18, height: 18)
+        statusItem.button?.image?.size = NSSize(width: 24, height: 24)
     }
 
     func update(validToken: Bool, text: String?, office: Office?, lastUpdate: Date?, name: String, paused: Bool, holidayEndDate: Date?, authSelector: Selector, pauseSelector: Selector, holidaySelector: Selector, updateSelector: Selector) {

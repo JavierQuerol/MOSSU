@@ -34,6 +34,13 @@ extension NSScreen {
     }
 }
 
+extension Error {
+    func isConnectionProblem() -> Bool {
+        let nSError = self as NSError
+        return nSError.code == -1009
+    }
+}
+
 extension NSImage {
     static func imageFromEmoji(_ emoji: String, size: CGFloat = 14) -> NSImage {
         let font = NSFont.systemFont(ofSize: size)

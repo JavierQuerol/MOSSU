@@ -22,11 +22,12 @@ class SlackStatusManager: NSObject {
 
     private let locationManager = CLLocationManager()
     private let reachability = Reachability()
-    private var hasInternet = true
 
     override init() {
         super.init()
         locationManager.delegate = self
+        reachability.delegate = self
+        reachability.startInternetTracking()
     }
 
     func requestAuthorization() {
@@ -35,6 +36,7 @@ class SlackStatusManager: NSObject {
 
     func startTracking() {
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+        locationManager.distanceFilter = 50
         locationManager.startUpdatingLocation()
     }
 
@@ -46,17 +48,13 @@ class SlackStatusManager: NSObject {
                 self.name = name
                 let office = Office.given(emoji: status)
                 self.currentOffice = office
-            case .failure:
-                self.token = nil
-                UserDefaults.standard.removeObject(forKey: "token")
-            }
-            self.reachability.startInternetTracking { [weak self] hasInternet in
-                guard let self = self else { return }
-                self.hasInternet = hasInternet
-                if hasInternet {
-                    self.startTracking()
+            case .failure(let error):
+                if !error.isConnectionProblem() {
+                    self.token = nil
+                    UserDefaults.standard.removeObject(forKey: "token")
                 }
             }
+            self.startTracking()
         }
     }
 
@@ -124,26 +122,28 @@ class SlackStatusManager: NSObject {
             }
         }
         
-        if hasInternet {
-            guard let token = token else { return }
-            Slack.update(given: office, token: token) { [weak self] error in
-                guard let self = self, error == nil else {
-                    self?.token = nil
+        guard let token = token else { return }
+        Slack.update(given: office, token: token) { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                if !error.isConnectionProblem() {
+                    self.token = nil
                     UserDefaults.standard.removeObject(forKey: "token")
-                    return
                 }
-                print("Slack actualizado correctamente a \(office.text)")
-                self.lastUpdate = Date()
-                if self.currentOffice != office {
-                    self.delegate?.slackStatusManager(self, showMessage: office.text)
-                }
-                self.currentOffice = office
+                return
             }
+
+            print("Slack actualizado correctamente a \"\(office.text)\"")
+            self.lastUpdate = Date()
+            if self.currentOffice != office {
+                self.delegate?.slackStatusManager(self, showMessage: office.text)
+            }
+            self.currentOffice = office
         }
     }
 }
 
-extension SlackStatusManager: CLLocationManagerDelegate {
+extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         delegate?.slackStatusManager(self, didUpdate: currentOffice)
     }
@@ -158,7 +158,17 @@ extension SlackStatusManager: CLLocationManagerDelegate {
             return
         }
         let office = Office.given(ssid: Office.SSID.current(), currentLocation: locations.last)
-        print("ubicación actualizada \(office.text)")
+        print("Ubicación identificada como \"\(office.text)\"")
         sendToSlack(office: office)
+    }
+    
+    func reachability(_ reachability: Reachability, didUpdateInternetStatus isAvailable: Bool) {
+        if isAvailable {
+            print("✅ Internet disponible - iniciando seguimiento de ubicación")
+            startTracking()
+        } else {
+            print("❌ Internet no disponible - deteniendo seguimiento de ubicación")
+            locationManager.stopUpdatingLocation()
+        }
     }
 }

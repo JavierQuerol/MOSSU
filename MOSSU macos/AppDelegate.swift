@@ -113,8 +113,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func updateStatusMenu(text: String? = nil, office: Office? = nil) {
-        print(text ?? office?.text ?? "")
         guard let statusBarController = self.statusBarController else { return }
+        print("Actualizando el menu a \"\(text ?? office?.text ?? "")\"")
         statusBarController.update(validToken: slackManager.token != nil,
                                    text: text,
                                    office: office,
@@ -129,7 +129,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func sendNotification(text: String) {
-        print("Enviado notificación : \(text)")
+        print("Enviado notificación: \(text)")
         notifier.send(text: text)
     }
 }

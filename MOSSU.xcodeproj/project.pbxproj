@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		960A08F328CB86250060F5DE /* Office.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F228CB86250060F5DE /* Office.swift */; };
 		960A08F528CB872E0060F5DE /* Slack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F428CB872E0060F5DE /* Slack.swift */; };
-		960A08FA28D06F290060F5DE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F928D06F290060F5DE /* Reachability.swift */; };
 		96341E272E22611A004D8BB6 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 96341E262E22611A004D8BB6 /* Sparkle */; };
 		966260292E295ED2002253FE /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB02E23A994007FE3E8 /* NotificationManager.swift */; };
+		9662602B2E2A9DAA002253FE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9662602A2E2A9DAA002253FE /* Reachability.swift */; };
 		966B512628D2435600CEDFB1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966B512528D2435600CEDFB1 /* Extensions.swift */; };
 		9675F0402E1FCE0800ED9A69 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9675F03F2E1FCE0500ED9A69 /* Constants.swift */; };
 		96A55E4A2E2479A50035AA17 /* OfficeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A55E382E2478DC0035AA17 /* OfficeTests.swift */; };
@@ -37,7 +37,7 @@
 		960A08F228CB86250060F5DE /* Office.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Office.swift; sourceTree = "<group>"; };
 		960A08F428CB872E0060F5DE /* Slack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slack.swift; sourceTree = "<group>"; };
 		960A08F828CF4D360060F5DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		960A08F928D06F290060F5DE /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		9662602A2E2A9DAA002253FE /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		966B512528D2435600CEDFB1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9675F03F2E1FCE0500ED9A69 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		96A55E382E2478DC0035AA17 /* OfficeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeTests.swift; sourceTree = "<group>"; };
@@ -156,11 +156,11 @@
 				96B02EB02E23A994007FE3E8 /* NotificationManager.swift */,
 				96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */,
 				96B02EB22E23A994007FE3E8 /* StatusBarController.swift */,
-				960A08F928D06F290060F5DE /* Reachability.swift */,
 				960A08F228CB86250060F5DE /* Office.swift */,
 				9675F03F2E1FCE0500ED9A69 /* Constants.swift */,
 				960A08F428CB872E0060F5DE /* Slack.swift */,
 				966B512528D2435600CEDFB1 /* Extensions.swift */,
+				9662602A2E2A9DAA002253FE /* Reachability.swift */,
 				96F0057C2E1D66ED00AF482C /* main.swift */,
 				96ED6A7628C61545001226F1 /* Assets.xcassets */,
 				96ED6A7B28C61545001226F1 /* MOSSU.entitlements */,
@@ -288,9 +288,9 @@
 				966B512628D2435600CEDFB1 /* Extensions.swift in Sources */,
 				960A08F528CB872E0060F5DE /* Slack.swift in Sources */,
 				960A08F328CB86250060F5DE /* Office.swift in Sources */,
-				960A08FA28D06F290060F5DE /* Reachability.swift in Sources */,
 				9675F0402E1FCE0800ED9A69 /* Constants.swift in Sources */,
 				96B02EB32E23A994007FE3E8 /* SlackStatusManager.swift in Sources */,
+				9662602B2E2A9DAA002253FE /* Reachability.swift in Sources */,
 				96B02EB52E23A994007FE3E8 /* StatusBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
