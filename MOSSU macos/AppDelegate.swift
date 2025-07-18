@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarController = StatusBarController()
         updateStatusMenu()
         slackManager.delegate = self
-//        UserDefaults.standard.removeObject(forKey: "token")
+        UserDefaults.standard.removeObject(forKey: "token")
 //        UserDefaults.standard.removeObject(forKey: "mutedUntil")
         if let token = UserDefaults.standard.string(forKey: "token") {
             slackManager.token = token
