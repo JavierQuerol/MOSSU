@@ -107,19 +107,8 @@ class SlackStatusManager: NSObject {
             return
         }
         if currentOffice != nil {
-            let weekday = Calendar.current.component(.weekday, from: Date())
-            let hour = Calendar.current.component(.hour, from: Date())
-            if Office.unavailableDays.contains(weekday) {
-                let df = DateFormatter()
-                df.locale = Locale(identifier: "es_ES")
-                let dayName = df.weekdaySymbols[weekday - 1]
-                delegate?.slackStatusManager(self, showMessage: "Los \(dayName)s no se actualiza Slack")
-                return
-            }
-            if hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
-                delegate?.slackStatusManager(self, showMessage: "Después de las \(Office.workingHoursEnd):00h no se actualiza Slack")
-                return
-            }
+            delegate?.slackStatusManager(self, didUpdate: self.currentOffice)
+            return
         }
         
         guard let token = token else { return }
