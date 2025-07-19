@@ -80,8 +80,7 @@ class StatusBarController {
         if Office.unavailableDays.contains(weekday) {
             let dayName = formatter.weekdaySymbols[weekday - 1]
             lastUpdateText = "Los \(dayName)s no se actualiza Slack"
-        }
-        if hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
+        } else if hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
             lastUpdateText =
                 "Después de las \(Office.workingHoursEnd):00h no se actualiza Slack"
         }
@@ -96,7 +95,7 @@ class StatusBarController {
         menu.addItem(NSMenuItem.separator())
 
         let pausedText =
-            paused ? "▶️ Reanudar actualizaciones" : "⏸️ Pausar actualizaciones"
+        (paused || Date() <= holidayEndDate ?? Date().addingTimeInterval(-100000)) ? "▶️ Reanudar actualizaciones" : "⏸️ Pausar actualizaciones"
         let pausedItem = NSMenuItem(
             title: pausedText,
             action: pauseSelector,
@@ -104,7 +103,7 @@ class StatusBarController {
         )
         menu.addItem(pausedItem)
 
-        if let endDate = holidayEndDate, paused {
+        if let endDate = holidayEndDate {
             formatter.timeStyle = .none
             let endString = formatter.string(from: endDate)
             let holidayInfo = NSMenuItem(

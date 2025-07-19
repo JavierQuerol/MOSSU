@@ -11,7 +11,9 @@ class SlackStatusManager: NSObject {
     var name: String = "El muchacho"
     var paused: Bool = false
     var lastUpdate: Date?
-    var holidayEndDate: Date?
+    var holidayEndDate: Date? {
+        didSet { UserDefaults.standard.set(holidayEndDate, forKey: "holidayEndDate") }
+    }
     private var holidayTimer: Timer?
     var currentOffice: Office? {
         didSet { delegate?.slackStatusManager(self, didUpdate: currentOffice) }
@@ -28,6 +30,7 @@ class SlackStatusManager: NSObject {
         locationManager.delegate = self
         reachability.delegate = self
         reachability.startInternetTracking()
+        holidayEndDate = UserDefaults.standard.value(forKey: "holidayEndDate") as? Date
     }
 
     func requestAuthorization() {
@@ -61,15 +64,16 @@ class SlackStatusManager: NSObject {
     func sendHoliday() {
         paused = true
         holidayEndDate = nil
+        UserDefaults.standard.removeObject(forKey: "holidayEndDate")
         holidayTimer?.invalidate()
         sendToSlack(office: holiday)
     }
     
     func sendHoliday(until endDate: Date) {
         paused = true
+        holidayEndDate = endDate
         scheduleHolidayTimer()
         sendToSlack(office: holiday)
-        holidayEndDate = endDate
     }
     
     private func scheduleHolidayTimer() {
@@ -101,18 +105,24 @@ class SlackStatusManager: NSObject {
 
     private func sendToSlack(office: Office) {
         locationManager.stopUpdatingLocation()
-        
-        if Date() <= holidayEndDate ?? Date(timeIntervalSinceNow: -10000000) {
-            print("Not checking status, holiday not over yet")
-            return
-        }
-        if currentOffice != nil {
-            delegate?.slackStatusManager(self, didUpdate: self.currentOffice)
-            return
-        }
+        var newOffice = office
         
         guard let token = token else { return }
-        Slack.update(given: office, token: token) { [weak self] error in
+        
+        var statusText = office.text
+        if let endDate = holidayEndDate, Date() <= endDate {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.locale = Locale(identifier: "es_ES")
+            newOffice = holiday
+            statusText = "Hasta el \(formatter.string(from: endDate))"
+        } else if currentOffice != nil {
+            delegate?.slackStatusManager(self, didUpdate: currentOffice)
+        }
+        
+        let updatedOffice = Office(location: newOffice.location, emoji: newOffice.emoji, text: statusText, ssids: newOffice.ssids, barIconImage: newOffice.barIconImage)
+        
+        Slack.update(given: updatedOffice, token: token) { [weak self] error in
             guard let self = self else { return }
             if let error = error {
                 if !error.isConnectionProblem() {
@@ -122,12 +132,12 @@ class SlackStatusManager: NSObject {
                 return
             }
 
-            print("Slack actualizado correctamente a \"\(office.text)\"")
+            print("Slack actualizado correctamente a \"\(updatedOffice.text)\"")
             self.lastUpdate = Date()
-            if self.currentOffice != office {
-                self.delegate?.slackStatusManager(self, showMessage: office.text)
+            if self.currentOffice != updatedOffice {
+                self.delegate?.slackStatusManager(self, showMessage: updatedOffice.text)
             }
-            self.currentOffice = office
+            self.currentOffice = updatedOffice
         }
     }
 }
