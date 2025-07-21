@@ -407,7 +407,7 @@
 			<h2><a href="#instructions" onclick="descargarYScroll()">Descargar</a></h2>
 		</div>
 		<div style="height: 400px;"></div>
-		<div class="content">
+		<div class="content" id="instructions-section" style="display: none;">
 			<h3 id="instructions">Instrucciones de instalación:</h3>
 		<img src="instructions1.png" style="width: calc(30vw - 4rem); max-width: 100%; margin: 0;" />
 		<img src="instructions2.png" style="width: calc(100vw - 4rem); max-width: 100%; margin: 0;" />
@@ -423,6 +423,12 @@
 	      document.body.appendChild(enlaceDescarga);
 	      enlaceDescarga.click();
 	      document.body.removeChild(enlaceDescarga);
+	      
+	      // Muestra las instrucciones
+	      document.getElementById('instructions-section').style.display = 'block';
+	      
+	      // Hace scroll a las instrucciones
+	      document.getElementById('instructions').scrollIntoView({ behavior: 'smooth' });
 	    }
 	  </script>
 </body>
