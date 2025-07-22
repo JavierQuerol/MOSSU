@@ -22,6 +22,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         slackManager.delegate = self
 //        UserDefaults.standard.removeObject(forKey: "token")
 //        UserDefaults.standard.removeObject(forKey: "mutedUntil")
+        
+        showFirstLaunchPopupIfNeeded()
+        
         if let token = UserDefaults.standard.string(forKey: "token") {
             slackManager.token = token
             slackManager.getCurrentStatus(token: token)
@@ -108,6 +111,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func checkForUpdates() {
         updaterController.checkForUpdates(nil)
+    }
+    
+    private func showFirstLaunchPopupIfNeeded() {
+        let hasShownFirstLaunchPopup = UserDefaults.standard.bool(forKey: "hasShownFirstLaunchPopup")
+        
+        if !hasShownFirstLaunchPopup {
+            let alert = NSAlert()
+            alert.messageText = "¡Bienvenido a MOSSU!"
+            alert.informativeText = "MOSSU ahora vive únicamente en la barra de estado del Mac (arriba a la derecha). Haz clic en el icono de MOSSU para acceder a todas las opciones de la aplicación."
+            alert.addButton(withTitle: "Entendido")
+            alert.alertStyle = .informational
+            
+            // Mostrar el alert y marcar como visto
+            alert.runModal()
+            UserDefaults.standard.set(true, forKey: "hasShownFirstLaunchPopup")
+        }
     }
     
     private func updateStatusMenu(text: String? = nil, office: Office? = nil) {
