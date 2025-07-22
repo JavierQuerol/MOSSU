@@ -61,8 +61,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
     
-    
-    
     @objc func showAuth() {
         var slackOAuthURL: URL? {
             var components = URLComponents(string: "https://slack.com/oauth/v2/authorize")

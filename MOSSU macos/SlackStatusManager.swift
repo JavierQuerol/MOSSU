@@ -24,6 +24,7 @@ class SlackStatusManager: NSObject {
 
     private let locationManager = CLLocationManager()
     private let reachability = Reachability()
+    private var hasPendingLocationUpdate = false
 
     override init() {
         super.init()
@@ -31,16 +32,27 @@ class SlackStatusManager: NSObject {
         reachability.delegate = self
         reachability.startInternetTracking()
         holidayEndDate = UserDefaults.standard.value(forKey: "holidayEndDate") as? Date
+        
+        // Observar cuando se activa la pantalla
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(screenDidWake),
+            name: NSWorkspace.didWakeNotification,
+            object: nil
+        )
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     func requestAuthorization() {
         locationManager.requestAlwaysAuthorization()
     }
 
     func startTracking() {
-        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.distanceFilter = 100
-        //locationManager.startUpdatingLocation()
         locationManager.requestLocation()
     }
 
@@ -168,9 +180,27 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     func reachability(_ reachability: Reachability, didUpdateInternetStatus isAvailable: Bool) {
         if isAvailable {
             print("✅ Internet disponible - obteniendo ubicación")
-            startTracking()
+            
+            // Si no hay pantalla activa, marcar como pendiente para cuando se abra
+            if !NSScreen.hasActiveDisplay() {
+                print("📱 Pantalla cerrada - marcando actualización como pendiente")
+                hasPendingLocationUpdate = true
+            } else {
+                startTracking()
+            }
         } else {
             print("❌ Internet no disponible")
+        }
+    }
+    
+    @objc private func screenDidWake() {
+        print("🌅 Pantalla activada")
+        
+        // Si hay una actualización pendiente, ejecutarla ahora
+        if hasPendingLocationUpdate {
+            print("🔄 Ejecutando actualización pendiente tras abrir pantalla")
+            hasPendingLocationUpdate = false
+            startTracking()
         }
     }
 }
