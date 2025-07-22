@@ -21,5 +21,7 @@
 	<string>https://mossu.vercel.app/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>0COFNzWLdS4OfTVzionon0LXc5U21sszAxDjs0AQyMY=</string>
+	<key>CFBundleVersion</key>
+	<string>15</string>
 </dict>
 </plist>
