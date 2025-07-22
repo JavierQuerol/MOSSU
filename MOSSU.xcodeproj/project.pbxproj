@@ -238,11 +238,12 @@
 			};
 			buildConfigurationList = 96ED6A6C28C61540001226F1 /* Build configuration list for PBXProject "MOSSU" */;
 			compatibilityVersion = "Xcode 13.0";
-			developmentRegion = en;
+			developmentRegion = es;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = 96ED6A6828C61540001226F1;
 			packageReferences = (

@@ -69,7 +69,7 @@ class StatusBarController {
         }
 
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "es_ES")
+        formatter.locale = Locale.current
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         let dateString = formatter.string(from: lastUpdate ?? Date())

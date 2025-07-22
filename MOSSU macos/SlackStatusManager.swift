@@ -39,8 +39,9 @@ class SlackStatusManager: NSObject {
 
     func startTracking() {
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
-        locationManager.distanceFilter = 50
-        locationManager.startUpdatingLocation()
+        locationManager.distanceFilter = 100
+        //locationManager.startUpdatingLocation()
+        locationManager.requestLocation()
     }
 
     func getCurrentStatus(token: String) {
@@ -61,14 +62,6 @@ class SlackStatusManager: NSObject {
         }
     }
 
-    func sendHoliday() {
-        paused = true
-        holidayEndDate = nil
-        UserDefaults.standard.removeObject(forKey: "holidayEndDate")
-        holidayTimer?.invalidate()
-        sendToSlack(office: holiday)
-    }
-    
     func sendHoliday(until endDate: Date) {
         paused = true
         holidayEndDate = endDate
@@ -85,11 +78,13 @@ class SlackStatusManager: NSObject {
                 guard let self = self else { return }
                 self.paused = false
                 self.holidayEndDate = nil
+                UserDefaults.standard.removeObject(forKey: "holidayEndDate")
                 self.startTracking()
             }
         } else {
             paused = false
             holidayEndDate = nil
+            UserDefaults.standard.removeObject(forKey: "holidayEndDate")
             startTracking()
         }
     }
@@ -98,13 +93,14 @@ class SlackStatusManager: NSObject {
         paused.toggle()
         if !paused {
             holidayEndDate = nil
+            UserDefaults.standard.removeObject(forKey: "holidayEndDate")
             UserDefaults.standard.removeObject(forKey: "mutedUntil")
+            holidayTimer?.invalidate()
             startTracking()
         }
     }
 
     private func sendToSlack(office: Office) {
-        locationManager.stopUpdatingLocation()
         var newOffice = office
         
         guard let token = token else { return }
@@ -113,14 +109,18 @@ class SlackStatusManager: NSObject {
         if let endDate = holidayEndDate, Date() <= endDate {
             let formatter = DateFormatter()
             formatter.dateStyle = .short
-            formatter.locale = Locale(identifier: "es_ES")
+            formatter.locale = Locale.current
             newOffice = holiday
             statusText = "Hasta el \(formatter.string(from: endDate))"
         } else if currentOffice != nil {
             delegate?.slackStatusManager(self, didUpdate: currentOffice)
         }
         
-        let updatedOffice = Office(location: newOffice.location, emoji: newOffice.emoji, text: statusText, ssids: newOffice.ssids, barIconImage: newOffice.barIconImage)
+        let updatedOffice = Office(location: newOffice.location,
+                                   emoji: newOffice.emoji,
+                                   text: statusText,
+                                   ssids: newOffice.ssids,
+                                   barIconImage: newOffice.barIconImage)
         
         Slack.update(given: updatedOffice, token: token) { [weak self] error in
             guard let self = self else { return }
@@ -161,13 +161,16 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
         sendToSlack(office: office)
     }
     
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
+        print("🛑 Error al trazar ubicación: \(error)")
+    }
+    
     func reachability(_ reachability: Reachability, didUpdateInternetStatus isAvailable: Bool) {
         if isAvailable {
-            print("✅ Internet disponible - iniciando seguimiento de ubicación")
+            print("✅ Internet disponible - obteniendo ubicación")
             startTracking()
         } else {
-            print("❌ Internet no disponible - deteniendo seguimiento de ubicación")
-            locationManager.stopUpdatingLocation()
+            print("❌ Internet no disponible")
         }
     }
 }

@@ -10,12 +10,6 @@ final class SlackStatusManagerTests: XCTestCase {
         manager.togglePause()
         XCTAssertFalse(manager.paused)
     }
-
-    func testSendHolidaySetsPaused() {
-        let manager = SlackStatusManager()
-        manager.sendHoliday()
-        XCTAssertTrue(manager.paused)
-    }
     
     func testSendHolidayWithDateStoresEndDate() {
             let manager = SlackStatusManager()
