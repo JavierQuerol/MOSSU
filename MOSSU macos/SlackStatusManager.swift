@@ -120,7 +120,7 @@ class SlackStatusManager: NSObject {
         var statusText = office.text
         if let endDate = holidayEndDate, Date() <= endDate {
             let formatter = DateFormatter()
-            formatter.dateStyle = .short
+            formatter.dateStyle = .long
             formatter.locale = Locale.current
             newOffice = holiday
             statusText = "Hasta el \(formatter.string(from: endDate))"
@@ -128,11 +128,21 @@ class SlackStatusManager: NSObject {
             delegate?.slackStatusManager(self, didUpdate: currentOffice)
         }
         
-        let weekday = Calendar.current.component(.weekday, from: Date())
-        let hour = Calendar.current.component(.hour, from: Date())
-        if Office.unavailableDays.contains(weekday) || hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
+        if paused {
             print("Sin actualizar Slack por el día o la hora")
             return
+        }
+        if newOffice != holiday {
+            let weekday = Calendar.current.component(.weekday, from: Date())
+            if Office.unavailableDays.contains(weekday) {
+                print("Sin actualizar Slack por la hora")
+                return
+            }
+            let hour = Calendar.current.component(.hour, from: Date())
+            if hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
+                print("Sin actualizar Slack por el día")
+                return
+            }
         }
         
         let updatedOffice = Office(location: newOffice.location,
