@@ -128,6 +128,13 @@ class SlackStatusManager: NSObject {
             delegate?.slackStatusManager(self, didUpdate: currentOffice)
         }
         
+        let weekday = Calendar.current.component(.weekday, from: Date())
+        let hour = Calendar.current.component(.hour, from: Date())
+        if Office.unavailableDays.contains(weekday) || hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
+            print("Sin actualizar Slack por el día o la hora")
+            return
+        }
+        
         let updatedOffice = Office(location: newOffice.location,
                                    emoji: newOffice.emoji,
                                    text: statusText,
