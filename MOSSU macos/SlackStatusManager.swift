@@ -34,7 +34,7 @@ class SlackStatusManager: NSObject {
         holidayEndDate = UserDefaults.standard.value(forKey: "holidayEndDate") as? Date
         
         // Observar cuando se activa la pantalla
-        NotificationCenter.default.addObserver(
+        NSWorkspace.shared.notificationCenter.addObserver(
             self,
             selector: #selector(screenDidWake),
             name: NSWorkspace.didWakeNotification,
