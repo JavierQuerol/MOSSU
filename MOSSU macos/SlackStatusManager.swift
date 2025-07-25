@@ -63,7 +63,7 @@ class SlackStatusManager: NSObject {
             case .success(let (status, name)):
                 self.name = name
                 let office = Office.given(emoji: status)
-                LogManager.shared.log("Tu estado de Slack está como: \(office?.text ?? "")")
+                LogManager.shared.log("⬇️ Tu estado de Slack está como: \(office?.text ?? "")")
                 self.currentOffice = office
             case .failure(let error):
                 if !error.isConnectionProblem() {
@@ -130,22 +130,22 @@ class SlackStatusManager: NSObject {
         }
         
         if paused {
-            LogManager.shared.log("Sin actualizar Slack por estar en pausa")
+            LogManager.shared.log("⏸️ Sin actualizar Slack por estar en pausa")
             return
         }
         if newOffice != holiday {
             let weekday = Calendar.current.component(.weekday, from: Date())
             if Office.unavailableDays.contains(weekday) {
-                LogManager.shared.log("Sin actualizar Slack por el día")
+                LogManager.shared.log("📅 Sin actualizar Slack por el día")
                 return
             }
             let hour = Calendar.current.component(.hour, from: Date())
             if hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
-                LogManager.shared.log("Sin actualizar Slack por la hora")
+                LogManager.shared.log("🕰️ Sin actualizar Slack por la hora")
                 return
             }
         } else {
-            LogManager.shared.log("Estás en vacaciones, pero actualizamos")
+            LogManager.shared.log("🌴 Estás en vacaciones, pero actualizamos")
         }
         
         let updatedOffice = Office(location: newOffice.location,
@@ -164,7 +164,7 @@ class SlackStatusManager: NSObject {
                 return
             }
 
-            LogManager.shared.log("Slack actualizado correctamente a \"\(updatedOffice.text)\"")
+            LogManager.shared.log("✅ Slack actualizado correctamente a \"\(updatedOffice.text)\"")
             self.lastUpdate = Date()
             if self.currentOffice != updatedOffice {
                 self.delegate?.slackStatusManager(self, showMessage: updatedOffice.text)
@@ -189,7 +189,7 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
             return
         }
         let office = Office.given(ssid: Office.SSID.current(), currentLocation: locations.last)
-        LogManager.shared.log("Ubicación identificada como \"\(office.text)\"")
+        LogManager.shared.log("🔍 Ubicación identificada como \"\(office.text)\"")
         sendToSlack(office: office)
     }
     
@@ -199,7 +199,7 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     
     func reachability(_ reachability: Reachability, didUpdateInternetStatus isAvailable: Bool) {
         if isAvailable {
-            LogManager.shared.log("✅ Internet disponible - obteniendo ubicación")
+            LogManager.shared.log("🛜 Internet disponible - obteniendo ubicación")
             
             // Si no hay pantalla activa, marcar como pendiente para cuando se abra
             if !NSScreen.hasActiveDisplay() {

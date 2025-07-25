@@ -42,7 +42,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
                 let token = queryItems.first(where: { $0.name == "token" })?.value
                 
-                LogManager.shared.log("Received token from url: \(token ?? "nil")")
+                LogManager.shared.log("🔏 Received token from url: \(token ?? "nil")")
                 
                 if let token = token {
                     slackManager.token = token
@@ -158,7 +158,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private func updateStatusMenu(text: String? = nil, office: Office? = nil) {
         guard let statusBarController = self.statusBarController else { return }
-        LogManager.shared.log("Actualizando el menu a \"\(text ?? office?.text ?? "")\"")
+        LogManager.shared.log("⇝ Actualizando el menu a \"\(text ?? office?.text ?? "")\"")
         statusBarController.update(validToken: slackManager.token != nil,
                                    text: text,
                                    office: office,
@@ -173,7 +173,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func sendNotification(text: String) {
-        LogManager.shared.log("Enviado notificación: \(text)")
+        LogManager.shared.log("📣 Enviado notificación: \(text)")
         notifier.send(text: text)
     }
 }
