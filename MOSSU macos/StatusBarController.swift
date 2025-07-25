@@ -94,7 +94,7 @@ class StatusBarController {
         menu.addItem(NSMenuItem.separator())
         
         let logsItem = NSMenuItem(
-            title: "Logs",
+            title: "Ver logs…",
             action: #selector(AppDelegate.showLogs),
             keyEquivalent: ""
         )
