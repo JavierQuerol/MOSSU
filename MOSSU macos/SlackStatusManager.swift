@@ -63,7 +63,7 @@ class SlackStatusManager: NSObject {
             case .success(let (status, name)):
                 self.name = name
                 let office = Office.given(emoji: status)
-                LogManager.shared.log("Tu estado de Slack está como: \(office?.text ?? "")")
+                LogManager.shared.log("Tu estado de Slack es \"\(office?.text ?? "")\"")
                 self.currentOffice = office
             case .failure(let error):
                 if !error.isConnectionProblem() {

@@ -65,3 +65,10 @@ extension NSImage {
     
     static let colmenaDefault = imageFromEmoji("🐝")
 }
+
+extension String {
+    func uppercasedFirst() -> String {
+        guard let first = first else { return self }
+        return String(first).uppercased() + dropFirst()
+    }
+}

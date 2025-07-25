@@ -37,7 +37,7 @@ class Slack {
         
         let params = [
             "profile": [
-                "status_text": office.text,
+                "status_text": office.text.uppercasedFirst(),
                 "status_emoji": office.emoji,
                 "status_expiration": 0
             ]
