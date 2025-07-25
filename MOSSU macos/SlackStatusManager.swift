@@ -63,6 +63,7 @@ class SlackStatusManager: NSObject {
             case .success(let (status, name)):
                 self.name = name
                 let office = Office.given(emoji: status)
+                print("Tu estado de Slack está como: \(office?.text ?? "")")
                 self.currentOffice = office
             case .failure(let error):
                 if !error.isConnectionProblem() {
@@ -129,20 +130,22 @@ class SlackStatusManager: NSObject {
         }
         
         if paused {
-            print("Sin actualizar Slack por el día o la hora")
+            print("Sin actualizar Slack por estar en pausa")
             return
         }
         if newOffice != holiday {
             let weekday = Calendar.current.component(.weekday, from: Date())
             if Office.unavailableDays.contains(weekday) {
-                print("Sin actualizar Slack por la hora")
+                print("Sin actualizar Slack por el día")
                 return
             }
             let hour = Calendar.current.component(.hour, from: Date())
             if hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
-                print("Sin actualizar Slack por el día")
+                print("Sin actualizar Slack por la hora")
                 return
             }
+        } else {
+            print("Estás en vacaciones, pero actualizamos")
         }
         
         let updatedOffice = Office(location: newOffice.location,
