@@ -55,50 +55,49 @@ class StatusBarController {
 
         menu.addItem(NSMenuItem.separator())
 
-        if let composedText = composedText {
-            let versionItem = NSMenuItem(
-                title: composedText,
-                action: nil,
-                keyEquivalent: ""
-            )
-            menu.addItem(versionItem)
-        }
-
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        let dateString = formatter.string(from: lastUpdate ?? Date())
-        var lastUpdateText = "Actualizado el \(dateString)"
 
-        let weekday = Calendar.current.component(.weekday, from: Date())
-        let hour = Calendar.current.component(.hour, from: Date())
-        if Office.unavailableDays.contains(weekday) {
-            let dayName = formatter.weekdaySymbols[weekday - 1]
-            lastUpdateText = "Los \(dayName)s no se actualiza Slack"
-        } else if hour >= Office.workingHoursEnd  {
-            lastUpdateText =
-                "Después de las \(Office.workingHoursEnd):00h no se actualiza Slack"
-        } else if hour < Office.workingHoursStart {
-            lastUpdateText =
-                "Antes de las \(Office.workingHoursStart):00h no se actualiza Slack"
+        if let composedText = composedText {
+            let dateString = formatter.string(from: lastUpdate ?? Date())
+            var lastUpdateText = "Actualizado el \(dateString)"
+
+            let weekday = Calendar.current.component(.weekday, from: Date())
+            let hour = Calendar.current.component(.hour, from: Date())
+            if Office.unavailableDays.contains(weekday) {
+                let dayName = formatter.weekdaySymbols[weekday - 1]
+                lastUpdateText = "Los \(dayName)s no se actualiza Slack"
+            } else if hour >= Office.workingHoursEnd  {
+                lastUpdateText =
+                    "Después de las \(Office.workingHoursEnd):00h no se actualiza Slack"
+            } else if hour < Office.workingHoursStart {
+                lastUpdateText =
+                    "Antes de las \(Office.workingHoursStart):00h no se actualiza Slack"
+            }
+
+            let combinedText = "\(composedText)\n\(lastUpdateText)"
+            let attributedString = NSMutableAttributedString(string: combinedText)
+            
+            let normalFont = NSFont.boldSystemFont(ofSize: NSFont.systemFontSize)
+            let smallFont = NSFont.menuFont(ofSize: NSFont.smallSystemFontSize)
+            
+            let firstLineRange = NSRange(location: 0, length: composedText.count)
+            attributedString.addAttribute(.font, value: normalFont, range: firstLineRange)
+            
+            let dateRange = NSRange(location: composedText.count + 1, length: lastUpdateText.count)
+            attributedString.addAttribute(.font, value: smallFont, range: dateRange)
+            
+            let statusItem = NSMenuItem(
+                title: "",
+                action: #selector(AppDelegate.showLogs),
+                keyEquivalent: ""
+            )
+            
+            statusItem.attributedTitle = attributedString
+            menu.addItem(statusItem)
         }
-
-        let lastUpdate = NSMenuItem(
-            title: lastUpdateText,
-            action: nil,
-            keyEquivalent: ""
-        )
-        menu.addItem(lastUpdate)
-        
-        menu.addItem(NSMenuItem.separator())
-        
-        let logsItem = NSMenuItem(
-            title: "Ver logs…",
-            action: #selector(AppDelegate.showLogs),
-            keyEquivalent: ""
-        )
-        menu.addItem(logsItem)
 
         menu.addItem(NSMenuItem.separator())
 
