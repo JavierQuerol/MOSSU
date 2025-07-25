@@ -25,7 +25,9 @@ MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
 NEW_MINOR=$((MINOR + 1))
 NEW_VERSION="${MAJOR}.${NEW_MINOR}"
 
+# Actualizar tanto el Info.plist como la configuración de Xcode
 /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString $NEW_VERSION" "$PLIST_PATH"
+xcrun agvtool new-marketing-version "$NEW_VERSION" > /dev/null
 
 echo "Actualizado al build: $NEW_BUILD y versión: $NEW_VERSION"
 
