@@ -129,7 +129,7 @@ class StatusBarController {
         
         // Logs section
         let logsItem = NSMenuItem(
-            title: "📄 Logs",
+            title: "Logs",
             action: #selector(AppDelegate.showLogs),
             keyEquivalent: ""
         )

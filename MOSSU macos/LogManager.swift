@@ -36,8 +36,4 @@ class LogManager {
     func getAllLogs() -> [LogEntry] {
         return logs
     }
-    
-    func clearLogs() {
-        logs.removeAll()
-    }
 }

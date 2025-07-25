@@ -63,7 +63,7 @@ class SlackStatusManager: NSObject {
             case .success(let (status, name)):
                 self.name = name
                 let office = Office.given(emoji: status)
-                LogManager.shared.log("⬇️ Tu estado de Slack está como: \(office?.text ?? "")")
+                LogManager.shared.log("Tu estado de Slack está como: \(office?.text ?? "")")
                 self.currentOffice = office
             case .failure(let error):
                 if !error.isConnectionProblem() {
@@ -136,12 +136,12 @@ class SlackStatusManager: NSObject {
         if newOffice != holiday {
             let weekday = Calendar.current.component(.weekday, from: Date())
             if Office.unavailableDays.contains(weekday) {
-                LogManager.shared.log("📅 Sin actualizar Slack por el día")
+                LogManager.shared.log("🟠 Sin actualizar Slack por el día")
                 return
             }
             let hour = Calendar.current.component(.hour, from: Date())
             if hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
-                LogManager.shared.log("🕰️ Sin actualizar Slack por la hora")
+                LogManager.shared.log("🟠 Sin actualizar Slack por la hora")
                 return
             }
         } else {
@@ -189,7 +189,7 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
             return
         }
         let office = Office.given(ssid: Office.SSID.current(), currentLocation: locations.last)
-        LogManager.shared.log("🔍 Ubicación identificada como \"\(office.text)\"")
+        LogManager.shared.log("Ubicación identificada como \"\(office.text)\"")
         sendToSlack(office: office)
     }
     
