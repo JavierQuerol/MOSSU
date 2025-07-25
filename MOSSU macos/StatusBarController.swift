@@ -17,11 +17,7 @@ class StatusBarController {
         lastUpdate: Date?,
         name: String,
         paused: Bool,
-        holidayEndDate: Date?,
-        authSelector: Selector,
-        pauseSelector: Selector,
-        holidaySelector: Selector,
-        updateSelector: Selector
+        holidayEndDate: Date?
     ) {
         NSApp.setActivationPolicy(.accessory)
         var composedText: String?
@@ -39,7 +35,7 @@ class StatusBarController {
         if !validToken {
             let status = NSMenuItem(
                 title: "🔴 Requiere autorización",
-                action: authSelector,
+                action: #selector(AppDelegate.showAuth),
                 keyEquivalent: ""
             )
             menu.addItem(status)
@@ -94,6 +90,15 @@ class StatusBarController {
             keyEquivalent: ""
         )
         menu.addItem(lastUpdate)
+        
+        menu.addItem(NSMenuItem.separator())
+        
+        let logsItem = NSMenuItem(
+            title: "Logs",
+            action: #selector(AppDelegate.showLogs),
+            keyEquivalent: ""
+        )
+        menu.addItem(logsItem)
 
         menu.addItem(NSMenuItem.separator())
 
@@ -101,7 +106,7 @@ class StatusBarController {
         (paused || Date() <= holidayEndDate ?? Date().addingTimeInterval(-100000)) ? "▶️ Reanudar actualizaciones" : "⏸️ Pausar actualizaciones"
         let pausedItem = NSMenuItem(
             title: pausedText,
-            action: pauseSelector,
+            action: #selector(AppDelegate.pauseOrResumeUpdates),
             keyEquivalent: ""
         )
         menu.addItem(pausedItem)
@@ -119,27 +124,17 @@ class StatusBarController {
             let holidaysModeText = "🌴 Activar modo vacaciones"
             let holidaysModeItem = NSMenuItem(
                 title: holidaysModeText,
-                action: holidaySelector,
+                action: #selector(AppDelegate.setHoliday),
                 keyEquivalent: ""
             )
             menu.addItem(holidaysModeItem)
         }
-        
-        menu.addItem(NSMenuItem.separator())
-        
-        // Logs section
-        let logsItem = NSMenuItem(
-            title: "Logs",
-            action: #selector(AppDelegate.showLogs),
-            keyEquivalent: ""
-        )
-        menu.addItem(logsItem)
 
         menu.addItem(NSMenuItem.separator())
 
         let updateItem = NSMenuItem(
             title: "Buscar actualizaciones…",
-            action: updateSelector,
+            action: #selector(AppDelegate.checkForUpdates),
             keyEquivalent: ""
         )
         menu.addItem(updateItem)

@@ -161,11 +161,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                    lastUpdate: slackManager.lastUpdate,
                                    name: slackManager.name,
                                    paused: slackManager.paused,
-                                   holidayEndDate: slackManager.holidayEndDate,
-                                   authSelector: #selector(showAuth),
-                                   pauseSelector: #selector(pauseOrResumeUpdates),
-                                   holidaySelector: #selector(setHoliday),
-                                   updateSelector: #selector(checkForUpdates))
+                                   holidayEndDate: slackManager.holidayEndDate)
     }
     
     private func sendNotification(text: String) {
