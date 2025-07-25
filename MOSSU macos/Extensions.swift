@@ -19,18 +19,23 @@ extension Array where Element == Office {
 extension Office.SSID {
     static func current() -> Office.SSID {
         let string = CWWiFiClient.shared().interfaces()?.compactMap { $0.ssid() }.first ?? ""
-        return Office.SSID(rawValue: string) ?? remote
+        return Office.SSID(rawValue: string) ?? remote(ssid: string)
     }
 }
 
 extension NSScreen {
     static func hasActiveDisplay() -> Bool {
-        var ids = [CGDirectDisplayID](repeating: 0, count: 16)
-        var count: UInt32 = 0
-        if CGGetActiveDisplayList(UInt32(ids.count), &ids, &count) == .success {
-            return count != 0
-        }
-        return false
+        // Verificar si hay pantallas disponibles y si alguna está activa
+        guard !NSScreen.screens.isEmpty else { return false }
+        
+        // Obtener la pantalla principal
+        guard let mainScreen = NSScreen.main else { return false }
+        
+        // Verificar si la pantalla principal está activa usando Core Graphics
+        let mainDisplayID = mainScreen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID ?? 0
+        
+        // Una pantalla está activa si no está en modo sleep/closed
+        return CGDisplayIsActive(mainDisplayID) != 0
     }
 }
 

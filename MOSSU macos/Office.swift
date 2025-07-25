@@ -89,11 +89,37 @@ struct Office: Equatable {
     static let workingHoursStart: Int = 7
     static let workingHoursEnd: Int = 18
     
-    enum SSID: String {
-        case mdona_1 = "WLAN_PA1"
-        case mdona_2 = "WLAN_SA1"
-        case piscina = "Piscina_online"
-        case remote = ""
+    enum SSID: Equatable {
+        case mdona_1
+        case mdona_2
+        case piscina
+        case remote(ssid: String)
+        
+        var rawValue: String {
+            switch self {
+            case .mdona_1:
+                return "WLAN_PA1"
+            case .mdona_2:
+                return "WLAN_SA1"
+            case .piscina:
+                return "Piscina_online"
+            case .remote(let ssid):
+                return ssid
+            }
+        }
+        
+        init?(rawValue: String) {
+            switch rawValue {
+            case "WLAN_PA1":
+                self = .mdona_1
+            case "WLAN_SA1":
+                self = .mdona_2
+            case "Piscina_online":
+                self = .piscina
+            default:
+                self = .remote(ssid: rawValue)
+            }
+        }
     }
     
     static func == (lhs: Office, rhs: Office) -> Bool {
