@@ -45,7 +45,7 @@ class Slack {
         let paramsData = try? JSONSerialization.data(withJSONObject: params)
         request.httpBody = paramsData
         
-        print("Intentando actualizar a \"\(office.text)\"")
+        LogManager.shared.log("Intentando actualizar a \"\(office.text)\"")
         
         let urlSession = URLSession(configuration: .ephemeral)
         urlSession.dataTask(with: request) { data, response, error in

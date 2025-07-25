@@ -18,6 +18,7 @@
 		96A55E4B2E2479C70035AA17 /* SlackStatusManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A55E392E2478DC0035AA17 /* SlackStatusManagerTests.swift */; };
 		96B02EB32E23A994007FE3E8 /* SlackStatusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */; };
 		96B02EB52E23A994007FE3E8 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB22E23A994007FE3E8 /* StatusBarController.swift */; };
+		96E010072E333B57002D8549 /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E010062E333B57002D8549 /* LogManager.swift */; };
 		96ED6A7528C61540001226F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED6A7428C61540001226F1 /* AppDelegate.swift */; };
 		96ED6A7728C61545001226F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96ED6A7628C61545001226F1 /* Assets.xcassets */; };
 		96F0057D2E1D66EF00AF482C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F0057C2E1D66ED00AF482C /* main.swift */; };
@@ -59,6 +60,7 @@
 		96B02EC02E23AF7E007FE3E8 /* MOSSU.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = MOSSU.zip; sourceTree = "<group>"; };
 		96B02EC12E23AF7E007FE3E8 /* redirect.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = redirect.html; sourceTree = "<group>"; };
 		96B02EC32E23AF7E007FE3E8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		96E010062E333B57002D8549 /* LogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
 		96EBC54C2E23246C00FBCE24 /* MOSSU.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MOSSU.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96ED6A7428C61540001226F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		96ED6A7628C61545001226F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				96ED6A7428C61540001226F1 /* AppDelegate.swift */,
 				96B02EB02E23A994007FE3E8 /* NotificationManager.swift */,
 				96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */,
+				96E010062E333B57002D8549 /* LogManager.swift */,
 				96B02EB22E23A994007FE3E8 /* StatusBarController.swift */,
 				960A08F228CB86250060F5DE /* Office.swift */,
 				9675F03F2E1FCE0500ED9A69 /* Constants.swift */,
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				966260292E295ED2002253FE /* NotificationManager.swift in Sources */,
+				96E010072E333B57002D8549 /* LogManager.swift in Sources */,
 				96ED6A7528C61540001226F1 /* AppDelegate.swift in Sources */,
 				96F0057D2E1D66EF00AF482C /* main.swift in Sources */,
 				966B512628D2435600CEDFB1 /* Extensions.swift in Sources */,

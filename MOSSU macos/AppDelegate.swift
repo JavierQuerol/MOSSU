@@ -42,7 +42,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
                 let token = queryItems.first(where: { $0.name == "token" })?.value
                 
-                print("Received token from url: \(token ?? "nil")")
+                LogManager.shared.log("Received token from url: \(token ?? "nil")")
                 
                 if let token = token {
                     slackManager.token = token
@@ -99,7 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func pauseOrResumeUpdates() {
         slackManager.togglePause()
-        print(slackManager.paused ? "Actualización pausada" : "Reanudando actualizaciones")
+        LogManager.shared.log(slackManager.paused ? "Actualización pausada" : "Reanudando actualizaciones")
         if let office = slackManager.currentOffice {
             updateStatusMenu(office: office)
         }
@@ -111,6 +111,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func checkForUpdates() {
         updaterController.checkForUpdates(nil)
+    }
+    
+    @objc func showLogs() {
+        let alert = NSAlert()
+        alert.messageText = "Logs de MOSSU"
+        alert.informativeText = "Últimos eventos registrados:"
+        
+        let logs = LogManager.shared.getAllLogs()
+        let logsText = logs.isEmpty ? "No hay logs disponibles" : logs.map { $0.formattedString }.joined(separator: "\n")
+        
+        let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 500, height: 300))
+        textView.string = logsText
+        textView.isEditable = false
+        textView.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
+        
+        let scrollView = NSScrollView(frame: NSRect(x: 0, y: 0, width: 500, height: 300))
+        scrollView.documentView = textView
+        scrollView.hasVerticalScroller = true
+        
+        alert.accessoryView = scrollView
+        alert.addButton(withTitle: "Cerrar")
+        alert.addButton(withTitle: "Limpiar Logs")
+        
+        let response = alert.runModal()
+        if response == .alertSecondButtonReturn {
+            LogManager.shared.clearLogs()
+        }
     }
     
     private func showFirstLaunchPopupIfNeeded() {
@@ -131,7 +158,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private func updateStatusMenu(text: String? = nil, office: Office? = nil) {
         guard let statusBarController = self.statusBarController else { return }
-        print("Actualizando el menu a \"\(text ?? office?.text ?? "")\"")
+        LogManager.shared.log("Actualizando el menu a \"\(text ?? office?.text ?? "")\"")
         statusBarController.update(validToken: slackManager.token != nil,
                                    text: text,
                                    office: office,
@@ -146,7 +173,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func sendNotification(text: String) {
-        print("Enviado notificación: \(text)")
+        LogManager.shared.log("Enviado notificación: \(text)")
         notifier.send(text: text)
     }
 }
