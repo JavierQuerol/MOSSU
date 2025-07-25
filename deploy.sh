@@ -27,7 +27,9 @@ NEW_VERSION="${MAJOR}.${NEW_MINOR}"
 
 # Actualizar tanto el Info.plist como la configuración de Xcode
 /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString $NEW_VERSION" "$PLIST_PATH"
-xcrun agvtool new-marketing-version "$NEW_VERSION" > /dev/null
+
+# Actualizar MARKETING_VERSION directamente en el archivo project.pbxproj
+sed -i '' "s/MARKETING_VERSION = [^;]*/MARKETING_VERSION = $NEW_VERSION/g" "MOSSU.xcodeproj/project.pbxproj"
 
 echo "Actualizado al build: $NEW_BUILD y versión: $NEW_VERSION"
 
