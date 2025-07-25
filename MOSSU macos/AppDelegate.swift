@@ -115,8 +115,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func showLogs() {
         let alert = NSAlert()
-        alert.messageText = "Logs de MOSSU"
-        alert.informativeText = "Últimos eventos registrados:"
+        alert.messageText = "Últimos eventos de MOSSU"
         
         let logs = LogManager.shared.getAllLogs()
         let logsText = logs.isEmpty ? "No hay logs disponibles" : logs.map { $0.formattedString }.joined(separator: "\n")

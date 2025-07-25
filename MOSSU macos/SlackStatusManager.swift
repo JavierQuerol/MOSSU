@@ -188,7 +188,9 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
             LogManager.shared.log("🛑 Estás en modo pausa")
             return
         }
-        let office = Office.given(ssid: Office.SSID.current(), currentLocation: locations.last)
+        let currentSSID = Office.SSID.current()
+        LogManager.shared.log("SSID: \(currentSSID.rawValue)")
+        let office = Office.given(ssid: currentSSID, currentLocation: locations.last)
         LogManager.shared.log("Ubicación identificada como \"\(office.text)\"")
         sendToSlack(office: office)
     }
