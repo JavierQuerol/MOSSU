@@ -34,6 +34,6 @@ class LogManager {
     }
     
     func getAllLogs() -> [LogEntry] {
-        return logs
+        return logs.reversed()
     }
 }
