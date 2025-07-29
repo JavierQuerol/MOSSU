@@ -93,7 +93,7 @@ struct Office: Equatable {
     
     static let unavailableDays: [Int] = [1, 7]
     static let workingHoursStart: Int = 8
-    static let workingHoursEnd: Int = 18
+    static let workingHoursEnd: Int = 19
     
     enum SSID: Equatable {
         case mdona_1
