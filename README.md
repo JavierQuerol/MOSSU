@@ -1,4 +1,5 @@
-# MOSSU: Mercadona Online Slack Status Updater para macOS
+# MOSSU
+## Mercadona Online Slack Status Updater para macOS
 
 ![](public/app.png)
 

@@ -66,6 +66,12 @@ let madridOffice = Office(location: CLLocation(latitude: 40.454171947281196, lon
                           ssids: [.mdona_1, .mdona_2],
                           barIconImage: NSImage.imageFromEmoji("🌳"))
 
+let mercadonaShop = Office(location: nil,
+                           emoji: ":mercadona:",
+                           text: "en tienda",
+                           ssids: [.mdona_1, .mdona_2],
+                           barIconImage: NSImage(named: "mercadona") ?? .colmenaDefault)
+
 let remote = Office(location: nil,
                     emoji: ":house_with_garden:",
                     text: "en remoto",
@@ -86,7 +92,7 @@ struct Office: Equatable {
     var barIconImage: NSImage
     
     static let unavailableDays: [Int] = [1, 7]
-    static let workingHoursStart: Int = 7
+    static let workingHoursStart: Int = 8
     static let workingHoursEnd: Int = 18
     
     enum SSID: Equatable {
@@ -146,7 +152,7 @@ struct Office: Equatable {
             if closestDistance < distanceToMatch, let closestOffice = sortedOffices.first {
                 return closestOffice
             }
-            return remote
+            return mercadonaShop
         }
     }
     
