@@ -1,5 +1,7 @@
 # MOSSU: Mercadona Online Slack Status Updater para macOS
 
+![](public/app.png)
+
 Este repositorio contiene tanto la aplicación de macOS como un pequeño backend que se puede desplegar en cualquier servicio de hosting compatible con funciones serverless (como Vercel, Netlify o similares). La app actualiza automáticamente tu estado de Slack según la Wi‑Fi o la localización, mientras que el backend gestiona el flujo de autenticación de Slack.
 
 ## Contenido del repositorio
@@ -37,6 +39,8 @@ personalizado `mossu://oauth` para recibir el token desde el backend anterior.
 El fichero `Constants.swift` contiene los valores por defecto del `client_id`, los scopes y la URL de redirección.
 
 Para distribuir la app puedes usar `deploy.sh`, que genera el ZIP firmado y un `appcast.xml` listo para Sparkle.
+
+![](public/web.png)
 
 ## Licencia
 
