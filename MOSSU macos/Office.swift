@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 import Cocoa
 
-let allOffices = [plazaAmerica, vlc1, bcn1, mad1, alc1, svq1, mad2, mad3, madridOffice, remote]
+let allOffices = [plazaAmerica, vlc1, bcn1, mad1, alc1, svq1, mad2, mad3, madridOffice, remote, mercadonaShop]
 let distanceToMatch: CLLocationDistance = 500
 
 let plazaAmerica = Office(location: CLLocation(latitude: 39.469539049320446, longitude: -0.36502215772323376),
