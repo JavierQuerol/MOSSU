@@ -38,6 +38,9 @@
 		960A08F228CB86250060F5DE /* Office.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Office.swift; sourceTree = "<group>"; };
 		960A08F428CB872E0060F5DE /* Slack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slack.swift; sourceTree = "<group>"; };
 		960A08F828CF4D360060F5DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		963C7BCA2E3B8BA70065871B /* app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app.png; sourceTree = "<group>"; };
+		963C7BCB2E3B8BA70065871B /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
+		963C7BCC2E3B8BA70065871B /* web.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = web.png; sourceTree = "<group>"; };
 		9662602A2E2A9DAA002253FE /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		9662602C2E2AF54D002253FE /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		9662602D2E2AF54D002253FE /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
@@ -136,6 +139,9 @@
 				96B02EBF2E23AF7E007FE3E8 /* appcast.xml */,
 				9662602C2E2AF54D002253FE /* icon.png */,
 				9662602D2E2AF54D002253FE /* index.html */,
+				963C7BCA2E3B8BA70065871B /* app.png */,
+				963C7BCB2E3B8BA70065871B /* style.css */,
+				963C7BCC2E3B8BA70065871B /* web.png */,
 				9662602E2E2AF54D002253FE /* instructions1.png */,
 				9662602F2E2AF54D002253FE /* instructions2.png */,
 				96B02EC02E23AF7E007FE3E8 /* MOSSU.zip */,
