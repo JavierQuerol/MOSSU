@@ -129,11 +129,11 @@ class SlackStatusManager: NSObject {
             delegate?.slackStatusManager(self, didUpdate: currentOffice)
         }
         
-        if paused {
-            LogManager.shared.log("⏸️ Sin actualizar Slack por estar en pausa")
-            return
-        }
         if newOffice != holiday {
+            if paused {
+                LogManager.shared.log("⏸️ Sin actualizar Slack por estar en pausa")
+                return
+            }
             let weekday = Calendar.current.component(.weekday, from: Date())
             if Office.unavailableDays.contains(weekday) {
                 LogManager.shared.log("🟠 Sin actualizar Slack por el día")
