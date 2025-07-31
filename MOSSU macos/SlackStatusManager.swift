@@ -124,7 +124,7 @@ class SlackStatusManager: NSObject {
             formatter.dateStyle = .long
             formatter.locale = Locale.current
             newOffice = holiday
-            statusText = "Hasta el \(formatter.string(from: endDate))"
+            statusText = "🌴 hasta el \(formatter.string(from: endDate))"
         } else if currentOffice != nil {
             delegate?.slackStatusManager(self, didUpdate: currentOffice)
         }

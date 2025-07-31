@@ -13,7 +13,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusBarController: StatusBarController?
     private let notifier = NotificationManager()
     private let slackManager = SlackStatusManager()
-    private let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+    private let updaterDelegate = UpdaterDelegate()
+    private lazy var updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: updaterDelegate, userDriverDelegate: nil)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         window = NSWindow()
