@@ -13,8 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusBarController: StatusBarController?
     private let notifier = NotificationManager()
     private let slackManager = SlackStatusManager()
-    private let updaterDelegate = UpdaterDelegate()
-    private lazy var updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: updaterDelegate, userDriverDelegate: nil)
+    private let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         window = NSWindow()
@@ -111,7 +110,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func checkForUpdates() {
-        updaterController.checkForUpdates(nil)
+        DispatchQueue.main.async {
+            NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])
+            self.updaterController.checkForUpdates(nil)
+        }
     }
     
     @objc func showLogs() {

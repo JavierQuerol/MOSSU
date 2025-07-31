@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		960A08F328CB86250060F5DE /* Office.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F228CB86250060F5DE /* Office.swift */; };
 		960A08F528CB872E0060F5DE /* Slack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F428CB872E0060F5DE /* Slack.swift */; };
-		961243E82E3B6C8A005CB976 /* UpdaterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961243E72E3B6C8A005CB976 /* UpdaterDelegate.swift */; };
 		96341E272E22611A004D8BB6 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 96341E262E22611A004D8BB6 /* Sparkle */; };
 		966260292E295ED2002253FE /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB02E23A994007FE3E8 /* NotificationManager.swift */; };
 		9662602B2E2A9DAA002253FE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9662602A2E2A9DAA002253FE /* Reachability.swift */; };
@@ -39,7 +38,6 @@
 		960A08F228CB86250060F5DE /* Office.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Office.swift; sourceTree = "<group>"; };
 		960A08F428CB872E0060F5DE /* Slack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slack.swift; sourceTree = "<group>"; };
 		960A08F828CF4D360060F5DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		961243E72E3B6C8A005CB976 /* UpdaterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterDelegate.swift; sourceTree = "<group>"; };
 		9662602A2E2A9DAA002253FE /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		9662602C2E2AF54D002253FE /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		9662602D2E2AF54D002253FE /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
@@ -165,7 +163,6 @@
 			children = (
 				960A08F828CF4D360060F5DE /* Info.plist */,
 				96ED6A7428C61540001226F1 /* AppDelegate.swift */,
-				961243E72E3B6C8A005CB976 /* UpdaterDelegate.swift */,
 				96B02EB02E23A994007FE3E8 /* NotificationManager.swift */,
 				96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */,
 				96E010062E333B57002D8549 /* LogManager.swift */,
@@ -297,7 +294,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				961243E82E3B6C8A005CB976 /* UpdaterDelegate.swift in Sources */,
 				966260292E295ED2002253FE /* NotificationManager.swift in Sources */,
 				96E010072E333B57002D8549 /* LogManager.swift in Sources */,
 				96ED6A7528C61540001226F1 /* AppDelegate.swift in Sources */,
