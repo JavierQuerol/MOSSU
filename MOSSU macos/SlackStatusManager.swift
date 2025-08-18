@@ -119,7 +119,7 @@ class SlackStatusManager: NSObject {
         guard let token = token else { return }
         
         var statusText = office.text
-        if let endDate = holidayEndDate, Date() <= endDate {
+        if let endDate = holidayEndDate, Date() < endDate {
             let formatter = DateFormatter()
             formatter.dateStyle = .long
             formatter.locale = Locale.current
