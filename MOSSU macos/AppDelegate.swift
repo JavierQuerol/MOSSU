@@ -123,12 +123,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let logs = LogManager.shared.getAllLogs()
         let logsText = logs.isEmpty ? "No hay logs disponibles" : logs.map { $0.formattedString }.joined(separator: "\n")
         
-        let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 600, height: 250))
+        let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 680, height: 250))
         textView.string = logsText
         textView.isEditable = false
         textView.font = NSFont.monospacedSystemFont(ofSize: 13, weight: .regular)
         
-        let scrollView = NSScrollView(frame: NSRect(x: 0, y: 0, width: 600, height: 250))
+        let scrollView = NSScrollView(frame: NSRect(x: 0, y: 0, width: 680, height: 250))
         scrollView.documentView = textView
         scrollView.hasVerticalScroller = true
         
