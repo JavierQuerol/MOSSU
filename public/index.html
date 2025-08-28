@@ -128,8 +128,8 @@
 	    <img src="icon.png" alt="Icono de MOSSU" style="width: 200px; height: 200px;" id="bee" class="wing-flap"/>
 			<h1 class="subtitle">MOSSU</h1>
 			<h3 class="title">Mercadona Online</h3>
-      <h3 class="title">Slack Status Updater</h3>
-		<button class="dl-card" aria-label="Descarga de MOSSU" type="button" onclick="downloadAndScroll()">
+		  <h3 class="title">Slack Status Updater</h3>
+		<button class="dl-card" aria-label="Descarga de MOSSU" type="button" onclick="downloadOnly()">
 		  <div class="dl-card__meta">
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;">
 				<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -139,23 +139,16 @@
 			Descargar <span id="app-version"></span>
 		  </div>
 		</button>
-		<div class="content" id="instructions-section" style="display: none;">
-			<h3 id="instructions">Instrucciones de instalación:</h3>
-		<img src="instructions1.png" style="width: calc(30vw - 4rem); max-width: 100%; margin: 0;" />
-		<img src="instructions2.png" style="width: calc(100vw - 4rem); max-width: 100%; margin: 0;" />
-	</div>
 	  </div>
 	  <script>
-	    function downloadAndScroll() {
-	      const enlaceDescarga = document.createElement('a');
-	      enlaceDescarga.href = 'MOSSU.zip';
-	      enlaceDescarga.download = 'MOSSU.zip';
-	      enlaceDescarga.style.display = 'none';
-	      document.body.appendChild(enlaceDescarga);
-	      enlaceDescarga.click();
-	      document.body.removeChild(enlaceDescarga);
-	      document.getElementById('instructions-section').style.display = 'block';
-	      document.getElementById('instructions').scrollIntoView({ behavior: 'smooth' });
+	    function downloadOnly() {
+	      const a = document.createElement('a');
+	      a.href = 'MOSSU.zip';
+	      a.download = 'MOSSU.zip';
+	      a.style.display = 'none';
+	      document.body.appendChild(a);
+	      a.click();
+	      document.body.removeChild(a);
 	    }
 
 		async function fetchAppVersion() {
