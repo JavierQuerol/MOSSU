@@ -44,8 +44,6 @@
 		9662602A2E2A9DAA002253FE /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		9662602C2E2AF54D002253FE /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		9662602D2E2AF54D002253FE /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		9662602E2E2AF54D002253FE /* instructions1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instructions1.png; sourceTree = "<group>"; };
-		9662602F2E2AF54D002253FE /* instructions2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instructions2.png; sourceTree = "<group>"; };
 		966B512528D2435600CEDFB1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9675F03F2E1FCE0500ED9A69 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		96A55E382E2478DC0035AA17 /* OfficeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeTests.swift; sourceTree = "<group>"; };
@@ -142,8 +140,6 @@
 				963C7BCA2E3B8BA70065871B /* app.png */,
 				963C7BCB2E3B8BA70065871B /* style.css */,
 				963C7BCC2E3B8BA70065871B /* web.png */,
-				9662602E2E2AF54D002253FE /* instructions1.png */,
-				9662602F2E2AF54D002253FE /* instructions2.png */,
 				96B02EC02E23AF7E007FE3E8 /* MOSSU.zip */,
 				96B02EC12E23AF7E007FE3E8 /* redirect.html */,
 			);
