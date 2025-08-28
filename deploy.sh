@@ -71,7 +71,7 @@ SUBMISSION_ZIP="build/${APP_NAME}-notary-submission.zip"
 
 echo "📦 Preparando ZIP temporal para envío a notarización..."
 rm -f "$SUBMISSION_ZIP"
-ditto -c -k --keepParent "$APP_PATH" "$SUBMISSION_ZIP"
+ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$SUBMISSION_ZIP"
 
 echo "🧾 Enviando a notarizar (ZIP temporal)..."
 if [[ -n "${NOTARYTOOL_PROFILE:-}" ]]; then
@@ -108,7 +108,7 @@ echo "🚮 Borrando el fichero appcast.xml"
 echo "📁 Comprimendo la app para Sparkle (ZIP final)..."
 mkdir -p "$PUBLIC_PATH"
 rm -f "$ZIP_PATH"
-ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
+ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ZIP_PATH"
 
 echo "📎 Aplicando staple al ZIP final..."
 xcrun stapler staple -v "$ZIP_PATH" || true
