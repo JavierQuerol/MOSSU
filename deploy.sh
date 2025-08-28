@@ -29,7 +29,7 @@ export NOTARYTOOL_PROFILE="AC_MOSSU"
 #   export SPARKLE_PRIVATE_KEY_PATH="$HOME/.sparkle/EdDSA.priv"
 
 # Incrementar el número de build
-xcrun agvtool bump -all > /dev/null
+# xcrun agvtool bump -all > /dev/null
 NEW_BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
 
 # Incrementar la versión de marketing
