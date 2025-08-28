@@ -110,6 +110,13 @@ mkdir -p "$PUBLIC_PATH"
 rm -f "$ZIP_PATH"
 ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
+echo "📎 Aplicando staple al ZIP final..."
+xcrun stapler staple -v "$ZIP_PATH" || true
+
+echo "🧪 Validando staple (app y zip)..."
+xcrun stapler validate "$APP_PATH" || true
+xcrun stapler validate "$ZIP_PATH" || true
+
 echo "🔐 Firmando (Sparkle) y generando el appcast..."
 if command -v generate_appcast >/dev/null 2>&1; then
   if [[ -n "${SPARKLE_PRIVATE_KEY_PATH:-}" ]]; then
