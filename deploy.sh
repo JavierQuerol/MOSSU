@@ -19,7 +19,7 @@ DEPLOYMENT_SERVER="Vercel"
 
 # Notarization credentials (choose one method):
 # - Keychain profile created with: xcrun notarytool store-credentials
-export NOTARYTOOL_PROFILE="AC_MOSSU"
+export NOTARYTOOL_PROFILE="AC MOSSU"
 # - App Store Connect API key (preferred):
 #   export AC_API_KEY_ID=...; export AC_API_ISSUER_ID=...; export AC_API_KEY_PATH=.../AuthKey_XXXXXX.p8
 # - Apple ID fallback (requires app-specific password):
@@ -28,9 +28,11 @@ export NOTARYTOOL_PROFILE="AC_MOSSU"
 # Optional: Sparkle EdDSA private key for signing appcast updates
 #   export SPARKLE_PRIVATE_KEY_PATH="$HOME/.sparkle/EdDSA.priv"
 
-# Incrementar el número de build
-# xcrun agvtool bump -all > /dev/null
-NEW_BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
+# Incrementar el número de build de forma consistente con AGVTool
+CURRENT_BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH" 2>/dev/null || echo 0)
+if [[ -z "$CURRENT_BUILD" ]]; then CURRENT_BUILD=0; fi
+NEW_BUILD=$((CURRENT_BUILD + 1))
+xcrun agvtool new-version -all "$NEW_BUILD" > /dev/null
 
 # Incrementar la versión de marketing
 CURRENT_VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$PLIST_PATH")
@@ -65,23 +67,25 @@ codesign --force --deep --options runtime --timestamp \
 echo "🔎 Verificando la firma..."
 codesign --verify --deep --strict --verbose=2 "$APP_PATH"
 
-echo "📁 Comprimendo la app para Sparkle..."
-mkdir -p "$PUBLIC_PATH"
-ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
+SUBMISSION_ZIP="build/${APP_NAME}-notary-submission.zip"
 
-echo "🧾 Enviando a notarizar el ZIP..."
+echo "📦 Preparando ZIP temporal para envío a notarización..."
+rm -f "$SUBMISSION_ZIP"
+ditto -c -k --keepParent "$APP_PATH" "$SUBMISSION_ZIP"
+
+echo "🧾 Enviando a notarizar (ZIP temporal)..."
 if [[ -n "${NOTARYTOOL_PROFILE:-}" ]]; then
-  xcrun notarytool submit "$ZIP_PATH" \
+  xcrun notarytool submit "$SUBMISSION_ZIP" \
     --keychain-profile "$NOTARYTOOL_PROFILE" \
     --wait --output-format normal
 elif [[ -n "${AC_API_KEY_ID:-}" && -n "${AC_API_ISSUER_ID:-}" && -n "${AC_API_KEY_PATH:-}" ]]; then
-  xcrun notarytool submit "$ZIP_PATH" \
+  xcrun notarytool submit "$SUBMISSION_ZIP" \
     --key "$AC_API_KEY_PATH" \
     --key-id "$AC_API_KEY_ID" \
     --issuer "$AC_API_ISSUER_ID" \
     --wait --output-format normal
 elif [[ -n "${APPLE_ID:-}" && -n "${APP_SPECIFIC_PASSWORD:-}" && -n "${APPLE_TEAM_ID:-}" ]]; then
-  xcrun notarytool submit "$ZIP_PATH" \
+  xcrun notarytool submit "$SUBMISSION_ZIP" \
     --apple-id "$APPLE_ID" \
     --password "$APP_SPECIFIC_PASSWORD" \
     --team-id "$APPLE_TEAM_ID" \
@@ -94,9 +98,17 @@ fi
 echo "📎 Aplicando staple a la app..."
 xcrun stapler staple -v "$APP_PATH"
 
+echo "🧪 Validando Gatekeeper (spctl)..."
+spctl --assess --type execute --verbose=2 "$APP_PATH" || true
+
 echo "🚮 Borrando el fichero appcast.xml"
 # Mantén el histórico si lo necesitas; por defecto Sparkle reescribe entradas.
 # rm -f "$PUBLIC_PATH/appcast.xml"
+
+echo "📁 Comprimendo la app para Sparkle (ZIP final)..."
+mkdir -p "$PUBLIC_PATH"
+rm -f "$ZIP_PATH"
+ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
 echo "🔐 Firmando (Sparkle) y generando el appcast..."
 if command -v generate_appcast >/dev/null 2>&1; then
@@ -118,4 +130,3 @@ git commit -m "new version of $APP_NAME"
 git push
 
 echo "Servidor $DEPLOYMENT_SERVER actualizado "
-
