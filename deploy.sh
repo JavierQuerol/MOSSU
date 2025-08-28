@@ -11,7 +11,7 @@ APP_PATH="${EXPORT_PATH}/${APP_NAME}.app"
 PUBLIC_PATH="public"
 PLIST_PATH="MOSSU macos/Info.plist"
 ZIP_PATH="${PUBLIC_PATH}/${APP_NAME}.zip"
-SIGN_IDENTITY="Apple Distribution: Javier Querol Morata (4385X6LBF4)"
+SIGN_IDENTITY="Developer ID Application: Javier Querol Morata (4385X6LBF4)"
 DEPLOYMENT_SERVER="Vercel"
 
 # Incrementar el número de build
