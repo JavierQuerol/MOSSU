@@ -49,7 +49,7 @@ class SlackStatusManager: NSObject {
     func requestAuthorization() {
         // Solicitar permiso solo "When In Use" para evitar conflictos con MDM
         // y reducir fricción. La app realiza peticiones puntuales con requestLocation().
-        if CLLocationManager.authorizationStatus() == .notDetermined {
+        if locationManager.authorizationStatus == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
         }
     }
@@ -179,10 +179,9 @@ class SlackStatusManager: NSObject {
 }
 
 extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         delegate?.slackStatusManager(self, didUpdate: currentOffice)
-        // En cuanto haya autorización, intentamos obtener ubicación
-        switch status {
+        switch manager.authorizationStatus {
         case .authorizedAlways, .authorizedWhenInUse:
             startTracking()
         case .denied, .restricted:
