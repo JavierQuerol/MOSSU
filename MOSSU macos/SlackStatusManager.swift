@@ -47,7 +47,11 @@ class SlackStatusManager: NSObject {
     }
     
     func requestAuthorization() {
-        locationManager.requestAlwaysAuthorization()
+        // Solicitar permiso solo "When In Use" para evitar conflictos con MDM
+        // y reducir fricción. La app realiza peticiones puntuales con requestLocation().
+        if CLLocationManager.authorizationStatus() == .notDetermined {
+            locationManager.requestWhenInUseAuthorization()
+        }
     }
 
     func startTracking() {
@@ -177,6 +181,15 @@ class SlackStatusManager: NSObject {
 extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         delegate?.slackStatusManager(self, didUpdate: currentOffice)
+        // En cuanto haya autorización, intentamos obtener ubicación
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            startTracking()
+        case .denied, .restricted:
+            LogManager.shared.log("🛑 Permiso de localización denegado o restringido")
+        default:
+            break
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -197,6 +210,9 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
         LogManager.shared.log("🛑 Error al trazar ubicación: \(error)")
+        if let clErr = error as? CLError, clErr.code == .denied {
+            LogManager.shared.log("ℹ️ Revisa Ajustes del Sistema → Privacidad y seguridad → Localización y habilita MOSSU.")
+        }
     }
     
     func reachability(_ reachability: Reachability, didUpdateInternetStatus isAvailable: Bool) {
