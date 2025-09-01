@@ -22,6 +22,7 @@
 		96ED6A7528C61540001226F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED6A7428C61540001226F1 /* AppDelegate.swift */; };
 		96ED6A7728C61545001226F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96ED6A7628C61545001226F1 /* Assets.xcassets */; };
 		96F0057D2E1D66EF00AF482C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F0057C2E1D66ED00AF482C /* main.swift */; };
+		96F1A1A22E5C000000000001 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F1A1A12E5C000000000001 /* LaunchAtLoginManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		96ED6A7628C61545001226F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		96ED6A7B28C61545001226F1 /* MOSSU.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MOSSU.entitlements; sourceTree = "<group>"; };
 		96F0057C2E1D66ED00AF482C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		96F1A1A12E5C000000000001 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 				96B02EB02E23A994007FE3E8 /* NotificationManager.swift */,
 				96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */,
 				96E010062E333B57002D8549 /* LogManager.swift */,
+				96F1A1A12E5C000000000001 /* LaunchAtLoginManager.swift */,
 				96B02EB22E23A994007FE3E8 /* StatusBarController.swift */,
 				960A08F228CB86250060F5DE /* Office.swift */,
 				9675F03F2E1FCE0500ED9A69 /* Constants.swift */,
@@ -307,6 +310,7 @@
 				96B02EB32E23A994007FE3E8 /* SlackStatusManager.swift in Sources */,
 				9662602B2E2A9DAA002253FE /* Reachability.swift in Sources */,
 				96B02EB52E23A994007FE3E8 /* StatusBarController.swift in Sources */,
+				96F1A1A22E5C000000000001 /* LaunchAtLoginManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

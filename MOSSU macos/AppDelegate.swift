@@ -13,6 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusBarController: StatusBarController?
     private let notifier = NotificationManager()
     private let slackManager = SlackStatusManager()
+    private let launchAtLoginManager = LaunchAtLoginManager()
     private let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -24,6 +25,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        UserDefaults.standard.removeObject(forKey: "mutedUntil")
         
         showFirstLaunchPopupIfNeeded()
+
+        // Enable "launch at login" by default on first run
+        if !UserDefaults.standard.bool(forKey: "hasSetLaunchAtLoginDefault") {
+            launchAtLoginManager.setEnabled(true)
+            UserDefaults.standard.set(true, forKey: "hasSetLaunchAtLoginDefault")
+        }
         
         if let token = UserDefaults.standard.string(forKey: "token") {
             slackManager.token = token
@@ -115,6 +122,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.updaterController.checkForUpdates(nil)
         }
     }
+
+    @objc func toggleLaunchAtLogin() {
+        let newValue = !launchAtLoginManager.isEnabled
+        launchAtLoginManager.setEnabled(newValue)
+        LogManager.shared.log(newValue ? "Abrir al iniciar sesión: activado" : "Abrir al iniciar sesión: desactivado")
+        if let office = slackManager.currentOffice {
+            updateStatusMenu(office: office)
+        } else {
+            updateStatusMenu()
+        }
+    }
     
     @objc func showLogs() {
         let alert = NSAlert()
@@ -163,7 +181,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                    lastUpdate: slackManager.lastUpdate,
                                    name: slackManager.name,
                                    paused: slackManager.paused,
-                                   holidayEndDate: slackManager.holidayEndDate)
+                                   holidayEndDate: slackManager.holidayEndDate,
+                                   launchAtLoginEnabled: launchAtLoginManager.isEnabled)
     }
     
     private func sendNotification(text: String) {
@@ -181,4 +200,3 @@ extension AppDelegate: SlackStatusManagerDelegate {
         sendNotification(text: text)
     }
 }
-

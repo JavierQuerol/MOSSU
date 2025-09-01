@@ -17,7 +17,8 @@ class StatusBarController {
         lastUpdate: Date?,
         name: String,
         paused: Bool,
-        holidayEndDate: Date?
+        holidayEndDate: Date?,
+        launchAtLoginEnabled: Bool
     ) {
         NSApp.setActivationPolicy(.accessory)
         var composedText: String?
@@ -130,6 +131,14 @@ class StatusBarController {
         }
 
         menu.addItem(NSMenuItem.separator())
+
+        let launchAtLoginItem = NSMenuItem(
+            title: "Abrir al iniciar sesión",
+            action: #selector(AppDelegate.toggleLaunchAtLogin),
+            keyEquivalent: ""
+        )
+        launchAtLoginItem.state = launchAtLoginEnabled ? .on : .off
+        menu.addItem(launchAtLoginItem)
 
         let updateItem = NSMenuItem(
             title: "Buscar actualizaciones…",
