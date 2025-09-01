@@ -1,0 +1,56 @@
+{
+  // VS Code tasks to build, run, and test the macOS app
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build MOSSU (Debug)",
+      "type": "shell",
+      "command": "xcodebuild",
+      "args": [
+        "-project", "MOSSU.xcodeproj",
+        "-scheme", "MOSSU",
+        "-configuration", "Debug",
+        "-derivedDataPath", "build",
+        "build"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Run MOSSU (no debug)",
+      "type": "shell",
+      "dependsOn": "Build MOSSU (Debug)",
+      "command": "open",
+      "args": [
+        "build/Build/Products/Debug/MOSSU.app"
+      ]
+    },
+    {
+      "label": "Test MOSSU",
+      "type": "shell",
+      "command": "xcodebuild",
+      "args": [
+        "-project", "MOSSU.xcodeproj",
+        "-scheme", "MOSSU",
+        "-destination", "platform=macOS",
+        "test"
+      ],
+      "group": "test",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Clean MOSSU",
+      "type": "shell",
+      "command": "xcodebuild",
+      "args": [
+        "-project", "MOSSU.xcodeproj",
+        "-scheme", "MOSSU",
+        "clean"
+      ]
+    }
+  ]
+}
+

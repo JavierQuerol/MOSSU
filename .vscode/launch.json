@@ -1,0 +1,17 @@
+{
+  // Debugging configuration using CodeLLDB (vadimcn.vscode-lldb)
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug MOSSU.app",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/Build/Products/Debug/MOSSU.app/Contents/MacOS/MOSSU",
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "preLaunchTask": "Build MOSSU (Debug)",
+      "env": {}
+    }
+  ]
+}
+
