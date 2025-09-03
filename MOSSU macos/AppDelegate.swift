@@ -123,6 +123,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @objc func toggleDay(_ sender: NSMenuItem) {
+        SchedulePreferences.shared.toggleDay(sender.tag)
+        if let office = slackManager.currentOffice {
+            updateStatusMenu(office: office)
+        } else {
+            updateStatusMenu()
+        }
+    }
+
+    @objc func toggleHour(_ sender: NSMenuItem) {
+        SchedulePreferences.shared.toggleHour(sender.tag)
+        if let office = slackManager.currentOffice {
+            updateStatusMenu(office: office)
+        } else {
+            updateStatusMenu()
+        }
+    }
+
     @objc func toggleLaunchAtLogin() {
         let newValue = !launchAtLoginManager.isEnabled
         launchAtLoginManager.setEnabled(newValue)

@@ -139,12 +139,12 @@ class SlackStatusManager: NSObject {
                 return
             }
             let weekday = Calendar.current.component(.weekday, from: Date())
-            if Office.unavailableDays.contains(weekday) {
+            if !SchedulePreferences.shared.isDayEnabled(weekday) {
                 LogManager.shared.log("🟠 Sin actualizar Slack por el día")
                 return
             }
             let hour = Calendar.current.component(.hour, from: Date())
-            if !Office.workingHours.contains(hour) {
+            if !SchedulePreferences.shared.isHourEnabled(hour) {
                 LogManager.shared.log("🟠 Sin actualizar Slack por la hora")
                 return
             }

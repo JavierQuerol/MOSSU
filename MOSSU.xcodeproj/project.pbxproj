@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		960A08F328CB86250060F5DE /* Office.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F228CB86250060F5DE /* Office.swift */; };
 		960A08F528CB872E0060F5DE /* Slack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A08F428CB872E0060F5DE /* Slack.swift */; };
+		963210D32E68BEED00961A3E /* SchedulePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963210D22E68BEED00961A3E /* SchedulePreferences.swift */; };
 		96341E272E22611A004D8BB6 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 96341E262E22611A004D8BB6 /* Sparkle */; };
 		966260292E295ED2002253FE /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB02E23A994007FE3E8 /* NotificationManager.swift */; };
 		9662602B2E2A9DAA002253FE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9662602A2E2A9DAA002253FE /* Reachability.swift */; };
@@ -39,6 +40,7 @@
 		960A08F228CB86250060F5DE /* Office.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Office.swift; sourceTree = "<group>"; };
 		960A08F428CB872E0060F5DE /* Slack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slack.swift; sourceTree = "<group>"; };
 		960A08F828CF4D360060F5DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		963210D22E68BEED00961A3E /* SchedulePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulePreferences.swift; sourceTree = "<group>"; };
 		963C7BCA2E3B8BA70065871B /* app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app.png; sourceTree = "<group>"; };
 		963C7BCB2E3B8BA70065871B /* style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
 		963C7BCC2E3B8BA70065871B /* web.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = web.png; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				96E010062E333B57002D8549 /* LogManager.swift */,
 				96F1A1A12E5C000000000001 /* LaunchAtLoginManager.swift */,
 				96B02EB22E23A994007FE3E8 /* StatusBarController.swift */,
+				963210D22E68BEED00961A3E /* SchedulePreferences.swift */,
 				960A08F228CB86250060F5DE /* Office.swift */,
 				9675F03F2E1FCE0500ED9A69 /* Constants.swift */,
 				960A08F428CB872E0060F5DE /* Slack.swift */,
@@ -311,6 +314,7 @@
 				9662602B2E2A9DAA002253FE /* Reachability.swift in Sources */,
 				96B02EB52E23A994007FE3E8 /* StatusBarController.swift in Sources */,
 				96F1A1A22E5C000000000001 /* LaunchAtLoginManager.swift in Sources */,
+				963210D32E68BEED00961A3E /* SchedulePreferences.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

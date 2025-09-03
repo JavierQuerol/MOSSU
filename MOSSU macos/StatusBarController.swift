@@ -68,11 +68,11 @@ class StatusBarController {
 
             let weekday = Calendar.current.component(.weekday, from: Date())
             let hour = Calendar.current.component(.hour, from: Date())
-            if Office.unavailableDays.contains(weekday) {
+            if !SchedulePreferences.shared.isDayEnabled(weekday) {
                 let dayName = formatter.weekdaySymbols[weekday - 1]
                 lastUpdateText = "Los \(dayName)s no se actualiza Slack"
-            } else if !Office.workingHours.contains(hour) {
-                lastUpdateText = "A las \(hour):00 no se actualiza Slack"
+            } else if !SchedulePreferences.shared.isHourEnabled(hour) {
+                lastUpdateText = "Fuera de horario de actualización"
             }
 
             let combinedText = "\(composedText)\n\(lastUpdateText)"
@@ -98,6 +98,42 @@ class StatusBarController {
         }
 
         menu.addItem(NSMenuItem.separator())
+
+        // Scheduling submenu: days and hours
+        let schedulingParent = NSMenuItem(title: "⏰ Horario de actualización", action: nil, keyEquivalent: "")
+        let schedulingMenu = NSMenu()
+
+        // Days submenu
+        let daysItem = NSMenuItem(title: "Días", action: nil, keyEquivalent: "")
+        let daysMenu = NSMenu()
+        let weekdaysOrder: [Int] = [2,3,4,5,6,7,1] // Mon..Sun
+        let weekdaySymbols = formatter.weekdaySymbols // Sunday-first
+        for wd in weekdaysOrder {
+            let index = wd - 1
+            guard let name = weekdaySymbols?[index].capitalized else { return }
+            let item = NSMenuItem(title: name, action: #selector(AppDelegate.toggleDay(_:)), keyEquivalent: "")
+            item.tag = wd
+            item.state = SchedulePreferences.shared.isDayEnabled(wd) ? .on : .off
+            daysMenu.addItem(item)
+        }
+        daysItem.submenu = daysMenu
+        schedulingMenu.addItem(daysItem)
+
+        // Hours submenu
+        let hoursItem = NSMenuItem(title: "Horas", action: nil, keyEquivalent: "")
+        let hoursMenu = NSMenu()
+        for hour in 6..<21 {
+            let title = String(format: "%02d:00", hour)
+            let item = NSMenuItem(title: title, action: #selector(AppDelegate.toggleHour(_:)), keyEquivalent: "")
+            item.tag = hour
+            item.state = SchedulePreferences.shared.isHourEnabled(hour) ? .on : .off
+            hoursMenu.addItem(item)
+        }
+        hoursItem.submenu = hoursMenu
+        schedulingMenu.addItem(hoursItem)
+
+        schedulingParent.submenu = schedulingMenu
+        menu.addItem(schedulingParent)
 
         let pausedText =
         (paused || Date() <= holidayEndDate ?? Date().addingTimeInterval(-100000)) ? "▶️ Reanudar actualizaciones" : "⏸️ Pausar actualizaciones"
