@@ -60,10 +60,11 @@ class StatusBarController {
         formatter.locale = Locale.current
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
+        formatter.doesRelativeDateFormatting = true
 
         if let composedText = composedText {
             let dateString = formatter.string(from: lastUpdate ?? Date())
-            var lastUpdateText = "Actualizado el \(dateString)"
+            var lastUpdateText = "Última actualización: \(dateString)"
 
             let weekday = Calendar.current.component(.weekday, from: Date())
             let hour = Calendar.current.component(.hour, from: Date())
