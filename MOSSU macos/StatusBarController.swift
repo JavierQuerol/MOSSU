@@ -70,12 +70,8 @@ class StatusBarController {
             if Office.unavailableDays.contains(weekday) {
                 let dayName = formatter.weekdaySymbols[weekday - 1]
                 lastUpdateText = "Los \(dayName)s no se actualiza Slack"
-            } else if hour >= Office.workingHoursEnd  {
-                lastUpdateText =
-                    "Después de las \(Office.workingHoursEnd):00h no se actualiza Slack"
-            } else if hour < Office.workingHoursStart {
-                lastUpdateText =
-                    "Antes de las \(Office.workingHoursStart):00h no se actualiza Slack"
+            } else if !Office.workingHours.contains(hour) {
+                lastUpdateText = "A las \(hour):00 no se actualiza Slack"
             }
 
             let combinedText = "\(composedText)\n\(lastUpdateText)"

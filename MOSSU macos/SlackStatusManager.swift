@@ -144,7 +144,7 @@ class SlackStatusManager: NSObject {
                 return
             }
             let hour = Calendar.current.component(.hour, from: Date())
-            if hour >= Office.workingHoursEnd || hour < Office.workingHoursStart {
+            if Office.workingHours.contains(hour) {
                 LogManager.shared.log("🟠 Sin actualizar Slack por la hora")
                 return
             }
