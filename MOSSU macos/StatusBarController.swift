@@ -18,7 +18,8 @@ class StatusBarController {
         name: String,
         paused: Bool,
         holidayEndDate: Date?,
-        launchAtLoginEnabled: Bool
+        launchAtLoginEnabled: Bool,
+        meetingEnabled: Bool
     ) {
         NSApp.setActivationPolicy(.accessory)
         var composedText: String?
@@ -172,6 +173,14 @@ class StatusBarController {
         )
         launchAtLoginItem.state = launchAtLoginEnabled ? .on : .off
         menu.addItem(launchAtLoginItem)
+
+        let meetingModeItem = NSMenuItem(
+            title: "Observar calendario",
+            action: #selector(AppDelegate.toggleMeetingIntegration),
+            keyEquivalent: ""
+        )
+        meetingModeItem.state = meetingEnabled ? .on : .off
+        menu.addItem(meetingModeItem)
 
         let updateItem = NSMenuItem(
             title: "Buscar actualizaciones…",

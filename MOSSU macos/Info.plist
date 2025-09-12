@@ -23,6 +23,8 @@
 	<string>MOSSU necesita acceder a tu ubicación para detectar la oficina incluso cuando la app está en segundo plano y mantener tu estado de Slack actualizado.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>MOSSU usa tu ubicación aproximada para detectar la oficina y actualizar tu estado de Slack.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>MOSSU necesita acceder a tu calendario para cambiar tu emoji de Slack durante tus reuniones.</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>

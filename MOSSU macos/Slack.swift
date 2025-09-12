@@ -29,7 +29,7 @@ class Slack {
         }.resume()
     }
     
-    static func update(given office: Office, token: String, completion: @escaping (Error?) -> Void) {
+    static func update(given office: Office, token: String, expiration: Int = 0, completion: @escaping (Error?) -> Void) {
         var request = URLRequest(url: URL(string: "https://slack.com/api/users.profile.set")!)
         request.httpMethod = "POST"
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -39,7 +39,7 @@ class Slack {
             "profile": [
                 "status_text": office.text.uppercasedFirst(),
                 "status_emoji": office.emoji,
-                "status_expiration": 0
+                "status_expiration": expiration
             ]
         ]
         let paramsData = try? JSONSerialization.data(withJSONObject: params)

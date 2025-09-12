@@ -35,6 +35,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let token = UserDefaults.standard.string(forKey: "token") {
             slackManager.token = token
             slackManager.getCurrentStatus(token: token)
+            if slackManager.meetingIntegrationEnabled {
+                slackManager.requestCalendarAccess()
+            }
         } else {
             showAuth()
         }
@@ -56,6 +59,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     slackManager.requestAuthorization()
                     slackManager.currentOffice = nil
                     slackManager.getCurrentStatus(token: token)
+                    if slackManager.meetingIntegrationEnabled {
+                        slackManager.requestCalendarAccess()
+                    }
                     startTracking()
                 }
             }
@@ -200,7 +206,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                    name: slackManager.name,
                                    paused: slackManager.paused,
                                    holidayEndDate: slackManager.holidayEndDate,
-                                   launchAtLoginEnabled: launchAtLoginManager.isEnabled)
+                                   launchAtLoginEnabled: launchAtLoginManager.isEnabled,
+                                   meetingEnabled: slackManager.meetingIntegrationEnabled)
+    }
+
+    @objc func toggleMeetingIntegration() {
+        slackManager.meetingIntegrationEnabled.toggle()
+        if let office = slackManager.currentOffice {
+            updateStatusMenu(office: office)
+        } else {
+            updateStatusMenu()
+        }
     }
     
     private func sendNotification(text: String) {
