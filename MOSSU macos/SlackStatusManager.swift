@@ -69,10 +69,21 @@ class SlackStatusManager: NSObject {
     }
     
     func requestAuthorization() {
-        // Solicitar permiso solo "When In Use" para evitar conflictos con MDM
-        // y reducir fricción. La app realiza peticiones puntuales con requestLocation().
-        if locationManager.authorizationStatus == .notDetermined {
-            locationManager.requestWhenInUseAuthorization()
+        // Para builds en la barra de menú necesitamos acceso continuo; intentamos
+        // solicitar "Always" (cuando está disponible) y retrocedemos a "When In Use".
+        switch locationManager.authorizationStatus {
+        case .notDetermined:
+            if locationManager.responds(to: #selector(CLLocationManager.requestAlwaysAuthorization)) {
+                locationManager.requestAlwaysAuthorization()
+                LogManager.shared.log("📍 Solicitando permiso de localización 'Siempre'")
+            } else {
+                locationManager.requestWhenInUseAuthorization()
+                LogManager.shared.log("📍 Solicitando permiso de localización 'Cuando se use la app'")
+            }
+        case .denied, .restricted:
+            LogManager.shared.log("🛑 Permiso de localización denegado/restringido. Actualiza los ajustes para permitir acceso siempre.")
+        default:
+            break
         }
     }
 
@@ -206,13 +217,11 @@ class SlackStatusManager: NSObject {
             }
             if !bypassScheduleRestrictions {
                 let weekday = Calendar.current.component(.weekday, from: Date())
-                if !SchedulePreferences.shared.isDayEnabled(weekday) {
-                    LogManager.shared.log("🟠 Sin actualizar Slack por el día")
-                    return
-                }
+                let isDayEnabled = SchedulePreferences.shared.isDayEnabled(weekday)
                 let hour = Calendar.current.component(.hour, from: Date())
-                if !SchedulePreferences.shared.isHourEnabled(hour) {
-                    LogManager.shared.log("🟠 Sin actualizar Slack por la hora")
+                let isHourEnabled = SchedulePreferences.shared.isHourEnabled(hour)
+                if (!isDayEnabled || !isHourEnabled) && newOffice == remote {
+                    LogManager.shared.log("🟠 Sin actualizar Slack: remoto fuera de horario laboral")
                     return
                 }
             }
