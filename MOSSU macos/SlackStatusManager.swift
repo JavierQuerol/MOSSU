@@ -73,17 +73,24 @@ class SlackStatusManager: NSObject {
         // solicitar "Always" (cuando está disponible) y retrocedemos a "When In Use".
         switch locationManager.authorizationStatus {
         case .notDetermined:
-            if locationManager.responds(to: #selector(CLLocationManager.requestAlwaysAuthorization)) {
-                locationManager.requestAlwaysAuthorization()
-                LogManager.shared.log("📍 Solicitando permiso de localización 'Siempre'")
-            } else {
-                locationManager.requestWhenInUseAuthorization()
-                LogManager.shared.log("📍 Solicitando permiso de localización 'Cuando se use la app'")
-            }
+            requestAlwaysAuthorizationIfAvailable()
+        case .authorizedWhenInUse:
+            LogManager.shared.log("ℹ️ Permiso actual: 'Cuando se use la app'. Intentando elevar a 'Siempre'.")
+            requestAlwaysAuthorizationIfAvailable()
         case .denied, .restricted:
             LogManager.shared.log("🛑 Permiso de localización denegado/restringido. Actualiza los ajustes para permitir acceso siempre.")
         default:
             break
+        }
+    }
+
+    private func requestAlwaysAuthorizationIfAvailable() {
+        if locationManager.responds(to: #selector(CLLocationManager.requestAlwaysAuthorization)) {
+            locationManager.requestAlwaysAuthorization()
+            LogManager.shared.log("📍 Solicitando permiso de localización 'Siempre'")
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+            LogManager.shared.log("📍 Solicitando permiso de localización 'Cuando se use la app'")
         }
     }
 
