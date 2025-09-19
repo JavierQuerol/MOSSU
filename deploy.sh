@@ -62,6 +62,7 @@ cp -R "$ARCHIVE_PATH/Products/Applications/${APP_NAME}.app" "$EXPORT_PATH"
 
 echo "🔏 Firmando la app con hardened runtime..."
 codesign --force --deep --options runtime --timestamp \
+  --entitlements "MOSSU macos/MOSSU.entitlements" \
   --sign "$SIGN_IDENTITY" "$APP_PATH"
 
 echo "🔎 Verificando la firma..."
