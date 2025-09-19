@@ -21,6 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarController = StatusBarController()
         updateStatusMenu()
         slackManager.delegate = self
+        slackManager.allowNextUpdateBypassingScheduleRestrictions()
 //        UserDefaults.standard.removeObject(forKey: "token")
 //        UserDefaults.standard.removeObject(forKey: "mutedUntil")
         
@@ -58,6 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     slackManager.token = token
                     slackManager.requestAuthorization()
                     slackManager.currentOffice = nil
+                    slackManager.allowNextUpdateBypassingScheduleRestrictions()
                     slackManager.getCurrentStatus(token: token)
                     if slackManager.meetingIntegrationEnabled {
                         slackManager.requestCalendarAccess()

@@ -42,10 +42,11 @@ class SlackStatusManager: NSObject {
     private var hasPendingLocationUpdate = false
     private let eventStore = EKEventStore()
     private var calendarAccessGranted = false
-    private var calendarTimer: Timer?
+    private var calendarRefreshTimer: Timer?
     private var meetingEndDate: Date?
     private var meetingLastEventIdentifier: String?
     private var meetingStatusTimer: Timer?
+    private var shouldBypassScheduleRestrictionsOnce = false
 
     override init() {
         super.init()
@@ -97,8 +98,12 @@ class SlackStatusManager: NSObject {
         locationManager.requestLocation()
     }
 
+    func allowNextUpdateBypassingScheduleRestrictions() {
+        shouldBypassScheduleRestrictionsOnce = true
+    }
+
     func startCalendarMonitoring() {
-        calendarTimer?.invalidate()
+        calendarRefreshTimer?.invalidate()
         guard calendarAccessGranted, meetingIntegrationEnabled else { return }
         NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: eventStore)
         NotificationCenter.default.addObserver(self,
@@ -106,13 +111,10 @@ class SlackStatusManager: NSObject {
                                                name: .EKEventStoreChanged,
                                                object: eventStore)
         checkCalendarAndUpdateIfNeeded()
-        calendarTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
-            self?.checkCalendarAndUpdateIfNeeded()
-        }
     }
 
     func stopCalendarMonitoring() {
-        calendarTimer?.invalidate()
+        calendarRefreshTimer?.invalidate()
         meetingStatusTimer?.invalidate()
         meetingEndDate = nil
         meetingLastEventIdentifier = nil
@@ -181,6 +183,10 @@ class SlackStatusManager: NSObject {
         var newOffice = office
         
         guard let token = token else { return }
+        let bypassScheduleRestrictions = shouldBypassScheduleRestrictionsOnce
+        if bypassScheduleRestrictions {
+            shouldBypassScheduleRestrictionsOnce = false
+        }
         
         var statusText = office.text
         if let endDate = holidayEndDate, Date() < endDate {
@@ -198,20 +204,22 @@ class SlackStatusManager: NSObject {
                 LogManager.shared.log("⏸️ Sin actualizar Slack por estar en pausa")
                 return
             }
-            let weekday = Calendar.current.component(.weekday, from: Date())
-            if !SchedulePreferences.shared.isDayEnabled(weekday) {
-                LogManager.shared.log("🟠 Sin actualizar Slack por el día")
-                return
-            }
-            let hour = Calendar.current.component(.hour, from: Date())
-            if !SchedulePreferences.shared.isHourEnabled(hour) {
-                LogManager.shared.log("🟠 Sin actualizar Slack por la hora")
-                return
+            if !bypassScheduleRestrictions {
+                let weekday = Calendar.current.component(.weekday, from: Date())
+                if !SchedulePreferences.shared.isDayEnabled(weekday) {
+                    LogManager.shared.log("🟠 Sin actualizar Slack por el día")
+                    return
+                }
+                let hour = Calendar.current.component(.hour, from: Date())
+                if !SchedulePreferences.shared.isHourEnabled(hour) {
+                    LogManager.shared.log("🟠 Sin actualizar Slack por la hora")
+                    return
+                }
             }
         } else {
             LogManager.shared.log("🌴 Estás en vacaciones, pero actualizamos")
         }
-        
+
         let updatedOffice = Office(location: newOffice.location,
                                    emoji: newOffice.emoji,
                                    text: statusText,
@@ -248,17 +256,33 @@ class SlackStatusManager: NSObject {
     }
 
     private func checkCalendarAndUpdateIfNeeded() {
-        guard calendarAccessGranted, meetingIntegrationEnabled else { return }
-        guard !paused else { return }
+        guard calendarAccessGranted, meetingIntegrationEnabled else {
+            calendarRefreshTimer?.invalidate()
+            return
+        }
+        guard !paused else {
+            calendarRefreshTimer?.invalidate()
+            return
+        }
         let now = Date()
         let start = now.addingTimeInterval(-300)
         let end = now.addingTimeInterval(7200)
         let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: nil)
-        let events = eventStore.events(matching: predicate)
-            .filter { !$0.isAllDay && $0.startDate <= now && $0.endDate > now }
+        let events = eventStore.events(matching: predicate).filter { !$0.isAllDay }
+        let ongoingEvents = events
+            .filter { $0.startDate <= now && $0.endDate > now }
             .sorted(by: { $0.endDate < $1.endDate })
+        let upcomingEvents = events
+            .filter { $0.startDate > now && $0.availability != .free }
+            .sorted(by: { $0.startDate < $1.startDate })
 
-        if let current = events.first {
+        if let nextStart = upcomingEvents.first?.startDate {
+            scheduleCalendarRefresh(at: nextStart)
+        } else {
+            calendarRefreshTimer?.invalidate()
+        }
+
+        if let current = ongoingEvents.first {
             // Considerar relevantes todos salvo marcados como "free"
             let isRelevant = current.availability != .free
             if isRelevant {
@@ -282,6 +306,21 @@ class SlackStatusManager: NSObject {
         meetingStatusTimer?.invalidate()
         // Forzar una actualización por ubicación
         startTracking()
+    }
+
+    private func scheduleCalendarRefresh(at date: Date) {
+        calendarRefreshTimer?.invalidate()
+        let interval = date.timeIntervalSinceNow
+        if interval <= 0 {
+            DispatchQueue.main.async { [weak self] in
+                self?.checkCalendarAndUpdateIfNeeded()
+            }
+            return
+        }
+        calendarRefreshTimer = Timer.scheduledTimer(withTimeInterval: interval + 1, repeats: false) { [weak self] _ in
+            self?.checkCalendarAndUpdateIfNeeded()
+        }
+        LogManager.shared.log("⏰ Próxima revisión de calendario programada a las \(date)")
     }
 
     private func sendMeetingEmojiUpdate() {
