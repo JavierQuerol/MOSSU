@@ -48,6 +48,14 @@ class SlackStatusManager: NSObject {
     private var meetingStatusTimer: Timer?
     private var shouldBypassScheduleRestrictionsOnce = false
 
+    private func isWithinWorkingHours(at date: Date = Date()) -> Bool {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        guard SchedulePreferences.shared.isDayEnabled(weekday) else { return false }
+        let hour = calendar.component(.hour, from: date)
+        return SchedulePreferences.shared.isHourEnabled(hour)
+    }
+
     override init() {
         super.init()
         locationManager.delegate = self
@@ -291,6 +299,7 @@ class SlackStatusManager: NSObject {
         let upcomingEvents = events
             .filter { $0.startDate > now && $0.availability != .free }
             .sorted(by: { $0.startDate < $1.startDate })
+        let withinWorkingHours = isWithinWorkingHours(at: now)
 
         if let nextStart = upcomingEvents.first?.startDate {
             scheduleCalendarRefresh(at: nextStart)
@@ -302,6 +311,10 @@ class SlackStatusManager: NSObject {
             // Considerar relevantes todos salvo marcados como "free"
             let isRelevant = current.availability != .free
             if isRelevant {
+                guard withinWorkingHours else {
+                    LogManager.shared.log("🕘 Reunión fuera de horario laboral - no se actualiza estado")
+                    return
+                }
                 if meetingLastEventIdentifier != current.eventIdentifier || meetingEndDate != current.endDate {
                     meetingLastEventIdentifier = current.eventIdentifier
                     meetingEndDate = current.endDate
@@ -311,6 +324,11 @@ class SlackStatusManager: NSObject {
                 }
                 return
             }
+        }
+
+        guard withinWorkingHours else {
+            LogManager.shared.log("🕘 Fuera de horario laboral - no se altera el estado")
+            return
         }
 
         // No hay reunión activa

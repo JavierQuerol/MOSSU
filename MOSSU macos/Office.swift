@@ -118,7 +118,7 @@ struct Office: Equatable {
     var barIconImageMeeting: NSImage
     
     static let unavailableDays: [Int] = [1, 7]
-    static let workingHours: [Int] = [8,9,10,11,12,15,16,17,18]
+    static let workingHours: [Int] = [9,10,11,12,15,16,17,18]
     
     enum SSID: Equatable {
         case mdona_1
