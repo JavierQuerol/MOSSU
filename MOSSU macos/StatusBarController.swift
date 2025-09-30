@@ -19,7 +19,10 @@ class StatusBarController {
         paused: Bool,
         holidayEndDate: Date?,
         launchAtLoginEnabled: Bool,
-        meetingEnabled: Bool
+        meetingEnabled: Bool,
+        selectedCalendarIdentifier: String?,
+        calendarMenuOptions: [(identifier: String, title: String)],
+        calendarMenuEnabled: Bool
     ) {
         NSApp.setActivationPolicy(.accessory)
         var composedText: String?
@@ -181,6 +184,41 @@ class StatusBarController {
         )
         meetingModeItem.state = meetingEnabled ? .on : .off
         menu.addItem(meetingModeItem)
+
+        if meetingEnabled {
+            let calendarParent = NSMenuItem(title: "Calendario observado", action: nil, keyEquivalent: "")
+            let calendarMenu = NSMenu()
+            let allCalendarsItem = NSMenuItem(
+                title: "Todos los calendarios",
+                action: #selector(AppDelegate.selectCalendar(_:)),
+                keyEquivalent: ""
+            )
+            allCalendarsItem.state = selectedCalendarIdentifier == nil ? .on : .off
+            allCalendarsItem.representedObject = nil
+            calendarMenu.addItem(allCalendarsItem)
+
+            if calendarMenuOptions.isEmpty {
+                let message = calendarMenuEnabled ? "No hay calendarios disponibles" : "Concede acceso a Calendario"
+                let infoItem = NSMenuItem(title: message, action: nil, keyEquivalent: "")
+                infoItem.isEnabled = false
+                calendarMenu.addItem(infoItem)
+            } else {
+                for option in calendarMenuOptions {
+                    let item = NSMenuItem(
+                        title: option.title,
+                        action: #selector(AppDelegate.selectCalendar(_:)),
+                        keyEquivalent: ""
+                    )
+                    item.state = option.identifier == selectedCalendarIdentifier ? .on : .off
+                    item.representedObject = option.identifier as NSString
+                    calendarMenu.addItem(item)
+                }
+            }
+
+            calendarParent.submenu = calendarMenu
+            calendarParent.isEnabled = calendarMenuEnabled
+            menu.addItem(calendarParent)
+        }
 
         let updateItem = NSMenuItem(
             title: "Buscar actualizaciones…",

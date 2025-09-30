@@ -15,6 +15,7 @@
 		9662602B2E2A9DAA002253FE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9662602A2E2A9DAA002253FE /* Reachability.swift */; };
 		966B512628D2435600CEDFB1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966B512528D2435600CEDFB1 /* Extensions.swift */; };
 		9675F0402E1FCE0800ED9A69 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9675F03F2E1FCE0500ED9A69 /* Constants.swift */; };
+		9696F3C42E8BD73200C5FE95 /* MOSSU.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9696F3C32E8BD73200C5FE95 /* MOSSU.icon */; };
 		96A55E4A2E2479A50035AA17 /* OfficeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A55E382E2478DC0035AA17 /* OfficeTests.swift */; };
 		96A55E4B2E2479C70035AA17 /* SlackStatusManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A55E392E2478DC0035AA17 /* SlackStatusManagerTests.swift */; };
 		96B02EB32E23A994007FE3E8 /* SlackStatusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */; };
@@ -49,6 +50,7 @@
 		9662602D2E2AF54D002253FE /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		966B512528D2435600CEDFB1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9675F03F2E1FCE0500ED9A69 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9696F3C32E8BD73200C5FE95 /* MOSSU.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = MOSSU.icon; sourceTree = "<group>"; };
 		96A55E382E2478DC0035AA17 /* OfficeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeTests.swift; sourceTree = "<group>"; };
 		96A55E392E2478DC0035AA17 /* SlackStatusManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlackStatusManagerTests.swift; sourceTree = "<group>"; };
 		96A55E412E24796E0035AA17 /* MOSSUTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MOSSUTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				960A08F828CF4D360060F5DE /* Info.plist */,
+				9696F3C32E8BD73200C5FE95 /* MOSSU.icon */,
 				96ED6A7428C61540001226F1 /* AppDelegate.swift */,
 				96B02EB02E23A994007FE3E8 /* NotificationManager.swift */,
 				96B02EB12E23A994007FE3E8 /* SlackStatusManager.swift */,
@@ -236,7 +239,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					96A55E402E24796E0035AA17 = {
 						CreatedOnToolsVersion = 16.4;
@@ -282,6 +285,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9696F3C42E8BD73200C5FE95 /* MOSSU.icon in Resources */,
 				96ED6A7728C61545001226F1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -500,8 +504,9 @@
 		96ED6A7F28C61545001226F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MOSSU;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "MOSSU macos/MOSSU.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -512,6 +517,8 @@
 				DEVELOPMENT_TEAM = 4385X6LBF4;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
 				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -538,8 +545,9 @@
 		96ED6A8028C61545001226F1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MOSSU;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "MOSSU macos/MOSSU.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -550,6 +558,8 @@
 				DEVELOPMENT_TEAM = 4385X6LBF4;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
 				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;

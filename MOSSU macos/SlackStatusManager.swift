@@ -5,6 +5,7 @@ import EventKit
 protocol SlackStatusManagerDelegate: AnyObject {
     func slackStatusManager(_ manager: SlackStatusManager, didUpdate office: Office?)
     func slackStatusManager(_ manager: SlackStatusManager, showMessage text: String)
+    func slackStatusManagerDidUpdateCalendarPreferences(_ manager: SlackStatusManager)
 }
 
 class SlackStatusManager: NSObject {
@@ -47,6 +48,11 @@ class SlackStatusManager: NSObject {
     private var meetingLastEventIdentifier: String?
     private var meetingStatusTimer: Timer?
     private var shouldBypassScheduleRestrictionsOnce = false
+    private enum DefaultsKeys {
+        static let selectedCalendarIdentifier = "selectedCalendarIdentifier"
+    }
+    private(set) var selectedCalendarIdentifier: String? = UserDefaults.standard.string(forKey: DefaultsKeys.selectedCalendarIdentifier)
+    var calendarPermissionsGranted: Bool { calendarAccessGranted }
 
     private func isWithinWorkingHours(at date: Date = Date()) -> Bool {
         let calendar = Calendar.current
@@ -109,11 +115,14 @@ class SlackStatusManager: NSObject {
                 self.calendarAccessGranted = granted
                 if granted {
                     LogManager.shared.log("📆 Calendario: acceso concedido")
+                    self.validateSelectedCalendar()
                     self.startCalendarMonitoring()
                 } else {
                     LogManager.shared.log("🛑 Calendario: acceso denegado")
+                    self.clearSelectedCalendar(persist: true)
                     self.meetingIntegrationEnabled = false
                 }
+                self.delegate?.slackStatusManagerDidUpdateCalendarPreferences(self)
             }
         }
     }
@@ -128,6 +137,87 @@ class SlackStatusManager: NSObject {
         shouldBypassScheduleRestrictionsOnce = true
     }
 
+    func updateSelectedCalendar(identifier: String?) {
+        let normalizedIdentifier = identifier?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if normalizedIdentifier == selectedCalendarIdentifier {
+            return
+        }
+        guard calendarAccessGranted else {
+            clearSelectedCalendar(persist: true)
+            delegate?.slackStatusManagerDidUpdateCalendarPreferences(self)
+            return
+        }
+        if let normalizedIdentifier = normalizedIdentifier, !normalizedIdentifier.isEmpty {
+            guard let calendar = eventStore.calendar(withIdentifier: normalizedIdentifier) else {
+                LogManager.shared.log("⚠️ Calendario seleccionado no encontrado. Se usará la lista completa.")
+                if clearSelectedCalendar(persist: true) {
+                    delegate?.slackStatusManagerDidUpdateCalendarPreferences(self)
+                }
+                return
+            }
+            selectedCalendarIdentifier = calendar.calendarIdentifier
+            UserDefaults.standard.set(calendar.calendarIdentifier, forKey: DefaultsKeys.selectedCalendarIdentifier)
+            LogManager.shared.log("📆 Calendario observado: \(calendar.title) – \(calendar.source.title)")
+        } else {
+            if clearSelectedCalendar(persist: true) {
+                LogManager.shared.log("📆 Observando todos los calendarios disponibles")
+                delegate?.slackStatusManagerDidUpdateCalendarPreferences(self)
+            }
+            return
+        }
+        if meetingIntegrationEnabled {
+            startCalendarMonitoring()
+        }
+        delegate?.slackStatusManagerDidUpdateCalendarPreferences(self)
+    }
+
+    var availableCalendars: [EKCalendar] {
+        guard calendarAccessGranted else { return [] }
+        return eventStore
+            .calendars(for: .event)
+            .sorted { lhs, rhs in
+                if lhs.source.title == rhs.source.title {
+                    return lhs.title.localizedCaseInsensitiveCompare(rhs.title) == .orderedAscending
+                }
+                return lhs.source.title.localizedCaseInsensitiveCompare(rhs.source.title) == .orderedAscending
+            }
+    }
+
+    private func validateSelectedCalendar() {
+        guard calendarAccessGranted else { return }
+        guard let identifier = selectedCalendarIdentifier else { return }
+        guard eventStore.calendar(withIdentifier: identifier) != nil else {
+            if clearSelectedCalendar(persist: true) {
+                LogManager.shared.log("⚠️ Calendario seleccionado ya no disponible. Se usará la lista completa.")
+                delegate?.slackStatusManagerDidUpdateCalendarPreferences(self)
+            }
+            return
+        }
+    }
+
+    @discardableResult
+    private func clearSelectedCalendar(persist: Bool) -> Bool {
+        guard selectedCalendarIdentifier != nil else { return false }
+        selectedCalendarIdentifier = nil
+        if persist {
+            UserDefaults.standard.removeObject(forKey: DefaultsKeys.selectedCalendarIdentifier)
+        }
+        return true
+    }
+
+    private func calendarsForQuery() -> [EKCalendar]? {
+        guard calendarAccessGranted else { return nil }
+        guard let identifier = selectedCalendarIdentifier else { return nil }
+        guard let calendar = eventStore.calendar(withIdentifier: identifier) else {
+            if clearSelectedCalendar(persist: true) {
+                LogManager.shared.log("⚠️ Calendario seleccionado ya no disponible. Se usará la lista completa.")
+                delegate?.slackStatusManagerDidUpdateCalendarPreferences(self)
+            }
+            return nil
+        }
+        return [calendar]
+    }
+
     func startCalendarMonitoring() {
         calendarRefreshTimer?.invalidate()
         guard calendarAccessGranted, meetingIntegrationEnabled else { return }
@@ -136,6 +226,7 @@ class SlackStatusManager: NSObject {
                                                selector: #selector(self.calendarStoreChanged),
                                                name: .EKEventStoreChanged,
                                                object: eventStore)
+        validateSelectedCalendar()
         checkCalendarAndUpdateIfNeeded()
     }
 
@@ -276,6 +367,7 @@ class SlackStatusManager: NSObject {
 
     @objc private func calendarStoreChanged() {
         LogManager.shared.log("📆 Cambios en calendario - reevaluando")
+        delegate?.slackStatusManagerDidUpdateCalendarPreferences(self)
         checkCalendarAndUpdateIfNeeded()
     }
 
@@ -291,7 +383,7 @@ class SlackStatusManager: NSObject {
         let now = Date()
         let start = now.addingTimeInterval(-300)
         let end = now.addingTimeInterval(7200)
-        let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: nil)
+        let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: calendarsForQuery())
         let events = eventStore.events(matching: predicate).filter { !$0.isAllDay }
         let ongoingEvents = events
             .filter { $0.startDate <= now && $0.endDate > now }

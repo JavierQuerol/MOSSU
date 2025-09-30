@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import EventKit
 import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -209,7 +210,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                    paused: slackManager.paused,
                                    holidayEndDate: slackManager.holidayEndDate,
                                    launchAtLoginEnabled: launchAtLoginManager.isEnabled,
-                                   meetingEnabled: slackManager.meetingIntegrationEnabled)
+                                   meetingEnabled: slackManager.meetingIntegrationEnabled,
+                                   selectedCalendarIdentifier: slackManager.selectedCalendarIdentifier,
+                                   calendarMenuOptions: slackManager.availableCalendars.map { (identifier: $0.calendarIdentifier,
+                                                                                            title: formattedCalendarTitle(for: $0)) },
+                                   calendarMenuEnabled: slackManager.calendarPermissionsGranted)
     }
 
     @objc func toggleMeetingIntegration() {
@@ -220,10 +225,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             updateStatusMenu()
         }
     }
+
+    @objc func selectCalendar(_ sender: NSMenuItem) {
+        let identifier = sender.representedObject as? String
+        slackManager.updateSelectedCalendar(identifier: identifier)
+    }
     
     private func sendNotification(text: String) {
         LogManager.shared.log("📣 Enviado notificación: \(text)")
         notifier.send(text: text)
+    }
+
+    private func formattedCalendarTitle(for calendar: EKCalendar) -> String {
+        let sourceTitle = calendar.source.title
+        if sourceTitle.isEmpty || sourceTitle == calendar.title {
+            return calendar.title
+        }
+        return "\(calendar.title) – \(sourceTitle)"
     }
 }
 
@@ -234,5 +252,13 @@ extension AppDelegate: SlackStatusManagerDelegate {
 
     func slackStatusManager(_ manager: SlackStatusManager, showMessage text: String) {
         sendNotification(text: text)
+    }
+
+    func slackStatusManagerDidUpdateCalendarPreferences(_ manager: SlackStatusManager) {
+        if let office = slackManager.currentOffice {
+            updateStatusMenu(office: office)
+        } else {
+            updateStatusMenu()
+        }
     }
 }
