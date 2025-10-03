@@ -48,6 +48,7 @@ class SlackStatusManager: NSObject {
     private var meetingLastEventIdentifier: String?
     private var meetingStatusTimer: Timer?
     private var shouldBypassScheduleRestrictionsOnce = false
+    private var shouldAllowScreenClosedUpdateOnce = false
     private enum DefaultsKeys {
         static let selectedCalendarIdentifier = "selectedCalendarIdentifier"
     }
@@ -426,6 +427,7 @@ class SlackStatusManager: NSObject {
         // No hay reunión activa
         if meetingEndDate != nil || meetingLastEventIdentifier != nil {
             LogManager.shared.log("✅ Fin de reunión - restaurar emoji de ubicación")
+            shouldAllowScreenClosedUpdateOnce = true
         }
         meetingEndDate = nil
         meetingLastEventIdentifier = nil
@@ -461,10 +463,9 @@ class SlackStatusManager: NSObject {
                                     barIconImage: office.barIconImageMeeting,
                                     emojiMeeting: office.emojiMeeting,
                                     barIconImageMeeting: office.barIconImageMeeting)
-        let expiration = Int(endDate.timeIntervalSince1970)
         LogManager.shared.log("📣 Actualizando emoji de Slack por reunión (expira: \(endDate))")
         currentOffice = officeForSlack
-        Slack.update(given: officeForSlack, token: token, expiration: expiration) { [weak self] error in
+        Slack.update(given: officeForSlack, token: token) { [weak self] error in
             guard let self = self else { return }
             if let error = error {
                 if !error.isConnectionProblem() {
@@ -504,9 +505,17 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard NSScreen.hasActiveDisplay() else {
+        let screenIsActive = NSScreen.hasActiveDisplay()
+        let canBypassScreenCheck = shouldAllowScreenClosedUpdateOnce
+        if !screenIsActive && !canBypassScreenCheck {
             LogManager.shared.log("🛑 No hay pantalla disponible")
             return
+        }
+        if canBypassScreenCheck {
+            shouldAllowScreenClosedUpdateOnce = false
+            if !screenIsActive {
+                LogManager.shared.log("✅ Restableciendo estado tras reunión aunque la pantalla esté cerrada")
+            }
         }
         guard !paused else {
             LogManager.shared.log("🛑 Estás en modo pausa")
