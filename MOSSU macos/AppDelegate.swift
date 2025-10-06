@@ -211,7 +211,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                    holidayEndDate: slackManager.holidayEndDate,
                                    launchAtLoginEnabled: launchAtLoginManager.isEnabled,
                                    meetingEnabled: slackManager.meetingIntegrationEnabled,
-                                   selectedCalendarIdentifier: slackManager.selectedCalendarIdentifier,
+                                   selectedCalendarIdentifiers: slackManager.selectedCalendarIdentifiers,
                                    calendarMenuOptions: slackManager.availableCalendars.map { (identifier: $0.calendarIdentifier,
                                                                                             title: formattedCalendarTitle(for: $0)) },
                                    calendarMenuEnabled: slackManager.calendarPermissionsGranted)
@@ -228,7 +228,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func selectCalendar(_ sender: NSMenuItem) {
         let identifier = sender.representedObject as? String
-        slackManager.updateSelectedCalendar(identifier: identifier)
+        slackManager.toggleCalendarSelection(identifier: identifier)
     }
     
     private func sendNotification(text: String) {

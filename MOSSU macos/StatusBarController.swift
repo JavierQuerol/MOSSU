@@ -20,7 +20,7 @@ class StatusBarController {
         holidayEndDate: Date?,
         launchAtLoginEnabled: Bool,
         meetingEnabled: Bool,
-        selectedCalendarIdentifier: String?,
+        selectedCalendarIdentifiers: Set<String>,
         calendarMenuOptions: [(identifier: String, title: String)],
         calendarMenuEnabled: Bool
     ) {
@@ -178,14 +178,14 @@ class StatusBarController {
         menu.addItem(meetingModeItem)
 
         if meetingEnabled {
-            let calendarParent = NSMenuItem(title: "Calendario observado", action: nil, keyEquivalent: "")
+            let calendarParent = NSMenuItem(title: "Calendarios observados", action: nil, keyEquivalent: "")
             let calendarMenu = NSMenu()
             let allCalendarsItem = NSMenuItem(
                 title: "Todos los calendarios",
                 action: #selector(AppDelegate.selectCalendar(_:)),
                 keyEquivalent: ""
             )
-            allCalendarsItem.state = selectedCalendarIdentifier == nil ? .on : .off
+            allCalendarsItem.state = selectedCalendarIdentifiers.isEmpty ? .on : .off
             allCalendarsItem.representedObject = nil
             calendarMenu.addItem(allCalendarsItem)
 
@@ -201,7 +201,7 @@ class StatusBarController {
                         action: #selector(AppDelegate.selectCalendar(_:)),
                         keyEquivalent: ""
                     )
-                    item.state = option.identifier == selectedCalendarIdentifier ? .on : .off
+                    item.state = selectedCalendarIdentifiers.contains(option.identifier) ? .on : .off
                     item.representedObject = option.identifier as NSString
                     calendarMenu.addItem(item)
                 }
