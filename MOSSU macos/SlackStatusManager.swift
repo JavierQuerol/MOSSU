@@ -41,6 +41,7 @@ class SlackStatusManager: NSObject {
     private let locationManager = CLLocationManager()
     private let reachability = Reachability()
     private var hasPendingLocationUpdate = false
+    private var lastWakeHandledAt: Date?
     private let eventStore = EKEventStore()
     private var calendarAccessGranted = false
     private var calendarRefreshTimer: Timer?
@@ -88,17 +89,26 @@ class SlackStatusManager: NSObject {
         reachability.startInternetTracking()
         holidayEndDate = UserDefaults.standard.value(forKey: "holidayEndDate") as? Date
         
-        // Observar cuando se activa la pantalla
+        // Observar cuando se activa la pantalla. Hacen falta las dos: `didWake` es el
+        // despertar del sistema y `screensDidWake` el de las pantallas, que es lo que
+        // ocurre al abrir la tapa si el Mac seguía despierto.
         NSWorkspace.shared.notificationCenter.addObserver(
             self,
             selector: #selector(screenDidWake),
             name: NSWorkspace.didWakeNotification,
             object: nil
         )
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(screenDidWake),
+            name: NSWorkspace.screensDidWakeNotification,
+            object: nil
+        )
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
     }
     
     func requestAuthorization() {
@@ -361,11 +371,10 @@ class SlackStatusManager: NSObject {
         
         var statusText = office.text
         if let endDate = holidayEndDate, Date() < endDate {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .long
-            formatter.locale = Locale.current
+            // El estado de vacaciones se escribe igual que cualquier otro: la fecha de
+            // vuelta se ve en el menú y en Ajustes, no colgando del texto del estado.
             newOffice = holiday
-            statusText = "🌴 hasta el \(formatter.string(from: endDate))"
+            statusText = holiday.text
         } else if currentOffice != nil {
             delegate?.slackStatusManager(self, didUpdate: currentOffice)
         }
@@ -481,6 +490,12 @@ class SlackStatusManager: NSObject {
         if meetingEndDate != nil || meetingLastEventIdentifier != nil {
             LogManager.shared.log("✅ Fin de reunión - restaurar emoji de ubicación")
             shouldAllowScreenClosedUpdateOnce = true
+            if !NSScreen.hasActiveDisplay() {
+                // Con el portátil cerrado la ubicación puede no llegar nunca, así que
+                // se deja pendiente para reintentarlo en cuanto vuelva a estar activo.
+                LogManager.shared.log("📱 Fin de reunión con el portátil cerrado - se reintentará al despertar")
+                hasPendingLocationUpdate = true
+            }
         }
         meetingEndDate = nil
         meetingLastEventIdentifier = nil
@@ -570,6 +585,8 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
                 LogManager.shared.log("✅ Restableciendo estado tras reunión aunque la pantalla esté cerrada")
             }
         }
+        // Ha llegado la ubicación que se esperaba: ya no hay nada pendiente.
+        hasPendingLocationUpdate = false
         guard !paused else {
             LogManager.shared.log("🛑 Estás en modo pausa")
             return
@@ -587,6 +604,11 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
         LogManager.shared.log("🛑 Error al trazar ubicación: \(error)")
+        if !NSScreen.hasActiveDisplay() {
+            // Cerrado no siempre hay ubicación: reintentar cuando el Mac vuelva.
+            LogManager.shared.log("📱 Sin ubicación con el portátil cerrado - se reintentará al despertar")
+            hasPendingLocationUpdate = true
+        }
         if let clErr = error as? CLError, clErr.code == .denied {
             LogManager.shared.log("ℹ️ Revisa Ajustes del Sistema → Privacidad y seguridad → Localización y habilita MOSSU.")
         }
@@ -609,12 +631,25 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     }
     
     @objc private func screenDidWake() {
+        // Al despertar el sistema llegan las dos notificaciones casi a la vez.
+        if let last = lastWakeHandledAt, Date().timeIntervalSince(last) < 5 { return }
+        lastWakeHandledAt = Date()
+
         LogManager.shared.log("🌅 Pantalla activada")
-        
-        // Si hay una actualización pendiente, ejecutarla ahora
-        if hasPendingLocationUpdate {
+
+        let hadPendingUpdate = hasPendingLocationUpdate
+        hasPendingLocationUpdate = false
+
+        // Si una reunión terminó con el portátil cerrado, el estado puede haberse quedado
+        // en "en reunión": revisar el calendario restaura la ubicación si ya no hay ninguna.
+        if meetingIntegrationEnabled {
+            LogManager.shared.log("🔄 Revisando calendario y estado tras despertar")
+            checkCalendarAndUpdateIfNeeded()
+            return
+        }
+
+        if hadPendingUpdate {
             LogManager.shared.log("🔄 Ejecutando actualización pendiente tras abrir pantalla")
-            hasPendingLocationUpdate = false
             startTracking()
         }
     }

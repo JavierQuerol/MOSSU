@@ -6,7 +6,7 @@
 //
 
 import Cocoa
-import EventKit
+import KeyboardShortcuts
 import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -20,6 +20,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         window = NSWindow()
         statusBarController = StatusBarController()
+        QuickLinkStore.shared.registerHandlers()
+        LAPSManager.shared.configure { [weak self] title, body in
+            // El usuario acaba de pedirlo: se avisa aunque esté en modo vacaciones.
+            self?.sendNotification(text: title, body: body, ignoringMute: true)
+        }
+        KeyboardShortcuts.onKeyUp(for: .lapsElevate) {
+            LAPSManager.shared.run()
+        }
+        SettingsModel.shared.configure(
+            slackManager: slackManager,
+            launchAtLoginManager: launchAtLoginManager,
+            checkForUpdates: { [weak self] in self?.checkForUpdates() },
+            showLogs: { [weak self] in self?.showLogs() },
+            startHoliday: { [weak self] date in self?.startHoliday(until: date) }
+        )
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(settingsDidChange),
+                                               name: .settingsDidChange,
+                                               object: nil)
         updateStatusMenu()
         slackManager.delegate = self
         slackManager.allowNextUpdateBypassingScheduleRestrictions()
@@ -95,30 +114,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    @objc func setHoliday() {
-        let alert = NSAlert()
-        alert.messageText = "Modo vacaciones"
-        alert.informativeText = "Selecciona hasta cuándo quieres pausar las notificaciones"
-        let datePicker = NSDatePicker(frame: NSRect(x: 0, y: 0, width: 150, height: 150))
-        datePicker.datePickerElements = [.yearMonthDay]
-        datePicker.dateValue = Date().addingTimeInterval(86400)
-        datePicker.datePickerStyle = .clockAndCalendar
-        alert.accessoryView = datePicker
-        alert.addButton(withTitle: "Aceptar")
-        alert.addButton(withTitle: "Cancelar")
-        let response = alert.runModal()
-        if response == .alertFirstButtonReturn {
-            slackManager.sendHoliday(until: datePicker.dateValue)
-            updateStatusMenu(office: holiday)
-        }
-    }
-
-    @objc func pauseOrResumeUpdates() {
-        slackManager.togglePause()
-        LogManager.shared.log(slackManager.paused ? "Actualización pausada" : "Reanudando actualizaciones")
-        if let office = slackManager.currentOffice {
-            updateStatusMenu(office: office)
-        }
+    func startHoliday(until date: Date) {
+        slackManager.sendHoliday(until: date)
+        updateStatusMenu(office: holiday)
     }
 
     @objc func startTracking() {
@@ -132,8 +130,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @objc func toggleDay(_ sender: NSMenuItem) {
-        SchedulePreferences.shared.toggleDay(sender.tag)
+    @objc func runLAPS() {
+        LAPSManager.shared.run()
+    }
+
+    @objc func showSettings() {
+        SettingsWindowController.shared.show(tab: .general)
+    }
+
+    @objc func showQuickLinks() {
+        SettingsWindowController.shared.show(tab: .shortcuts)
+    }
+
+    @objc private func settingsDidChange() {
+        refreshStatusMenu()
+    }
+
+    private func refreshStatusMenu() {
         if let office = slackManager.currentOffice {
             updateStatusMenu(office: office)
         } else {
@@ -141,26 +154,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @objc func toggleHour(_ sender: NSMenuItem) {
-        SchedulePreferences.shared.toggleHour(sender.tag)
-        if let office = slackManager.currentOffice {
-            updateStatusMenu(office: office)
-        } else {
-            updateStatusMenu()
-        }
-    }
-
-    @objc func toggleLaunchAtLogin() {
-        let newValue = !launchAtLoginManager.isEnabled
-        launchAtLoginManager.setEnabled(newValue)
-        LogManager.shared.log(newValue ? "Abrir al iniciar sesión: activado" : "Abrir al iniciar sesión: desactivado")
-        if let office = slackManager.currentOffice {
-            updateStatusMenu(office: office)
-        } else {
-            updateStatusMenu()
-        }
-    }
-    
     @objc func showLogs() {
         let alert = NSAlert()
         alert.messageText = "Últimos eventos de MOSSU"
@@ -208,46 +201,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                    lastUpdate: slackManager.lastUpdate,
                                    name: slackManager.name,
                                    paused: slackManager.paused,
-                                   holidayEndDate: slackManager.holidayEndDate,
-                                   launchAtLoginEnabled: launchAtLoginManager.isEnabled,
-                                   meetingEnabled: slackManager.meetingIntegrationEnabled,
-                                   selectedCalendarIdentifiers: slackManager.selectedCalendarIdentifiers,
-                                   calendarMenuOptions: slackManager.availableCalendars.map { (identifier: $0.calendarIdentifier,
-                                                                                            title: formattedCalendarTitle(for: $0)) },
-                                   calendarMenuEnabled: slackManager.calendarPermissionsGranted)
+                                   holidayEndDate: slackManager.holidayEndDate)
     }
 
-    @objc func toggleMeetingIntegration() {
-        slackManager.meetingIntegrationEnabled.toggle()
-        if let office = slackManager.currentOffice {
-            updateStatusMenu(office: office)
-        } else {
-            updateStatusMenu()
-        }
-    }
-
-    @objc func selectCalendar(_ sender: NSMenuItem) {
-        let identifier = sender.representedObject as? String
-        slackManager.toggleCalendarSelection(identifier: identifier)
-    }
-    
-    private func sendNotification(text: String) {
+    private func sendNotification(text: String, body: String? = nil, ignoringMute: Bool = false) {
         LogManager.shared.log("📣 Enviado notificación: \(text)")
-        notifier.send(text: text)
-    }
-
-    private func formattedCalendarTitle(for calendar: EKCalendar) -> String {
-        let sourceTitle = calendar.source.title
-        if sourceTitle.isEmpty || sourceTitle == calendar.title {
-            return calendar.title
-        }
-        return "\(calendar.title) – \(sourceTitle)"
+        notifier.send(text: text, body: body, ignoringMute: ignoringMute)
     }
 }
 
 extension AppDelegate: SlackStatusManagerDelegate {
     func slackStatusManager(_ manager: SlackStatusManager, didUpdate office: Office?) {
         updateStatusMenu(office: office)
+        // Para que "Última actualización" de la ventana de ajustes no se quede atrás.
+        SettingsModel.shared.refresh()
     }
 
     func slackStatusManager(_ manager: SlackStatusManager, showMessage text: String) {
@@ -255,10 +222,7 @@ extension AppDelegate: SlackStatusManagerDelegate {
     }
 
     func slackStatusManagerDidUpdateCalendarPreferences(_ manager: SlackStatusManager) {
-        if let office = slackManager.currentOffice {
-            updateStatusMenu(office: office)
-        } else {
-            updateStatusMenu()
-        }
+        SettingsModel.shared.refresh()
+        refreshStatusMenu()
     }
 }

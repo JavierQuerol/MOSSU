@@ -25,6 +25,19 @@
 		96ED6A7728C61545001226F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96ED6A7628C61545001226F1 /* Assets.xcassets */; };
 		96F0057D2E1D66EF00AF482C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F0057C2E1D66ED00AF482C /* main.swift */; };
 		96F1A1A22E5C000000000001 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F1A1A12E5C000000000001 /* LaunchAtLoginManager.swift */; };
+		96FA000000000000000000B1 /* SelectionReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F1 /* SelectionReader.swift */; };
+		96FA000000000000000000B2 /* QuickLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F2 /* QuickLink.swift */; };
+		96FA000000000000000000B3 /* QuickLinkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F3 /* QuickLinkStore.swift */; };
+		96FA000000000000000000B4 /* QuickLinkRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F4 /* QuickLinkRunner.swift */; };
+		96FA000000000000000000B5 /* QuickLinksSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F5 /* QuickLinksSettingsView.swift */; };
+		96FA000000000000000000B6 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F6 /* SettingsWindowController.swift */; };
+		96FA000000000000000000B7 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F7 /* SettingsModel.swift */; };
+		96FA000000000000000000B8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F8 /* SettingsView.swift */; };
+		96FA000000000000000000B9 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000F9 /* GeneralSettingsView.swift */; };
+		96FA000000000000000000BA /* ScheduleSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000FA /* ScheduleSettingsView.swift */; };
+		96FA000000000000000000BB /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000FB /* CalendarSettingsView.swift */; };
+		96FA000000000000000000BC /* LAPSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000FC /* LAPSManager.swift */; };
+		96FA000000000000000000C3 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 96FA000000000000000000C2 /* KeyboardShortcuts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +86,18 @@
 		96ED6A7B28C61545001226F1 /* MOSSU.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MOSSU.entitlements; sourceTree = "<group>"; };
 		96F0057C2E1D66ED00AF482C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		96F1A1A12E5C000000000001 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F1 /* SelectionReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionReader.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F2 /* QuickLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLink.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F3 /* QuickLinkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLinkStore.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F4 /* QuickLinkRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLinkRunner.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F5 /* QuickLinksSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLinksSettingsView.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F6 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F7 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		96FA000000000000000000F9 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		96FA000000000000000000FA /* ScheduleSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSettingsView.swift; sourceTree = "<group>"; };
+		96FA000000000000000000FB /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
+		96FA000000000000000000FC /* LAPSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LAPSManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96341E272E22611A004D8BB6 /* Sparkle in Frameworks */,
+				96FA000000000000000000C3 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +209,18 @@
 				960A08F428CB872E0060F5DE /* Slack.swift */,
 				966B512528D2435600CEDFB1 /* Extensions.swift */,
 				9662602A2E2A9DAA002253FE /* Reachability.swift */,
+				96FA000000000000000000F1 /* SelectionReader.swift */,
+				96FA000000000000000000F2 /* QuickLink.swift */,
+				96FA000000000000000000F3 /* QuickLinkStore.swift */,
+				96FA000000000000000000F4 /* QuickLinkRunner.swift */,
+				96FA000000000000000000F5 /* QuickLinksSettingsView.swift */,
+				96FA000000000000000000F6 /* SettingsWindowController.swift */,
+				96FA000000000000000000F7 /* SettingsModel.swift */,
+				96FA000000000000000000F8 /* SettingsView.swift */,
+				96FA000000000000000000F9 /* GeneralSettingsView.swift */,
+				96FA000000000000000000FA /* ScheduleSettingsView.swift */,
+				96FA000000000000000000FB /* CalendarSettingsView.swift */,
+				96FA000000000000000000FC /* LAPSManager.swift */,
 				96F0057C2E1D66ED00AF482C /* main.swift */,
 				96ED6A7628C61545001226F1 /* Assets.xcassets */,
 				96ED6A7B28C61545001226F1 /* MOSSU.entitlements */,
@@ -227,6 +265,10 @@
 			dependencies = (
 			);
 			name = MOSSU;
+			packageProductDependencies = (
+				96341E262E22611A004D8BB6 /* Sparkle */,
+				96FA000000000000000000C2 /* KeyboardShortcuts */,
+			);
 			productName = SSU;
 			productReference = 96EBC54C2E23246C00FBCE24 /* MOSSU.app */;
 			productType = "com.apple.product-type.application";
@@ -262,6 +304,7 @@
 			mainGroup = 96ED6A6828C61540001226F1;
 			packageReferences = (
 				96341E252E22611A004D8BB6 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				96FA000000000000000000C1 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			productRefGroup = 96ED6A6828C61540001226F1;
 			projectDirPath = "";
@@ -319,6 +362,18 @@
 				96B02EB52E23A994007FE3E8 /* StatusBarController.swift in Sources */,
 				96F1A1A22E5C000000000001 /* LaunchAtLoginManager.swift in Sources */,
 				963210D32E68BEED00961A3E /* SchedulePreferences.swift in Sources */,
+				96FA000000000000000000B1 /* SelectionReader.swift in Sources */,
+				96FA000000000000000000B2 /* QuickLink.swift in Sources */,
+				96FA000000000000000000B3 /* QuickLinkStore.swift in Sources */,
+				96FA000000000000000000B4 /* QuickLinkRunner.swift in Sources */,
+				96FA000000000000000000B5 /* QuickLinksSettingsView.swift in Sources */,
+				96FA000000000000000000B6 /* SettingsWindowController.swift in Sources */,
+				96FA000000000000000000B7 /* SettingsModel.swift in Sources */,
+				96FA000000000000000000B8 /* SettingsView.swift in Sources */,
+				96FA000000000000000000B9 /* GeneralSettingsView.swift in Sources */,
+				96FA000000000000000000BA /* ScheduleSettingsView.swift in Sources */,
+				96FA000000000000000000BB /* CalendarSettingsView.swift in Sources */,
+				96FA000000000000000000BC /* LAPSManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,7 +570,7 @@
 				CURRENT_PROJECT_VERSION = 126;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 4385X6LBF4;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
@@ -556,7 +611,7 @@
 				CURRENT_PROJECT_VERSION = 126;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 4385X6LBF4;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
@@ -624,6 +679,14 @@
 				minimumVersion = 2.7.1;
 			};
 		};
+		96FA000000000000000000C1 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -631,6 +694,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 96341E252E22611A004D8BB6 /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
+		};
+		96FA000000000000000000C2 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96FA000000000000000000C1 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

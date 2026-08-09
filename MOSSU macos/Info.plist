@@ -19,6 +19,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>126</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>MOSSU controla el Workspace ONE Intelligent Hub para solicitar permisos de administrador durante 45 minutos con LAPS.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>MOSSU necesita acceder a tu calendario para cambiar tu emoji de Slack durante tus reuniones.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

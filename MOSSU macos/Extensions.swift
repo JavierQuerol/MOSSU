@@ -71,4 +71,11 @@ extension String {
         guard let first = first else { return self }
         return String(first).uppercased() + dropFirst()
     }
+
+    /// Trunca por el medio para que quepa en un item de menú.
+    func truncatedInMiddle(limit: Int) -> String {
+        guard count > limit else { return self }
+        let keep = (limit - 1) / 2
+        return "\(prefix(keep))…\(suffix(keep))"
+    }
 }
