@@ -59,11 +59,40 @@ struct QuickLinksSettingsView: View {
                 HStack(spacing: 8) {
                     Button("Conceder…") { SelectionReader.requestAccessibilityPermission() }
                     Button("Abrir Ajustes del sistema…") { SelectionReader.openAccessibilitySettings() }
+                    Button("Reiniciar MOSSU") { restartApp() }
                 }
+                Text("Si MOSSU ya aparece activado en la lista, el permiso quedó huérfano tras una actualización: quítalo con el botón −, reinicia MOSSU y vuelve a concederlo.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             Spacer(minLength: 0)
         }
         .padding(16)
+    }
+
+    /// Relanza MOSSU: los cambios de Accesibilidad se aplican de forma fiable en el
+    /// arranque siguiente. Se espera a que este proceso muera antes de abrir el nuevo
+    /// para no tener dos instancias peleándose por los atajos globales.
+    private func restartApp() {
+        let bundlePath = Bundle.main.bundlePath
+        let pid = ProcessInfo.processInfo.processIdentifier
+
+        let relauncher = Process()
+        relauncher.executableURL = URL(fileURLWithPath: "/bin/sh")
+        relauncher.arguments = [
+            "-c",
+            "while kill -0 \(pid) 2>/dev/null; do sleep 0.2; done; /usr/bin/open \"\(bundlePath)\""
+        ]
+
+        do {
+            try relauncher.run()
+        } catch {
+            LogManager.shared.log("No pude programar el reinicio: \(error.localizedDescription)")
+            return
+        }
+
+        NSApp.terminate(nil)
     }
 
     // MARK: - Acción integrada (LAPS)

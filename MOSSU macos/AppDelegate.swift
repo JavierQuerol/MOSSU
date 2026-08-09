@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         window = NSWindow()
+        SelectionReader.resetStaleAuthorizationAfterUpdate()
         statusBarController = StatusBarController()
         QuickLinkStore.shared.registerHandlers()
         LAPSManager.shared.configure { [weak self] title, body in

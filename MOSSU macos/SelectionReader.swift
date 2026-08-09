@@ -36,6 +36,51 @@ enum SelectionReader {
 
     // MARK: - Permiso
 
+    private static let lastRunBuildKey = "lastRunBuild"
+
+    /// Al actualizar, la concesión de Accesibilidad puede quedar huérfana: el interruptor
+    /// sigue activado en Ajustes del sistema pero macOS ya no confía en el binario nuevo,
+    /// y desde la app no hay salida (el diálogo de conceder no aparece si ya estás en la
+    /// lista). Si al arrancar una versión distinta el permiso no es efectivo, se borra la
+    /// entrada para que se pueda volver a pedir limpia.
+    static func resetStaleAuthorizationAfterUpdate() {
+        let defaults = UserDefaults.standard
+        let currentBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+        let previousBuild = defaults.string(forKey: lastRunBuildKey)
+        defaults.set(currentBuild, forKey: lastRunBuildKey)
+
+        guard previousBuild != currentBuild else { return }
+        // Si el permiso funciona, la entrada está sana: tocarla solo daría trabajo al usuario.
+        guard !AXIsProcessTrusted() else { return }
+
+        let from = previousBuild ?? "desconocida"
+        LogManager.shared.log("🔐 Actualización (\(from) → \(currentBuild)) sin Accesibilidad efectiva: reseteando el permiso")
+        resetAccessibilityAuthorization()
+    }
+
+    /// En una instalación nueva no hay entrada que borrar y `tccutil` no hace nada.
+    private static func resetAccessibilityAuthorization() {
+        guard let bundleIdentifier = Bundle.main.bundleIdentifier else { return }
+
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/tccutil")
+        process.arguments = ["reset", "Accessibility", bundleIdentifier]
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+            if process.terminationStatus == 0 {
+                LogManager.shared.log("🔐 Permiso de Accesibilidad reseteado: vuelve a concederlo cuando lo necesites")
+            } else {
+                LogManager.shared.log("🔐 tccutil devolvió \(process.terminationStatus) al resetear Accesibilidad")
+            }
+        } catch {
+            LogManager.shared.log("🔐 No se pudo ejecutar tccutil: \(error.localizedDescription)")
+        }
+    }
+
     /// Muestra el diálogo del sistema para conceder Accesibilidad (botón de la ventana de ajustes).
     static func requestAccessibilityPermission() {
         didPromptForAccessibility = true
