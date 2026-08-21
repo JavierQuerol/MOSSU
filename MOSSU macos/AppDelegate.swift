@@ -117,6 +117,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func startHoliday(until date: Date) {
         slackManager.sendHoliday(until: date)
+        // Si la fecha de vuelta no valía, no hay vacaciones que anunciar en el menú.
+        guard slackManager.isOnHoliday else { return }
         updateStatusMenu(office: holiday)
     }
 
@@ -145,6 +147,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func settingsDidChange() {
         refreshStatusMenu()
+        // Las vacaciones también caducan solas: la ventana de ajustes abierta ha de enterarse.
+        SettingsModel.shared.refresh()
     }
 
     private func refreshStatusMenu() {
@@ -202,7 +206,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                    lastUpdate: slackManager.lastUpdate,
                                    name: slackManager.name,
                                    paused: slackManager.paused,
-                                   holidayEndDate: slackManager.holidayEndDate)
+                                   holidayEndDate: slackManager.activeHolidayEndDate)
     }
 
     private func sendNotification(text: String, body: String? = nil, ignoringMute: Bool = false) {

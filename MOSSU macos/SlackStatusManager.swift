@@ -11,11 +11,20 @@ protocol SlackStatusManagerDelegate: AnyObject {
 class SlackStatusManager: NSObject {
     weak var delegate: SlackStatusManagerDelegate?
     var name: String = "El muchacho"
-    var paused: Bool = false
+    var paused: Bool = UserDefaults.standard.bool(forKey: "paused") {
+        didSet { UserDefaults.standard.set(paused, forKey: "paused") }
+    }
     var lastUpdate: Date?
     var holidayEndDate: Date? {
         didSet { UserDefaults.standard.set(holidayEndDate, forKey: "holidayEndDate") }
     }
+    /// Las vacaciones solo cuentan si la fecha de vuelta todavía no ha llegado.
+    var isOnHoliday: Bool {
+        guard let endDate = holidayEndDate else { return false }
+        return Date() < endDate
+    }
+    /// Fecha de vuelta para la UI: nil en cuanto las vacaciones han terminado.
+    var activeHolidayEndDate: Date? { isOnHoliday ? holidayEndDate : nil }
     private var holidayTimer: Timer?
     var currentOffice: Office? {
         didSet { delegate?.slackStatusManager(self, didUpdate: currentOffice) }
@@ -88,6 +97,14 @@ class SlackStatusManager: NSObject {
         reachability.delegate = self
         reachability.startInternetTracking()
         holidayEndDate = UserDefaults.standard.value(forKey: "holidayEndDate") as? Date
+        // Las vacaciones pueden haber terminado con la app cerrada: el timer no sobrevive
+        // al reinicio, así que hay que revisar la fecha guardada y reponerlo si toca.
+        if !expireHolidayIfNeeded() {
+            // Unas vacaciones vigentes implican pausa, aunque vengan de una versión que
+            // no la guardaba: si no, el menú y el toggle de Ajustes dirían lo contrario.
+            if isOnHoliday { paused = true }
+            scheduleHolidayTimer()
+        }
         
         // Observar cuando se activa la pantalla. Hacen falta las dos: `didWake` es el
         // despertar del sistema y `screensDidWake` el de las pantallas, que es lo que
@@ -157,6 +174,7 @@ class SlackStatusManager: NSObject {
     }
 
     func startTracking() {
+        expireHolidayIfNeeded()
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.distanceFilter = 100
         locationManager.requestLocation()
@@ -323,8 +341,14 @@ class SlackStatusManager: NSObject {
     }
 
     func sendHoliday(until endDate: Date) {
+        // "Vuelvo el X" quiere decir que las vacaciones caducan a las 00:00 de ese día.
+        let returnDate = Calendar.current.startOfDay(for: endDate)
+        guard Date() < returnDate else {
+            LogManager.shared.log("🌴 Fecha de vuelta ya pasada: no se activan vacaciones")
+            return
+        }
         paused = true
-        holidayEndDate = endDate
+        holidayEndDate = returnDate
         scheduleHolidayTimer()
         sendToSlack(office: holiday)
     }
@@ -336,26 +360,46 @@ class SlackStatusManager: NSObject {
         if interval > 0 {
             holidayTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
                 guard let self = self else { return }
-                self.paused = false
-                self.holidayEndDate = nil
-                UserDefaults.standard.removeObject(forKey: "holidayEndDate")
+                self.clearHoliday()
                 self.startTracking()
             }
         } else {
-            paused = false
-            holidayEndDate = nil
-            UserDefaults.standard.removeObject(forKey: "holidayEndDate")
+            clearHoliday()
             startTracking()
         }
+    }
+
+    /// Cancela las vacaciones a mano. No pasa por `togglePause` a propósito: la pausa puede
+    /// no estar guardada (versiones anteriores) y entonces reanudar acabaría pausando.
+    func cancelHoliday() {
+        guard holidayEndDate != nil else { return }
+        LogManager.shared.log("🌴 Vacaciones canceladas")
+        clearHoliday()
+        startTracking()
+    }
+
+    /// Borra unas vacaciones ya cumplidas. No relanza el tracking: eso lo decide quien llama.
+    @discardableResult
+    func expireHolidayIfNeeded() -> Bool {
+        guard let endDate = holidayEndDate, Date() >= endDate else { return false }
+        LogManager.shared.log("🌴 Las vacaciones han terminado")
+        clearHoliday()
+        return true
+    }
+
+    private func clearHoliday() {
+        holidayTimer?.invalidate()
+        holidayTimer = nil
+        paused = false
+        holidayEndDate = nil
+        NotificationCenter.default.post(name: .settingsDidChange, object: nil)
     }
 
     func togglePause() {
         paused.toggle()
         if !paused {
-            holidayEndDate = nil
-            UserDefaults.standard.removeObject(forKey: "holidayEndDate")
+            clearHoliday()
             UserDefaults.standard.removeObject(forKey: "mutedUntil")
-            holidayTimer?.invalidate()
             startTracking()
         }
     }
@@ -370,7 +414,8 @@ class SlackStatusManager: NSObject {
         }
         
         var statusText = office.text
-        if let endDate = holidayEndDate, Date() < endDate {
+        expireHolidayIfNeeded()
+        if isOnHoliday {
             // El estado de vacaciones se escribe igual que cualquier otro: la fecha de
             // vuelta se ve en el menú y en Ajustes, no colgando del texto del estado.
             newOffice = holiday
@@ -637,6 +682,13 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
 
         LogManager.shared.log("🌅 Pantalla activada")
 
+        // El timer de vacaciones no dispara mientras el Mac duerme: al despertar hay que
+        // cerrarlas si ya han pasado, o reponer el timer si siguen vigentes.
+        let holidayJustEnded = expireHolidayIfNeeded()
+        if isOnHoliday {
+            scheduleHolidayTimer()
+        }
+
         let hadPendingUpdate = hasPendingLocationUpdate
         hasPendingLocationUpdate = false
 
@@ -648,7 +700,7 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
             return
         }
 
-        if hadPendingUpdate {
+        if hadPendingUpdate || holidayJustEnded {
             LogManager.shared.log("🔄 Ejecutando actualización pendiente tras abrir pantalla")
             startTracking()
         }

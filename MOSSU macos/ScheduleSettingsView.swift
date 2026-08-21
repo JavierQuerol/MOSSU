@@ -84,9 +84,9 @@ struct ScheduleSettingsView: View {
         if let endDate = model.holidayEndDate {
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Estás de vacaciones hasta el \(Self.dateFormatter.string(from: endDate)).")
+                    Text("Estás de vacaciones. Vuelves el \(Self.dateFormatter.string(from: endDate)).")
                         .fixedSize(horizontal: false, vertical: true)
-                    Text("MOSSU ha puesto el estado de vacaciones y no lo cambiará hasta esa fecha.")
+                    Text("MOSSU ha puesto el estado de vacaciones y no lo cambiará hasta que vuelvas.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -97,9 +97,9 @@ struct ScheduleSettingsView: View {
         } else {
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 VStack(alignment: .leading, spacing: 3) {
-                    DatePicker("Hasta el", selection: $holidayDate, in: Date()..., displayedComponents: .date)
+                    DatePicker("Vuelvo el", selection: $holidayDate, in: Self.firstReturnDate..., displayedComponents: .date)
                         .datePickerStyle(.field)
-                    Text("Pausa MOSSU y pone tu estado de vacaciones hasta esa fecha.")
+                    Text("Pausa MOSSU y pone tu estado de vacaciones hasta que vuelvas.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -125,6 +125,12 @@ struct ScheduleSettingsView: View {
         formatter.doesRelativeDateFormatting = true
         return formatter
     }()
+
+    /// Volver hoy no son vacaciones: lo antes que se puede volver es mañana.
+    private static var firstReturnDate: Date {
+        let calendar = Calendar.current
+        return calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: Date())) ?? Date()
+    }
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()

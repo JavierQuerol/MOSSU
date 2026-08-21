@@ -133,7 +133,7 @@ class StatusBarController {
             let endString = formatter.string(from: endDate)
             menu.addItem(
                 NSMenuItem(
-                    title: "🌴 Vacaciones hasta \(endString)",
+                    title: "🌴 Vacaciones — vuelves el \(endString)",
                     action: nil,
                     keyEquivalent: ""
                 )

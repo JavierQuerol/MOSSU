@@ -4,7 +4,7 @@ import CoreLocation
 
 final class OfficeTests: XCTestCase {
     func testGivenSSIDWithNoMatchesReturnsRemote() {
-        let office = Office.given(ssid: .remote, currentLocation: nil)
+        let office = Office.given(ssid: .remote(ssid: "WiFi_de_casa"), currentLocation: nil)
         XCTAssertEqual(office, remote)
     }
 

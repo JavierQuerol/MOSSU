@@ -109,7 +109,7 @@ final class SettingsModel: ObservableObject {
     }
 
     var holidayEndDate: Date? {
-        slackManager?.holidayEndDate
+        slackManager?.activeHolidayEndDate
     }
 
     func startHoliday(until date: Date) {
@@ -119,10 +119,8 @@ final class SettingsModel: ObservableObject {
     }
 
     func cancelHoliday() {
-        guard slackManager?.paused == true else { return }
         objectWillChange.send()
-        slackManager?.togglePause()
-        LogManager.shared.log("Vacaciones canceladas")
+        slackManager?.cancelHoliday()
         notifyMenu()
     }
 
