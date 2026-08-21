@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MOSSU (Mercadona Online Slack Status Updater) is a macOS status bar application that automatically updates your Slack status based on Wi-Fi network or location. The project consists of:
+MOSSU (Mercadona Online Support & Shortcuts Utility) is a macOS status bar application that automatically updates your Slack status based on Wi-Fi network or location, handles LAPS admin elevation, and provides quick-access URL shortcuts with hotkeys. The project consists of:
 
 - **macOS App**: Swift-based status bar application (`MOSSU macos/`)
 - **Backend**: Node.js serverless functions for Slack OAuth (`api/`)
