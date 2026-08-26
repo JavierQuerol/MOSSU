@@ -18,6 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        buildMainMenu()
         window = NSWindow()
         SelectionReader.resetStaleAuthorizationAfterUpdate()
         statusBarController = StatusBarController()
@@ -197,6 +198,37 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    /// MOSSU vive en la barra de estado y no carga ningún nib de menú, pero sin un
+    /// menú Edición macOS no enruta ⌘V/⌘C/⌘X/⌘A a los campos de texto: en ajustes
+    /// no se podía ni pegar una URL. Solo se ve mientras la app es `.regular`
+    /// (ajustes abiertos); los atajos de edición funcionan gracias a él siempre.
+    private func buildMainMenu() {
+        let mainMenu = NSMenu()
+
+        // El primer submenú es el de la aplicación (el título lo pone el sistema).
+        let appMenu = NSMenu()
+        appMenu.addItem(withTitle: "Salir de MOSSU",
+                        action: #selector(NSApplication.terminate(_:)),
+                        keyEquivalent: "q")
+        let appItem = NSMenuItem()
+        appItem.submenu = appMenu
+        mainMenu.addItem(appItem)
+
+        let editMenu = NSMenu(title: "Edición")
+        editMenu.addItem(withTitle: "Deshacer", action: Selector(("undo:")), keyEquivalent: "z")
+        editMenu.addItem(withTitle: "Rehacer", action: Selector(("redo:")), keyEquivalent: "Z")
+        editMenu.addItem(.separator())
+        editMenu.addItem(withTitle: "Cortar", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
+        editMenu.addItem(withTitle: "Copiar", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        editMenu.addItem(withTitle: "Pegar", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        editMenu.addItem(withTitle: "Seleccionar todo", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+        let editItem = NSMenuItem()
+        editItem.submenu = editMenu
+        mainMenu.addItem(editItem)
+
+        NSApp.mainMenu = mainMenu
+    }
+
     private func updateStatusMenu(text: String? = nil, office: Office? = nil) {
         guard let statusBarController = self.statusBarController else { return }
         LogManager.shared.log("Actualizando el menu a \"\(text ?? office?.text ?? "")\"")
