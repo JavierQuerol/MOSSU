@@ -270,10 +270,35 @@ final class LAPSManager {
         return Self.embeddedFlow
     }
 
+    /// Sube en cada cambio del flujo embebido para que sustituya a la copia de disco.
+    private static let flowVersion = 2
+    private static let flowVersionMarker = "-- mossu-flow-version:"
+
     private func installFlowIfNeeded() {
-        let fileManager = FileManager.default
-        guard !fileManager.fileExists(atPath: Self.flowPath) else { return }
+        guard let installed = try? String(contentsOfFile: Self.flowPath, encoding: .utf8) else {
+            writeEmbeddedFlow()
+            return
+        }
+        guard Self.version(of: installed) < Self.flowVersion else { return }
+
+        // Copia vieja: se guarda aparte por si tenía retoques a mano y se instala la nueva.
+        let backupPath = Self.flowPath + ".bak"
+        try? FileManager.default.removeItem(atPath: backupPath)
+        try? FileManager.default.moveItem(atPath: Self.flowPath, toPath: backupPath)
+        LogManager.shared.log("🔐 LAPS: flujo antiguo guardado en \(backupPath)")
         writeEmbeddedFlow()
+    }
+
+    /// Versión declarada en el flujo; los anteriores al marcador cuentan como 1.
+    private static func version(of flow: String) -> Int {
+        guard let line = flow.components(separatedBy: .newlines)
+            .first(where: { $0.trimmingCharacters(in: .whitespaces).hasPrefix(flowVersionMarker) }) else {
+            return 1
+        }
+        let value = line.trimmingCharacters(in: .whitespaces)
+            .dropFirst(flowVersionMarker.count)
+            .trimmingCharacters(in: .whitespaces)
+        return Int(value) ?? 1
     }
 
     func revealFlowInFinder() {
@@ -303,6 +328,7 @@ final class LAPSManager {
     private static let embeddedFlow = #"""
     -- Flujo LAPS 45m. Fichero editable: MOSSU lo lee en cada ejecución, sin recompilar.
     -- Devuelve: SELECCIONADO_45M | YA_ADMIN | SIN_DIALOGO  (o lanza error con el motivo)
+    \#(flowVersionMarker) \#(flowVersion)
 
     on findByTwo(el, a, b)
         set elName to ""
@@ -324,6 +350,34 @@ final class LAPSManager {
         end repeat
         return missing value
     end findByTwo
+
+    -- Primer botón "Ver todo" de la portada de Apps (el de "Todas las aplicaciones").
+    on findSeeAll(el)
+        set elRole to ""
+        set elDesc to ""
+        set kids to {}
+        tell application "System Events"
+            try
+                set elRole to role of el
+            end try
+            try
+                set elDesc to description of el
+            end try
+            try
+                set kids to UI elements of el
+            end try
+        end tell
+        try
+            if elRole is "AXButton" and elDesc is not missing value then
+                if elDesc starts with "Ver todo" or elDesc starts with "See all" or elDesc starts with "View all" then return el
+            end if
+        end try
+        repeat with k in kids
+            set f to my findSeeAll(k)
+            if f is not missing value then return f
+        end repeat
+        return missing value
+    end findSeeAll
 
     -- Garantiza que el Hub tiene ventana abierta. `open -a` envía el evento "reopen",
     -- que es lo único que la restaura si el usuario la cerró (activate no basta).
@@ -362,15 +416,30 @@ final class LAPSManager {
         end tell
     end tell
 
-    -- Buscar el botón de LAPS, reintentando (la vista tarda en pintarse)
+    -- Buscar el botón de LAPS, reintentando (la vista tarda en pintarse).
+    -- En frío el Hub abre la portada de Apps, cuyo carrusel solo enseña las primeras
+    -- apps por orden alfabético: si LAPS no está ahí, se abre "Ver todo".
     set btn to missing value
-    repeat 5 times
+    set seeAllOpened to false
+    repeat 8 times
         tell application "System Events"
             try
                 set btn to my findByTwo(window 1 of process "Intelligent Hub", "LAPS", "Run")
             end try
         end tell
         if btn is not missing value then exit repeat
+        if not seeAllOpened then
+            set seeAll to missing value
+            tell application "System Events"
+                try
+                    set seeAll to my findSeeAll(window 1 of process "Intelligent Hub")
+                end try
+            end tell
+            if seeAll is not missing value then
+                tell application "System Events" to click seeAll
+                set seeAllOpened to true
+            end if
+        end if
         delay 1.5
     end repeat
     if btn is missing value then error "No encuentro el botón Run/Rerun de LAPS en el Hub."
