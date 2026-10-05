@@ -492,12 +492,14 @@ class SlackStatusManager: NSObject {
         let start = now.addingTimeInterval(-300)
         let end = now.addingTimeInterval(7200)
         let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: calendarsForQuery())
-        let events = eventStore.events(matching: predicate).filter { !$0.isAllDay }
+        // Lo marcado como "disponible" no es una reunión, tampoco mientras está en curso: si
+        // no, un evento así que acabe antes taparía a la reunión real que se solapa con él.
+        let events = eventStore.events(matching: predicate).filter { !$0.isAllDay && $0.availability != .free }
         let ongoingEvents = events
             .filter { $0.startDate <= now && $0.endDate > now }
             .sorted(by: { $0.endDate < $1.endDate })
         let upcomingEvents = events
-            .filter { $0.startDate > now && $0.availability != .free }
+            .filter { $0.startDate > now }
             .sorted(by: { $0.startDate < $1.startDate })
         let withinWorkingHours = isWithinWorkingHours(at: now)
 
@@ -507,32 +509,54 @@ class SlackStatusManager: NSObject {
             calendarRefreshTimer?.invalidate()
         }
 
-        if let current = ongoingEvents.first {
-            // Considerar relevantes todos salvo marcados como "free"
-            let isRelevant = current.availability != .free
-            if isRelevant {
-                guard withinWorkingHours else {
-                    LogManager.shared.log("🕘 Reunión fuera de horario laboral - no se actualiza estado")
-                    return
-                }
-                if meetingLastEventIdentifier != current.eventIdentifier || meetingEndDate != current.endDate {
-                    meetingLastEventIdentifier = current.eventIdentifier
-                    meetingEndDate = current.endDate
-                    scheduleMeetingEndTimer()
-                    LogManager.shared.log("🗓️ Reunión detectada hasta \(current.endDate ?? Date())")
-                    sendMeetingEmojiUpdate()
-                }
-                return
+        // Fuera de horario no se empieza a mostrar ninguna reunión, pero la que ya se muestra
+        // sigue hasta que acabe.
+        var meeting = ongoingEvents.first
+        if !withinWorkingHours {
+            meeting = meetingLastEventIdentifier.flatMap { shown in
+                ongoingEvents.first { $0.eventIdentifier == shown }
             }
         }
 
-        guard withinWorkingHours else {
-            LogManager.shared.log("🕘 Fuera de horario laboral - no se altera el estado")
+        if let current = meeting {
+            if meetingLastEventIdentifier != current.eventIdentifier || meetingEndDate != current.endDate {
+                meetingLastEventIdentifier = current.eventIdentifier
+                meetingEndDate = current.endDate
+                scheduleMeetingEndTimer()
+                LogManager.shared.log("🗓️ Reunión detectada hasta \(current.endDate ?? Date())")
+                // Se publica ya con el último sitio conocido; si aún no hay, remoto.
+                sendMeetingEmojiUpdate(for: currentOffice ?? remote)
+            }
+            // Igual que sin reunión, cada revisión vuelve a pedir la ubicación: el sitio
+            // conocido puede estar desfasado (portátil abierto en otro lugar, app recién
+            // arrancada…) y la reunión solo debe cambiar el emoji, no congelar el sitio.
+            startTracking()
             return
         }
 
-        // No hay reunión activa
-        if meetingEndDate != nil || meetingLastEventIdentifier != nil {
+        // No hay reunión que mostrar
+        let meetingEnded = meetingEndDate != nil || meetingLastEventIdentifier != nil
+        meetingEndDate = nil
+        meetingLastEventIdentifier = nil
+        meetingStatusTimer?.invalidate()
+
+        guard withinWorkingHours else {
+            if meetingEnded, let shownOffice = currentOffice {
+                // Fuera de horario no se pide la ubicación (que además no podría poner
+                // "remoto"), pero el emoji de reunión lo ha puesto MOSSU y tiene que
+                // quitarlo: se deja el sitio que mostraba la reunión.
+                LogManager.shared.log("✅ Fin de reunión fuera de horario - quitar emoji de reunión")
+                allowNextUpdateBypassingScheduleRestrictions()
+                sendToSlack(office: shownOffice.withoutMeeting)
+            } else {
+                LogManager.shared.log(ongoingEvents.isEmpty
+                    ? "🕘 Fuera de horario laboral - no se altera el estado"
+                    : "🕘 Reunión fuera de horario laboral - no se actualiza estado")
+            }
+            return
+        }
+
+        if meetingEnded {
             LogManager.shared.log("✅ Fin de reunión - restaurar emoji de ubicación")
             shouldAllowScreenClosedUpdateOnce = true
             if !NSScreen.hasActiveDisplay() {
@@ -542,9 +566,6 @@ class SlackStatusManager: NSObject {
                 hasPendingLocationUpdate = true
             }
         }
-        meetingEndDate = nil
-        meetingLastEventIdentifier = nil
-        meetingStatusTimer?.invalidate()
         // Forzar una actualización por ubicación
         startTracking()
     }
@@ -564,18 +585,11 @@ class SlackStatusManager: NSObject {
         LogManager.shared.log("⏰ Próxima revisión de calendario programada a las \(date)")
     }
 
-    private func sendMeetingEmojiUpdate() {
+    /// Publica `office` con el emoji y el icono de reunión, manteniendo su texto.
+    private func sendMeetingEmojiUpdate(for office: Office) {
         guard let token = token else { return }
         guard let endDate = meetingEndDate, endDate > Date() else { return }
-        // Mantener texto de la ubicación actual; si aún no hay, usar remoto
-        let office = currentOffice ?? remote
-        let officeForSlack = Office(location: office.location,
-                                    emoji: office.emojiMeeting,
-                                    text: office.text,
-                                    ssids: office.ssids,
-                                    barIconImage: office.barIconImageMeeting,
-                                    emojiMeeting: office.emojiMeeting,
-                                    barIconImageMeeting: office.barIconImageMeeting)
+        let officeForSlack = office.inMeeting
         LogManager.shared.log("📣 Actualizando emoji de Slack por reunión (expira: \(endDate))")
         currentOffice = officeForSlack
         Slack.update(given: officeForSlack, token: token) { [weak self] error in
@@ -636,14 +650,17 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
             LogManager.shared.log("🛑 Estás en modo pausa")
             return
         }
-        if meetingIntegrationEnabled, let end = meetingEndDate, end > Date() {
-            LogManager.shared.log("🛑 En reunión - no actualizamos por ubicación")
-            return
-        }
         let currentSSID = Office.SSID.current()
         LogManager.shared.log("SSID: \(currentSSID.rawValue)")
         let office = Office.given(ssid: currentSSID, currentLocation: locations.last)
         LogManager.shared.log("Ubicación identificada como \"\(office.text)\"")
+        if meetingIntegrationEnabled, let end = meetingEndDate, end > Date() {
+            // En reunión la ubicación sigue decidiendo el sitio; la reunión solo pone el
+            // emoji. Consume el salto de horario igual que haría `sendToSlack`.
+            shouldBypassScheduleRestrictionsOnce = false
+            sendMeetingEmojiUpdate(for: office)
+            return
+        }
         sendToSlack(office: office)
     }
     
@@ -693,7 +710,8 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
         hasPendingLocationUpdate = false
 
         // Si una reunión terminó con el portátil cerrado, el estado puede haberse quedado
-        // en "en reunión": revisar el calendario restaura la ubicación si ya no hay ninguna.
+        // en "en reunión": revisar el calendario restaura la ubicación si ya no hay ninguna
+        // y, si la reunión sigue, vuelve a pedir el sitio por si lo has abierto en otro lugar.
         if meetingIntegrationEnabled {
             LogManager.shared.log("🔄 Revisando calendario y estado tras despertar")
             checkCalendarAndUpdateIfNeeded()

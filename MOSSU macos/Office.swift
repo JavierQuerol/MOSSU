@@ -161,7 +161,24 @@ struct Office: Equatable {
         guard let currentLocation = self.location else { return 0 }
         return location.distance(from: currentLocation)
     }
-    
+
+    /// La misma oficina con el emoji y el icono de reunión.
+    var inMeeting: Office {
+        Office(location: location,
+               emoji: emojiMeeting,
+               text: text,
+               ssids: ssids,
+               barIconImage: barIconImageMeeting,
+               emojiMeeting: emojiMeeting,
+               barIconImageMeeting: barIconImageMeeting)
+    }
+
+    /// La oficina de la que sale una variante de reunión, o ella misma si no lo es. Se busca
+    /// por el texto porque el emoji de reunión lo comparten todas las colmenas.
+    var withoutMeeting: Office {
+        allOffices.first { $0.text == text } ?? self
+    }
+
     static func given(ssid: SSID, currentLocation: CLLocation?) -> Office {
         let possibleOffices = allOffices.filter { $0.ssids.contains(ssid) }
         

@@ -8,6 +8,11 @@
 import Foundation
 
 class Slack {
+    /// Las actualizaciones salen de una en una y en el orden en que se piden. A veces van
+    /// dos seguidas (al empezar una reunión con el sitio desfasado y al corregirlo) y, si se
+    /// cruzaran por el camino, Slack podría quedarse con la vieja.
+    private static let updateQueue = DispatchQueue(label: "com.javierquerol.mossu.slack-update")
+
     static func getStatus(token: String, completion: @escaping (Result<(String, String), Error>) -> Void) {
         var request = URLRequest(url: URL(string: "https://slack.com/api/users.profile.get")!)
         request.httpMethod = "GET"
@@ -46,12 +51,17 @@ class Slack {
         request.httpBody = paramsData
         
         LogManager.shared.log("Intentando actualizar a \"\(office.text)\"")
-        
-        let urlSession = URLSession(configuration: .ephemeral)
-        urlSession.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                completion(error)
-            }
-        }.resume()
+
+        updateQueue.async {
+            let finished = DispatchSemaphore(value: 0)
+            let urlSession = URLSession(configuration: .ephemeral)
+            urlSession.dataTask(with: request) { data, response, error in
+                DispatchQueue.main.async {
+                    completion(error)
+                }
+                finished.signal()
+            }.resume()
+            finished.wait()
+        }
     }
 }
