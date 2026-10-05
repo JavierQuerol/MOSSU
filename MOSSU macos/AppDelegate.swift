@@ -127,6 +127,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         slackManager.startTracking()
     }
 
+    @objc func forceStatusUpdate() {
+        SettingsModel.shared.forceUpdate(from: "el menú")
+    }
+
     @objc func checkForUpdates() {
         DispatchQueue.main.async {
             NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])

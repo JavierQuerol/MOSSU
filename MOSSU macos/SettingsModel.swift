@@ -88,9 +88,9 @@ final class SettingsModel: ObservableObject {
     }
 
     /// Rehace la detección (red y ubicación) y manda el estado saltándose el horario.
-    func forceUpdate() {
+    func forceUpdate(from origin: String = "Ajustes") {
         objectWillChange.send()
-        LogManager.shared.log("🔄 Actualización forzada desde Ajustes")
+        LogManager.shared.log("🔄 Actualización forzada desde \(origin)")
         slackManager?.allowNextUpdateBypassingScheduleRestrictions()
         slackManager?.startTracking()
         notifyMenu()

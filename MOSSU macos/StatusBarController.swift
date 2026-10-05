@@ -125,6 +125,15 @@ class StatusBarController {
             menu.addItem(statusItem)
         }
 
+        // Igual que "Actualizar ahora" de Ajustes: en pausa no hay nada que forzar.
+        menu.addItem(
+            NSMenuItem(
+                title: "🔄 Actualizar estado",
+                action: paused ? nil : #selector(AppDelegate.forceStatusUpdate),
+                keyEquivalent: ""
+            )
+        )
+
         menu.addItem(NSMenuItem.separator())
 
         // Las vacaciones se activan y cancelan en Ajustes; aquí solo se ve hasta cuándo.
