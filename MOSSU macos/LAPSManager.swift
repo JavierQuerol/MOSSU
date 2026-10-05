@@ -271,7 +271,7 @@ final class LAPSManager {
     }
 
     /// Sube en cada cambio del flujo embebido para que sustituya a la copia de disco.
-    private static let flowVersion = 2
+    private static let flowVersion = 3
     private static let flowVersionMarker = "-- mossu-flow-version:"
 
     private func installFlowIfNeeded() {
@@ -416,30 +416,33 @@ final class LAPSManager {
         end tell
     end tell
 
+    -- Ir siempre a "Todas las aplicaciones" > "Ver todo": el carrusel de la portada solo
+    -- enseña las primeras apps por orden alfabético y LAPS puede no estar. Si el botón no
+    -- aparece (p. ej. el Hub ya está en la lista completa), se busca en lo que haya en pantalla.
+    set seeAll to missing value
+    repeat 5 times
+        tell application "System Events"
+            try
+                set seeAll to my findSeeAll(window 1 of process "Intelligent Hub")
+            end try
+        end tell
+        if seeAll is not missing value then exit repeat
+        delay 1
+    end repeat
+    if seeAll is not missing value then
+        tell application "System Events" to click seeAll
+        delay 1.5
+    end if
+
     -- Buscar el botón de LAPS, reintentando (la vista tarda en pintarse).
-    -- En frío el Hub abre la portada de Apps, cuyo carrusel solo enseña las primeras
-    -- apps por orden alfabético: si LAPS no está ahí, se abre "Ver todo".
     set btn to missing value
-    set seeAllOpened to false
-    repeat 8 times
+    repeat 6 times
         tell application "System Events"
             try
                 set btn to my findByTwo(window 1 of process "Intelligent Hub", "LAPS", "Run")
             end try
         end tell
         if btn is not missing value then exit repeat
-        if not seeAllOpened then
-            set seeAll to missing value
-            tell application "System Events"
-                try
-                    set seeAll to my findSeeAll(window 1 of process "Intelligent Hub")
-                end try
-            end tell
-            if seeAll is not missing value then
-                tell application "System Events" to click seeAll
-                set seeAllOpened to true
-            end if
-        end if
         delay 1.5
     end repeat
     if btn is missing value then error "No encuentro el botón Run/Rerun de LAPS en el Hub."
