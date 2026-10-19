@@ -59,9 +59,9 @@ class StatusBarController {
 
         if !validToken {
             let status = NSMenuItem(
-                title: "🔴 Requiere autorización",
-                action: #selector(AppDelegate.showAuth),
-                keyEquivalent: ""
+                title: "Requiere autorización",
+                symbol: "exclamationmark.circle",
+                action: #selector(AppDelegate.showAuth)
             )
             menu.addItem(status)
 
@@ -70,8 +70,8 @@ class StatusBarController {
             menu.addItem(
                 NSMenuItem(
                     title: "Salir",
-                    action: #selector(NSApplication.terminate(_:)),
-                    keyEquivalent: ""
+                    symbol: "xmark.rectangle",
+                    action: #selector(NSApplication.terminate(_:))
                 )
             )
             statusItem.menu = menu
@@ -128,9 +128,9 @@ class StatusBarController {
         // Igual que "Actualizar ahora" de Ajustes: en pausa no hay nada que forzar.
         menu.addItem(
             NSMenuItem(
-                title: "🔄 Actualizar estado",
-                action: paused ? nil : #selector(AppDelegate.forceStatusUpdate),
-                keyEquivalent: ""
+                title: "Actualizar estado",
+                symbol: "arrow.clockwise",
+                action: paused ? nil : #selector(AppDelegate.forceStatusUpdate)
             )
         )
 
@@ -142,9 +142,9 @@ class StatusBarController {
             let endString = formatter.string(from: endDate)
             menu.addItem(
                 NSMenuItem(
-                    title: "🌴 Vacaciones — vuelves el \(endString)",
-                    action: nil,
-                    keyEquivalent: ""
+                    title: "Vacaciones — vuelves el \(endString)",
+                    symbol: "beach.umbrella",
+                    action: nil
                 )
             )
             menu.addItem(NSMenuItem.separator())
@@ -160,7 +160,8 @@ class StatusBarController {
 
         menu.addItem(
             NSMenuItem(
-                title: "⚙️ Ajustes…",
+                title: "Ajustes…",
+                symbol: "gearshape",
                 action: #selector(AppDelegate.showSettings),
                 keyEquivalent: ","
             )
@@ -171,8 +172,8 @@ class StatusBarController {
         menu.addItem(
             NSMenuItem(
                 title: "Salir",
-                action: #selector(NSApplication.terminate(_:)),
-                keyEquivalent: ""
+                symbol: "xmark.rectangle",
+                action: #selector(NSApplication.terminate(_:))
             )
         )
         statusItem.menu = menu
@@ -196,7 +197,8 @@ class StatusBarController {
         let manager = LAPSManager.shared
 
         if manager.isRunning {
-            item.title = "⏳ Activando admin…"
+            item.title = "Activando admin…"
+            item.image = .menuSymbol("hourglass")
             item.action = nil
             applyShortcut(nil, to: item)
             return
@@ -205,16 +207,18 @@ class StatusBarController {
         if manager.isAdmin {
             if let remaining = manager.remainingElevation {
                 let minutes = max(1, Int(ceil(remaining / 60)))
-                item.title = "🔓 Admin activo · quedan \(minutes) min"
+                item.title = "Admin activo · quedan \(minutes) min"
             } else {
-                item.title = "🔓 Admin activo"
+                item.title = "Admin activo"
             }
+            item.image = .menuSymbol("lock.open")
             item.action = nil
             applyShortcut(nil, to: item)
             return
         }
 
-        item.title = "🔒 LAPS"
+        item.title = "LAPS"
+        item.image = .menuSymbol("lock")
         item.action = #selector(AppDelegate.runLAPS)
         applyShortcut(.lapsElevate, to: item)
     }
@@ -237,22 +241,35 @@ class StatusBarController {
 
         guard !visibleLinks.isEmpty else { return false }
 
-        if !SelectionReader.hasAccessibilityPermission {
+        // Los atajos de URL fija no leen la selección, así que funcionan sin el permiso.
+        let needsSelection = visibleLinks.contains { $0.0.usesSelection }
+        if needsSelection && !SelectionReader.hasAccessibilityPermission {
             menu.addItem(
                 NSMenuItem(
-                    title: "⚠️ Falta permiso de Accesibilidad",
-                    action: #selector(AppDelegate.showQuickLinks),
-                    keyEquivalent: ""
+                    title: "Falta permiso de Accesibilidad",
+                    symbol: "exclamationmark.triangle",
+                    action: #selector(AppDelegate.showQuickLinks)
                 )
             )
         }
 
         for (link, title) in visibleLinks {
-            let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+            let item = NSMenuItem(
+                title: title,
+                symbol: link.usesSelection ? "text.magnifyingglass" : "link",
+                action: nil
+            )
             menu.addItem(item)
             applyShortcut(link.shortcutName, to: item)
         }
 
         return true
+    }
+}
+
+private extension NSMenuItem {
+    convenience init(title: String, symbol: String, action: Selector?, keyEquivalent: String = "") {
+        self.init(title: title, action: action, keyEquivalent: keyEquivalent)
+        image = .menuSymbol(symbol)
     }
 }

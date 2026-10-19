@@ -189,7 +189,7 @@ struct QuickLinksSettingsView: View {
 
     private var footer: some View {
         HStack(alignment: .center, spacing: 12) {
-            Text("Escribe \(QuickLink.selectionToken) donde quieras insertar el texto que tengas seleccionado.")
+            Text("Escribe \(QuickLink.selectionToken) donde quieras insertar el texto que tengas seleccionado. Sin él, el atajo abre la URL tal cual.")
                 .font(.callout)
                 .foregroundColor(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

@@ -1,7 +1,7 @@
 import AppKit
 
 /// Construye y abre la URL de un atajo sustituyendo `{selection}` por el texto
-/// seleccionado en la app en primer plano.
+/// seleccionado en la app en primer plano. Las URL sin token se abren tal cual.
 enum QuickLinkRunner {
     /// Valor de ejemplo para la vista previa de la ventana de ajustes.
     static let sampleSelection = "23053"
@@ -11,8 +11,15 @@ enum QuickLinkRunner {
         case query
     }
 
-    /// Lee la selección y abre la URL resultante en el navegador por defecto.
+    /// Lee la selección si la plantilla la usa y abre la URL resultante en el navegador
+    /// por defecto.
     static func run(_ link: QuickLink) {
+        // Sin token no hay nada que leer: ni simular ⌘C ni pedir Accesibilidad.
+        guard link.usesSelection else {
+            open(template: link.urlTemplate, selection: "")
+            return
+        }
+
         SelectionReader.readSelectedText { selection in
             let text = selection?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
 
@@ -22,15 +29,19 @@ enum QuickLinkRunner {
                 return
             }
 
-            guard let url = buildURL(template: link.urlTemplate, selection: text) else {
-                LogManager.shared.log("⌨️ Atajo cancelado: URL no válida (\(link.urlTemplate))")
-                NSSound.beep()
-                return
-            }
-
-            LogManager.shared.log("⌨️ Abriendo \(url.absoluteString)")
-            NSWorkspace.shared.open(url)
+            open(template: link.urlTemplate, selection: text)
         }
+    }
+
+    private static func open(template: String, selection: String) {
+        guard let url = buildURL(template: template, selection: selection) else {
+            LogManager.shared.log("⌨️ Atajo cancelado: URL no válida (\(template))")
+            NSSound.beep()
+            return
+        }
+
+        LogManager.shared.log("⌨️ Abriendo \(url.absoluteString)")
+        NSWorkspace.shared.open(url)
     }
 
     /// URL que produciría la plantilla con un valor de ejemplo, o nil si no es válida.

@@ -3,6 +3,7 @@ import KeyboardShortcuts
 
 /// Un atajo global definido por el usuario: una plantilla de URL y la combinación de
 /// teclas que la dispara. No tiene nombre: la etiqueta del menú se deriva de la URL.
+/// Sin token, la URL es fija y se abre tal cual, haya o no texto seleccionado.
 struct QuickLink: Codable, Identifiable, Equatable {
     /// Token que se sustituye por el texto seleccionado al disparar el atajo.
     static let selectionToken = "{selection}"
@@ -21,6 +22,11 @@ struct QuickLink: Codable, Identifiable, Equatable {
     init(id: UUID = UUID(), urlTemplate: String = "") {
         self.id = id
         self.urlTemplate = urlTemplate
+    }
+
+    /// Si la plantilla inserta el texto seleccionado. Si no, no hace falta leerlo.
+    var usesSelection: Bool {
+        Self.selectionTokens.contains { urlTemplate.contains($0) }
     }
 
     /// Nombre dinámico bajo el que KeyboardShortcuts persiste la combinación de teclas.

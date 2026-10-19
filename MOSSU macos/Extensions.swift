@@ -64,6 +64,28 @@ extension NSImage {
     }
     
     static let colmenaDefault = imageFromEmoji("🐝")
+
+    /// SF Symbol monocromo para un item de menú. Es plantilla, así que se tiñe como el
+    /// texto (también al resaltarlo o deshabilitarlo). Va centrado en un lienzo fijo para
+    /// que los títulos queden alineados aunque cada símbolo tenga su propia proporción.
+    static func menuSymbol(_ name: String) -> NSImage? {
+        guard let symbol = NSImage(systemSymbolName: name, accessibilityDescription: nil)?
+            .withSymbolConfiguration(.init(pointSize: 13, weight: .regular)) else { return nil }
+
+        let image = NSImage(size: NSSize(width: 16, height: 16), flipped: false) { rect in
+            let scale = min(1, rect.width / symbol.size.width, rect.height / symbol.size.height)
+            let size = NSSize(width: symbol.size.width * scale, height: symbol.size.height * scale)
+            symbol.draw(in: NSRect(
+                x: rect.midX - size.width / 2,
+                y: rect.midY - size.height / 2,
+                width: size.width,
+                height: size.height
+            ))
+            return true
+        }
+        image.isTemplate = true
+        return image
+    }
 }
 
 extension String {
