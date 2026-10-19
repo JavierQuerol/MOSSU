@@ -50,6 +50,13 @@ class SlackStatusManager: NSObject {
     private let locationManager = CLLocationManager()
     private let reachability = Reachability()
     private var hasPendingLocationUpdate = false
+    /// Al llegar a un sitio la primera petición de ubicación puede fallar (la Wi-Fi recién
+    /// conectada aún no sirve para ubicarse) y, sin reintento, el estado se quedaría como
+    /// estaba hasta el siguiente cambio de red.
+    private static let maxLocationRetries = 3
+    private static let locationRetryDelay: TimeInterval = 30
+    private var locationRetriesLeft = 0
+    private var locationRetryTimer: Timer?
     private var lastWakeHandledAt: Date?
     private let eventStore = EKEventStore()
     private var calendarAccessGranted = false
@@ -174,10 +181,30 @@ class SlackStatusManager: NSObject {
     }
 
     func startTracking() {
+        // Cada petición nueva (los reintentos no) vuelve a tener todos los reintentos.
+        locationRetriesLeft = Self.maxLocationRetries
+        requestLocation()
+    }
+
+    private func requestLocation() {
+        locationRetryTimer?.invalidate()
         expireHolidayIfNeeded()
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.distanceFilter = 100
         locationManager.requestLocation()
+    }
+
+    private func scheduleLocationRetry() {
+        guard locationRetriesLeft > 0 else {
+            LogManager.shared.log("🛑 Sin ubicación tras varios intentos - se esperará al siguiente cambio de red")
+            return
+        }
+        locationRetriesLeft -= 1
+        LogManager.shared.log("🔁 Se reintentará la ubicación en \(Int(Self.locationRetryDelay)) s")
+        locationRetryTimer?.invalidate()
+        locationRetryTimer = Timer.scheduledTimer(withTimeInterval: Self.locationRetryDelay, repeats: false) { [weak self] _ in
+            self?.requestLocation()
+        }
     }
 
     func allowNextUpdateBypassingScheduleRestrictions() {
@@ -632,6 +659,7 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        locationRetryTimer?.invalidate()
         let screenIsActive = NSScreen.hasActiveDisplay()
         let canBypassScreenCheck = shouldAllowScreenClosedUpdateOnce
         if !screenIsActive && !canBypassScreenCheck {
@@ -666,12 +694,15 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
         LogManager.shared.log("🛑 Error al trazar ubicación: \(error)")
+        let isDenied = (error as? CLError)?.code == .denied
         if !NSScreen.hasActiveDisplay() {
             // Cerrado no siempre hay ubicación: reintentar cuando el Mac vuelva.
             LogManager.shared.log("📱 Sin ubicación con el portátil cerrado - se reintentará al despertar")
             hasPendingLocationUpdate = true
+        } else if !isDenied {
+            scheduleLocationRetry()
         }
-        if let clErr = error as? CLError, clErr.code == .denied {
+        if isDenied {
             LogManager.shared.log("ℹ️ Revisa Ajustes del Sistema → Privacidad y seguridad → Localización y habilita MOSSU.")
         }
     }
@@ -679,22 +710,32 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
     func reachability(_ reachability: Reachability, didUpdateInternetStatus isAvailable: Bool) {
         if isAvailable {
             LogManager.shared.log("🛜 Internet disponible - obteniendo ubicación")
-            
-            // Si no hay pantalla activa, marcar como pendiente para cuando se abra
-            if !NSScreen.hasActiveDisplay() {
-                LogManager.shared.log("📱 Pantalla cerrada - marcando actualización como pendiente")
-                hasPendingLocationUpdate = true
-            } else {
-                startTracking()
-            }
+            trackWhenScreenIsActive()
         } else {
             LogManager.shared.log("❌ Internet no disponible")
         }
     }
     
+    func reachability(_ reachability: Reachability, didJoinNetwork ssid: String) {
+        LogManager.shared.log("🛜 Conectado a la red \(ssid) - obteniendo ubicación")
+        trackWhenScreenIsActive()
+    }
+
+    private func trackWhenScreenIsActive() {
+        // Si no hay pantalla activa, marcar como pendiente para cuando se abra
+        if !NSScreen.hasActiveDisplay() {
+            LogManager.shared.log("📱 Pantalla cerrada - marcando actualización como pendiente")
+            hasPendingLocationUpdate = true
+        } else {
+            startTracking()
+        }
+    }
+
     @objc private func screenDidWake() {
-        // Al despertar el sistema llegan las dos notificaciones casi a la vez.
-        if let last = lastWakeHandledAt, Date().timeIntervalSince(last) < 5 { return }
+        // Al despertar el sistema llegan las dos notificaciones casi a la vez. La segunda se
+        // ignora salvo que entre medias haya quedado algo pendiente: la red suele volver justo
+        // entonces, con la pantalla aún apagada, y si no se perdería hasta el siguiente despertar.
+        if let last = lastWakeHandledAt, Date().timeIntervalSince(last) < 5, !hasPendingLocationUpdate { return }
         lastWakeHandledAt = Date()
 
         LogManager.shared.log("🌅 Pantalla activada")
