@@ -3,6 +3,14 @@
     <channel>
         <title>MOSSU</title>
         <item>
+            <title>1.64</title>
+            <pubDate>Mon, 19 Oct 2026 18:14:39 +0200</pubDate>
+            <sparkle:version>134</sparkle:version>
+            <sparkle:shortVersionString>1.64</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="4513655" type="application/octet-stream" sparkle:edSignature="01hc3yOy0zbPyms1e0gSlZZl/WuGJOQlQnmi3DtRQHxbLLDswhGHMheT6fsb4TOsr5vkodnke9dgriXTeYyABw=="/>
+        </item>
+        <item>
             <title>1.63</title>
             <pubDate>Mon, 19 Oct 2026 16:51:59 +0200</pubDate>
             <sparkle:version>133</sparkle:version>
@@ -17,14 +25,6 @@
             <sparkle:shortVersionString>1.62</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
             <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="4507472" type="application/octet-stream" sparkle:edSignature="m+nSO3Bbayc6O5HAOekaMyMOaRvDbuIUcChuxwBAhfSNwR7b8b9RSyoznHlcqY7c8dwYAewa/2al1tEOkFkADg=="/>
-        </item>
-        <item>
-            <title>1.61</title>
-            <pubDate>Thu, 24 Sep 2026 17:19:04 +0200</pubDate>
-            <sparkle:version>131</sparkle:version>
-            <sparkle:shortVersionString>1.61</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://mossu.vercel.app/MOSSU.zip" length="4503224" type="application/octet-stream" sparkle:edSignature="ryIcjdKmpLkjXjxuU15+m+CtLIkQl3gYK5cIN9vFvaWIE6wF9c/katGDeAPCax8UEKlwESSxzQIMsPYQ57OICw=="/>
         </item>
     </channel>
 </rss>
