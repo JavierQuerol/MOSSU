@@ -1,7 +1,7 @@
 import Cocoa
 import KeyboardShortcuts
 
-/// Refresca el item de LAPS justo antes de que el menú se despliegue.
+/// Refresca los items que cambian solos (LAPS y batería) justo antes de que el menú se despliegue.
 private final class MenuRefresher: NSObject, NSMenuDelegate {
     private let onOpen: () -> Void
 
@@ -17,9 +17,15 @@ private final class MenuRefresher: NSObject, NSMenuDelegate {
 class StatusBarController {
     private let statusItem: NSStatusItem
     private var lapsMenuItem: NSMenuItem?
+    private var batteryMenuItem: NSMenuItem?
     private lazy var menuRefresher = MenuRefresher { [weak self] in
-        guard let item = self?.lapsMenuItem else { return }
-        self?.configureLAPSItem(item)
+        guard let self = self else { return }
+        if let item = self.lapsMenuItem {
+            self.configureLAPSItem(item)
+        }
+        if let item = self.batteryMenuItem {
+            self.configureBatteryItem(item)
+        }
     }
 
     init() {
@@ -127,6 +133,10 @@ class StatusBarController {
             menu.addItem(NSMenuItem.separator())
         }
 
+        if addBatteryItem(to: menu) {
+            menu.addItem(NSMenuItem.separator())
+        }
+
         // Igual que "Actualizar ahora" de Ajustes: en pausa no hay nada que forzar.
         menu.addItem(
             NSMenuItem(
@@ -135,6 +145,7 @@ class StatusBarController {
                 action: paused ? nil : #selector(AppDelegate.forceStatusUpdate)
             )
         )
+        addLAPSItem(to: menu)
 
         menu.addItem(NSMenuItem.separator())
 
@@ -151,10 +162,6 @@ class StatusBarController {
             )
             menu.addItem(NSMenuItem.separator())
         }
-
-        addLAPSItem(to: menu)
-
-        menu.addItem(NSMenuItem.separator())
 
         if addQuickLinksSection(to: menu) {
             menu.addItem(NSMenuItem.separator())
@@ -223,6 +230,37 @@ class StatusBarController {
         item.image = .menuSymbol("lock")
         item.action = #selector(AppDelegate.runLAPS)
         applyShortcut(.lapsElevate, to: item)
+    }
+
+    /// Informativa, como la de admin activo. Sirve sobre todo cuando el icono de batería
+    /// de macOS está oculto por estar enchufado. Devuelve `true` si ha añadido la fila.
+    private func addBatteryItem(to menu: NSMenu) -> Bool {
+        guard BatteryStatus.current != nil else {
+            batteryMenuItem = nil
+            return false
+        }
+        let item = NSMenuItem(title: "", action: nil, keyEquivalent: "")
+        configureBatteryItem(item)
+        menu.addItem(item)
+        batteryMenuItem = item
+        return true
+    }
+
+    /// Con batería no se indica nada: lo que interesa es saber si está enchufado.
+    private func configureBatteryItem(_ item: NSMenuItem) {
+        guard let battery = BatteryStatus.current else { return }
+
+        var title = "Batería \(battery.level)%"
+        if battery.isCharging {
+            title += " (Cargando)"
+        } else if battery.isPluggedIn {
+            title += " (Enchufado)"
+        }
+        item.title = title
+
+        // SF Symbols solo tiene el rayo con la batería llena; sin cargar, el nivel más cercano.
+        let level = Int((Double(battery.level) / 25).rounded()) * 25
+        item.image = .menuSymbol(battery.isCharging ? "battery.100percent.bolt" : "battery.\(level)percent")
     }
 
     /// `setShortcut` es @MainActor (consulta la distribución de teclado activa) y este

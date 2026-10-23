@@ -136,3 +136,29 @@ final class BatteryIconManager {
         return Date().timeIntervalSince1970 - (TimeInterval(start.tv_sec) + TimeInterval(start.tv_usec) / 1_000_000)
     }
 }
+
+/// Lo que el menú cuenta de la batería interna. Nil en los Mac que no tienen.
+struct BatteryStatus {
+    let level: Int
+    let isCharging: Bool
+    let isPluggedIn: Bool
+
+    static var current: BatteryStatus? {
+        guard let snapshot = IOPSCopyPowerSourcesInfo()?.takeRetainedValue(),
+              let sources = IOPSCopyPowerSourcesList(snapshot)?.takeRetainedValue() as? [CFTypeRef] else {
+            return nil
+        }
+        for source in sources {
+            guard let info = IOPSGetPowerSourceDescription(snapshot, source)?.takeUnretainedValue() as? [String: Any],
+                  info[kIOPSTypeKey] as? String == kIOPSInternalBatteryType,
+                  let capacity = info[kIOPSCurrentCapacityKey] as? Int,
+                  let maxCapacity = info[kIOPSMaxCapacityKey] as? Int, maxCapacity > 0 else { continue }
+            return BatteryStatus(
+                level: Int((Double(capacity) / Double(maxCapacity) * 100).rounded()),
+                isCharging: info[kIOPSIsChargingKey] as? Bool ?? false,
+                isPluggedIn: info[kIOPSPowerSourceStateKey] as? String == kIOPSACPowerValue
+            )
+        }
+        return nil
+    }
+}
