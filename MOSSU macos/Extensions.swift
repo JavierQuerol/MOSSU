@@ -40,9 +40,10 @@ extension NSScreen {
 }
 
 extension Error {
+    /// Cualquier error de URLSession es de red: un token inválido no llega así, sino como
+    /// respuesta de Slack con `ok: false`. Por eso ninguno de ellos justifica borrar el token.
     func isConnectionProblem() -> Bool {
-        let nSError = self as NSError
-        return nSError.code == -1009
+        (self as NSError).domain == NSURLErrorDomain
     }
 }
 

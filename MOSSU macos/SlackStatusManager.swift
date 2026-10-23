@@ -57,6 +57,14 @@ class SlackStatusManager: NSObject {
     private static let locationRetryDelay: TimeInterval = 30
     private var locationRetriesLeft = 0
     private var locationRetryTimer: Timer?
+    /// Lo mismo con el envío a Slack: al llegar, la red puede darse por disponible unos
+    /// segundos antes de funcionar, y un envío fallido que no se repite deja puesto el
+    /// estado anterior hasta el siguiente cambio de red.
+    private static let maxSlackRetries = 3
+    private static let slackRetryDelay: TimeInterval = 30
+    private var slackRetryTimer: Timer?
+    /// Sube con cada envío: solo se reintenta el último, para no pisar uno más nuevo.
+    private var slackUpdateID = 0
     private var lastWakeHandledAt: Date?
     private let eventStore = EKEventStore()
     private var calendarAccessGranted = false
@@ -431,7 +439,8 @@ class SlackStatusManager: NSObject {
         }
     }
 
-    private func sendToSlack(office: Office) {
+    private func sendToSlack(office: Office, retriesLeft: Int = SlackStatusManager.maxSlackRetries) {
+        let updateID = beginSlackUpdate()
         var newOffice = office
         
         guard let token = token else { return }
@@ -482,9 +491,14 @@ class SlackStatusManager: NSObject {
         Slack.update(given: updatedOffice, token: token, expiration: 0) { [weak self] error in
             guard let self = self else { return }
             if let error = error {
+                LogManager.shared.log("🛑 Error al actualizar Slack (\((error as NSError).code)): \(error.localizedDescription)")
                 if !error.isConnectionProblem() {
                     self.token = nil
                     UserDefaults.standard.removeObject(forKey: "token")
+                } else if updateID == self.slackUpdateID {
+                    self.scheduleSlackRetry(of: office,
+                                            bypassingSchedule: bypassScheduleRestrictions,
+                                            retriesLeft: retriesLeft)
                 }
                 return
             }
@@ -495,6 +509,32 @@ class SlackStatusManager: NSObject {
                 self.delegate?.slackStatusManager(self, showMessage: updatedOffice.text)
             }
             self.currentOffice = updatedOffice
+        }
+    }
+
+    /// Cada envío nuevo deja sin efecto el reintento pendiente de uno anterior.
+    @discardableResult
+    private func beginSlackUpdate() -> Int {
+        slackRetryTimer?.invalidate()
+        slackUpdateID += 1
+        return slackUpdateID
+    }
+
+    /// Repite el envío entero, así que vuelve a mirar pausa, vacaciones y horario.
+    private func scheduleSlackRetry(of office: Office, bypassingSchedule: Bool, retriesLeft: Int) {
+        guard retriesLeft > 0 else {
+            LogManager.shared.log("🛑 Slack sigue sin responder - se reintentará al despertar o con el siguiente cambio de red")
+            hasPendingLocationUpdate = true
+            return
+        }
+        LogManager.shared.log("🔁 Se reintentará actualizar Slack en \(Int(Self.slackRetryDelay)) s")
+        slackRetryTimer = Timer.scheduledTimer(withTimeInterval: Self.slackRetryDelay, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
+            // Si el envío original podía saltarse el horario (p. ej. "Actualizar estado"), el reintento también.
+            if bypassingSchedule {
+                self.allowNextUpdateBypassingScheduleRestrictions()
+            }
+            self.sendToSlack(office: office, retriesLeft: retriesLeft - 1)
         }
     }
 
@@ -619,6 +659,7 @@ class SlackStatusManager: NSObject {
         let officeForSlack = office.inMeeting
         LogManager.shared.log("📣 Actualizando emoji de Slack por reunión (expira: \(endDate))")
         currentOffice = officeForSlack
+        beginSlackUpdate()
         Slack.update(given: officeForSlack, token: token) { [weak self] error in
             guard let self = self else { return }
             if let error = error {
