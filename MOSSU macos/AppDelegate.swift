@@ -7,7 +7,6 @@
 
 import Cocoa
 import KeyboardShortcuts
-import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow?
@@ -15,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let notifier = NotificationManager()
     private let slackManager = SlackStatusManager()
     private let launchAtLoginManager = LaunchAtLoginManager()
-    private let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+    private let updateManager = UpdateManager()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         buildMainMenu()
@@ -31,6 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             LAPSManager.shared.run()
         }
         BatteryIconManager.shared.start()
+        updateManager.start()
         SettingsModel.shared.configure(
             slackManager: slackManager,
             launchAtLoginManager: launchAtLoginManager,
@@ -135,7 +135,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func checkForUpdates() {
         DispatchQueue.main.async {
             NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])
-            self.updaterController.checkForUpdates(nil)
+            self.updateManager.checkForUpdates()
         }
     }
 

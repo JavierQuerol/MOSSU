@@ -32,6 +32,7 @@ final class LAPSManager {
     private var adminWatchTimer: Timer?
     /// Hasta cuándo tiene sentido cerrar el Hub tras una elevación recién pedida.
     private var closeHubDeadline: Date?
+    private var adminWaiters: [(Bool) -> Void] = []
 
     private init() {}
 
@@ -156,6 +157,20 @@ final class LAPSManager {
 
     // MARK: - Ejecución
 
+    /// Para lo que necesita admin, como instalar una actualización: si ya lo eres sigue al
+    /// momento; si no, pide la elevación y espera a que se aplique. Responde si eres admin.
+    func ensureAdmin(then completion: @escaping (Bool) -> Void) {
+        cachedAdminCheck = nil
+        guard !isAdmin else { return completion(true) }
+
+        // Si ya hay una petición en marcha (con el atajo, por ejemplo), basta con esperarla.
+        let alreadyRequested = isRunning || !adminWaiters.isEmpty
+        adminWaiters.append(completion)
+        if !alreadyRequested {
+            run()
+        }
+    }
+
     func run() {
         guard !isRunning else { return }
 
@@ -163,6 +178,7 @@ final class LAPSManager {
         // pero entre la caducidad y el siguiente repaso puede colarse una llamada.
         guard !isAdmin else {
             LogManager.shared.log("🔐 LAPS: ya eres admin, LAPS no permite renovar")
+            answerAdminWaiters()
             return
         }
 
@@ -172,6 +188,7 @@ final class LAPSManager {
             SelectionReader.requestAccessibilityPermission()
             notifyAction?("MOSSU necesita permiso de Accesibilidad",
                           "Actívalo para que MOSSU pueda pilotar el Intelligent Hub.")
+            answerAdminWaiters()
             return
         }
 
@@ -188,9 +205,15 @@ final class LAPSManager {
                 guard let self = self else { return }
                 self.isRunning = false
                 self.cachedAdminCheck = nil
-                self.handle(output: result.output, error: result.error)
+                let requested = self.handle(output: result.output, error: result.error)
                 self.syncShortcutAvailability()
                 self.notifyMenu()
+
+                if requested {
+                    self.waitForElevation(until: Date().addingTimeInterval(self.elevationGrace))
+                } else {
+                    self.answerAdminWaiters()
+                }
 
                 // La elevación tarda unos segundos en aplicarse: repasar poco después
                 // para desregistrar el atajo sin esperar al repaso de cada minuto.
@@ -199,6 +222,30 @@ final class LAPSManager {
                 }
             }
         }
+    }
+
+    /// El flujo termina antes de que la elevación se aplique: quien espera en `ensureAdmin`
+    /// sigue esperando hasta ser admin o hasta que pase el margen.
+    private func waitForElevation(until deadline: Date) {
+        guard !adminWaiters.isEmpty else { return }
+
+        cachedAdminCheck = nil
+        guard !isAdmin, Date() < deadline else {
+            answerAdminWaiters()
+            return
+        }
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { [weak self] _ in
+            self?.waitForElevation(until: deadline)
+        }
+    }
+
+    private func answerAdminWaiters() {
+        let waiters = adminWaiters
+        adminWaiters = []
+        guard !waiters.isEmpty else { return }
+
+        let admin = isAdmin
+        waiters.forEach { $0(admin) }
     }
 
     private func notifyMenu() {
@@ -222,7 +269,8 @@ final class LAPSManager {
         return (result.stringValue ?? "", "")
     }
 
-    private func handle(output: String, error: String) {
+    /// Devuelve si se pidió la elevación, aunque todavía no se haya aplicado.
+    private func handle(output: String, error: String) -> Bool {
         LogManager.shared.log("🔐 LAPS resultado -> salida=[\(output)] error=[\(error)]")
 
         guard error.isEmpty else {
@@ -234,7 +282,7 @@ final class LAPSManager {
             } else {
                 notifyAction?("LAPS: no se pudo completar", error)
             }
-            return
+            return false
         }
 
         if output.contains("SELECCIONADO_45M") {
@@ -249,13 +297,16 @@ final class LAPSManager {
             } else {
                 notifyAction?("45 min solicitado", "La elevación puede tardar unos segundos en aplicarse.")
             }
+            return true
         } else if output.contains("YA_ADMIN") {
             notifyAction?("Ya eras administrador", "No hacía falta elevar; aviso cerrado.")
+            return true
         } else if output.contains("SIN_DIALOGO") {
             notifyAction?("No apareció el selector", "LAPS no mostró el diálogo de tiempo. Inténtalo de nuevo en unos segundos.")
         } else {
             notifyAction?("LAPS", output.isEmpty ? "Terminado." : output)
         }
+        return false
     }
 
     // MARK: - Flujo editable
