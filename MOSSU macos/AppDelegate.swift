@@ -30,6 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         KeyboardShortcuts.onKeyUp(for: .lapsElevate) {
             LAPSManager.shared.run()
         }
+        BatteryIconManager.shared.start()
         SettingsModel.shared.configure(
             slackManager: slackManager,
             launchAtLoginManager: launchAtLoginManager,
@@ -94,7 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+        BatteryIconManager.shared.stop()
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

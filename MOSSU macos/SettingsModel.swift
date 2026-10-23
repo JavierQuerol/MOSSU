@@ -73,6 +73,15 @@ final class SettingsModel: ObservableObject {
         }
     }
 
+    var hidesBatteryIconWhilePluggedIn: Bool {
+        get { BatteryIconManager.shared.isEnabled }
+        set {
+            objectWillChange.send()
+            LogManager.shared.log(newValue ? "Ocultar la batería enchufado: activado" : "Ocultar la batería enchufado: desactivado")
+            BatteryIconManager.shared.isEnabled = newValue
+        }
+    }
+
     func checkForUpdates() {
         checkForUpdatesAction?()
     }

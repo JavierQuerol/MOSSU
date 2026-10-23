@@ -9,6 +9,16 @@ struct GeneralSettingsView: View {
                 Toggle("Abrir MOSSU al iniciar sesión", isOn: $model.launchAtLoginEnabled)
             }
 
+            SettingsSection(title: "Barra de menús") {
+                VStack(alignment: .leading, spacing: 6) {
+                    Toggle("Ocultar el icono de batería mientras el Mac está enchufado", isOn: $model.hidesBatteryIconWhilePluggedIn)
+                    Text("Vuelve a aparecer al desenchufarlo. Para aplicar el cambio, MOSSU reinicia Centro de control y los iconos de la derecha de la barra parpadean un momento.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+
             SettingsSection(title: "Versión de MOSSU") {
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 3) {

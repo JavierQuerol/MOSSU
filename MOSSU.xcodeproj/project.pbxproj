@@ -37,6 +37,7 @@
 		96FA000000000000000000BA /* ScheduleSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000FA /* ScheduleSettingsView.swift */; };
 		96FA000000000000000000BB /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000FB /* CalendarSettingsView.swift */; };
 		96FA000000000000000000BC /* LAPSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000FC /* LAPSManager.swift */; };
+		96FA000000000000000000BD /* BatteryIconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FA000000000000000000FD /* BatteryIconManager.swift */; };
 		96FA000000000000000000C3 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 96FA000000000000000000C2 /* KeyboardShortcuts */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +99,7 @@
 		96FA000000000000000000FA /* ScheduleSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSettingsView.swift; sourceTree = "<group>"; };
 		96FA000000000000000000FB /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
 		96FA000000000000000000FC /* LAPSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LAPSManager.swift; sourceTree = "<group>"; };
+		96FA000000000000000000FD /* BatteryIconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryIconManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 				96FA000000000000000000FA /* ScheduleSettingsView.swift */,
 				96FA000000000000000000FB /* CalendarSettingsView.swift */,
 				96FA000000000000000000FC /* LAPSManager.swift */,
+				96FA000000000000000000FD /* BatteryIconManager.swift */,
 				96F0057C2E1D66ED00AF482C /* main.swift */,
 				96ED6A7628C61545001226F1 /* Assets.xcassets */,
 				96ED6A7B28C61545001226F1 /* MOSSU.entitlements */,
@@ -374,6 +377,7 @@
 				96FA000000000000000000BA /* ScheduleSettingsView.swift in Sources */,
 				96FA000000000000000000BB /* CalendarSettingsView.swift in Sources */,
 				96FA000000000000000000BC /* LAPSManager.swift in Sources */,
+				96FA000000000000000000BD /* BatteryIconManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
