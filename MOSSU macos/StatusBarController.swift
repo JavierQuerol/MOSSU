@@ -123,6 +123,8 @@ class StatusBarController {
 
             statusItem.attributedTitle = attributedString
             menu.addItem(statusItem)
+
+            menu.addItem(NSMenuItem.separator())
         }
 
         // Igual que "Actualizar ahora" de Ajustes: en pausa no hay nada que forzar.
