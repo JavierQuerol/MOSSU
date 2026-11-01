@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 /// Ventana única de ajustes. MOSSU corre como accessory, así que hay que pasar a
@@ -11,26 +12,35 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
     }
 
     private var didCenter = false
+    private var titleSubscription: AnyCancellable?
 
     private static func make() -> SettingsWindowController {
         let window = NSWindow(contentViewController: NSHostingController(rootView: SettingsView()))
-        window.title = "Ajustes de MOSSU"
-        window.styleMask = [.titled, .closable, .resizable]
+        // Como en Ajustes del Sistema: el contenido ocupa también la barra de título
+        // para que la barra lateral llegue hasta arriba, y la barra de herramientas
+        // (vacía) pone el título encima de la sección, no encima de la barra lateral.
+        window.styleMask = [.titled, .closable, .resizable, .fullSizeContentView]
+        window.toolbar = NSToolbar()
+        window.toolbarStyle = .unified
         window.isReleasedWhenClosed = false
 
         // El tamaño se fija aquí y no con `idealWidth`/`idealHeight` en SwiftUI: con un
         // frame flexible, NSHostingController resuelve al mínimo y los ideales se ignoran.
-        window.contentMinSize = NSSize(width: 700, height: 480)
+        window.contentMinSize = NSSize(width: 760, height: 480)
         window.setContentSize(preferredContentSize())
 
         let controller = SettingsWindowController(window: window)
         window.delegate = controller
+        // La ventana se titula con la sección abierta, también al cambiarla desde la barra lateral.
+        controller.titleSubscription = SettingsModel.shared.$selectedTab.sink { [weak window] tab in
+            window?.title = tab.title
+        }
         return controller
     }
 
     /// Tamaño de arranque, acotado a lo que quepa en la pantalla del portátil.
     private static func preferredContentSize() -> NSSize {
-        var size = NSSize(width: 760, height: 680)
+        var size = NSSize(width: 900, height: 720)
         if let visible = NSScreen.main?.visibleFrame {
             size.width = min(size.width, visible.width - 40)
             size.height = min(size.height, visible.height - 40)

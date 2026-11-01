@@ -270,7 +270,7 @@ class StatusBarController {
     }
 
     /// Cada atajo es una fila del menú en modo lectura, con su combinación de teclas.
-    /// La única acción es el aviso de permiso, que abre la pestaña de atajos.
+    /// La única acción es el aviso de permiso, que abre la sección de atajos.
     /// Devuelve `true` si ha añadido algo al menú.
     @discardableResult
     private func addQuickLinksSection(to menu: NSMenu) -> Bool {

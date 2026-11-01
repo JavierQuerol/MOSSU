@@ -11,7 +11,8 @@ extension Notification.Name {
 final class SettingsModel: ObservableObject {
     static let shared = SettingsModel()
 
-    enum Tab: Hashable {
+    /// Secciones de la ventana de ajustes, en el orden de la barra lateral.
+    enum Tab: Hashable, CaseIterable {
         case general
         case schedule
         case calendar

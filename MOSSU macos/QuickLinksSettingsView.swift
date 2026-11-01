@@ -143,7 +143,7 @@ struct QuickLinksSettingsView: View {
         .padding(.top, 8)
     }
 
-    /// Sin scroll propio: la pestaña entera ya scrollea, y anidar dos scrolls
+    /// Sin scroll propio: la sección entera ya scrollea, y anidar dos scrolls
     /// hace que el trackpad no sepa cuál mover.
     private var list: some View {
         VStack(spacing: 14) {
