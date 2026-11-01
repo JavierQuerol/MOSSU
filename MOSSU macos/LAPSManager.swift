@@ -33,6 +33,9 @@ final class LAPSManager {
     /// Hasta cuándo tiene sentido cerrar el Hub tras una elevación recién pedida.
     private var closeHubDeadline: Date?
     private var adminWaiters: [(Bool) -> Void] = []
+    /// Si MOSSU ha abierto Cisco Secure Client para el LAPS en curso: solo entonces se
+    /// cierra al acabar. Si ya estaba abierto, es del usuario.
+    private var openedCisco = false
 
     private init() {}
 
@@ -78,13 +81,16 @@ final class LAPSManager {
 
         guard Date() < deadline else {
             // La elevación no llegó a aplicarse: no cerrar el Hub más tarde por sorpresa.
+            // Cisco sí, porque solo se cierra si lo abrió MOSSU para este LAPS.
             closeHubDeadline = nil
+            closeCiscoIfLAPSEnded()
             return
         }
 
         guard isAdmin else { return }
         closeHubDeadline = nil
         closeIntelligentHub()
+        closeCiscoIfLAPSEnded()
     }
 
     private func closeIntelligentHub() {
@@ -195,6 +201,7 @@ final class LAPSManager {
         isRunning = true
         cachedAdminCheck = nil
         LogManager.shared.log("🔐 LAPS: pidiendo admin 45 min…")
+        openCiscoIfOffNetwork()
         notifyMenu()
 
         let source = flowSource
@@ -206,6 +213,8 @@ final class LAPSManager {
                 self.isRunning = false
                 self.cachedAdminCheck = nil
                 let requested = self.handle(output: result.output, error: result.error)
+                // Si se ha pedido la elevación, Cisco espera a cerrarse con el Hub.
+                self.closeCiscoIfLAPSEnded()
                 self.syncShortcutAvailability()
                 self.notifyMenu()
 
@@ -231,6 +240,9 @@ final class LAPSManager {
 
         cachedAdminCheck = nil
         guard !isAdmin, Date() < deadline else {
+            // Quien espera suele ser una actualización, que cierra MOSSU al instalarse:
+            // el Hub y Cisco se cierran ya, sin esperar al siguiente repaso.
+            closeHubIfElevated()
             answerAdminWaiters()
             return
         }
@@ -307,6 +319,62 @@ final class LAPSManager {
             notifyAction?("LAPS", output.isEmpty ? "Terminado." : output)
         }
         return false
+    }
+
+    // MARK: - VPN
+
+    private static let ciscoBundleID = "com.cisco.secureclient.gui"
+
+    private var runningCisco: [NSRunningApplication] {
+        NSRunningApplication.runningApplications(withBundleIdentifier: Self.ciscoBundleID)
+    }
+
+    /// Fuera de la red de Mercadona LAPS necesita la VPN, así que Cisco Secure Client se
+    /// abre a la vez que el flujo. Si ya estaba abierto no se toca, ni ahora ni al acabar.
+    private func openCiscoIfOffNetwork() {
+        guard !Office.SSID.current().isMercadona else { return }
+
+        guard runningCisco.isEmpty else {
+            // Si lo abrió un LAPS anterior que aún espera la elevación, sigue siendo de MOSSU.
+            if !openedCisco {
+                LogManager.shared.log("🔐 LAPS: Cisco Secure Client ya estaba abierto, no se cerrará")
+            }
+            return
+        }
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: Self.ciscoBundleID) else {
+            LogManager.shared.log("🔐 LAPS: fuera de la red de Mercadona, pero no encuentro Cisco Secure Client")
+            return
+        }
+
+        LogManager.shared.log("🔐 LAPS: fuera de la red de Mercadona, abro Cisco Secure Client")
+        openedCisco = true
+        NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration()) { [weak self] _, error in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if let error = error {
+                    LogManager.shared.log("🔐 LAPS: no pude abrir Cisco Secure Client (\(error.localizedDescription))")
+                    self.openedCisco = false
+                    return
+                }
+                // El flujo puede haber fallado antes de que Cisco acabara de abrirse.
+                self.closeCiscoIfLAPSEnded()
+            }
+        }
+    }
+
+    /// El LAPS acaba con el flujo, salvo que se haya pedido la elevación: entonces acaba al
+    /// cerrar el Hub (o al darla por perdida), por si la VPN hace falta para aplicarla.
+    private func closeCiscoIfLAPSEnded() {
+        guard openedCisco, !isRunning, closeHubDeadline == nil else { return }
+        openedCisco = false
+
+        let clients = runningCisco
+        guard !clients.isEmpty else { return }
+
+        for client in clients where !client.terminate() {
+            LogManager.shared.log("🔐 LAPS: Cisco Secure Client no aceptó cerrarse")
+        }
+        LogManager.shared.log("🔐 LAPS: Cisco Secure Client cerrado")
     }
 
     // MARK: - Flujo editable

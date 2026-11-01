@@ -24,6 +24,17 @@ final class OfficeTests: XCTestCase {
         XCTAssertEqual(office, mad1)
     }
 
+    /// Fuera de estas redes LAPS abre Cisco Secure Client para la VPN.
+    func testOnlyMercadonaWiFisAreMercadonaNetworks() {
+        for ssid in ["WLAN_PA1", "WLAN_SA1", "Piscina_online"] {
+            XCTAssertEqual(Office.SSID(rawValue: ssid)?.isMercadona, true, ssid)
+        }
+        // Sin Wi-Fi (con cable, por ejemplo) el SSID llega vacío y cuenta como de fuera.
+        for ssid in ["WiFi_de_casa", ""] {
+            XCTAssertEqual(Office.SSID(rawValue: ssid)?.isMercadona, false, ssid)
+        }
+    }
+
     func testGivenEmojiReturnsCorrectOffice() {
         let office = Office.given(emoji: ":mad1_bee:")
         XCTAssertEqual(office, mad1)

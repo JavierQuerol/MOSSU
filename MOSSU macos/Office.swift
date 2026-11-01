@@ -139,6 +139,12 @@ struct Office: Equatable {
             }
         }
         
+        /// Las Wi-Fi de Mercadona son las que tienen caso propio; cualquier otra es de fuera.
+        var isMercadona: Bool {
+            if case .remote = self { return false }
+            return true
+        }
+
         init?(rawValue: String) {
             switch rawValue {
             case "WLAN_PA1":
