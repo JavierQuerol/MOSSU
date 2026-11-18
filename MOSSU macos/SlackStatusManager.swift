@@ -50,6 +50,13 @@ class SlackStatusManager: NSObject {
     private let locationManager = CLLocationManager()
     private let reachability = Reachability()
     private var hasPendingLocationUpdate = false
+    /// Al abrir la tapa con el Mac ya despierto (DarkWake tras conectarse a la Wi-Fi de la
+    /// oficina), la ubicación llega antes de que la pantalla cuente como activa. Por eso, lo
+    /// que queda pendiente por falta de pantalla se lanza en cuanto la hay, mirándolo cada
+    /// segundo durante un rato, en vez de esperar al siguiente despertar, que puede tardar horas.
+    private static let screenWaitTimeout: TimeInterval = 30
+    private static let screenCheckInterval: TimeInterval = 1
+    private var screenWaitTimer: Timer?
     /// Al llegar a un sitio la primera petición de ubicación puede fallar (la Wi-Fi recién
     /// conectada aún no sirve para ubicarse) y, sin reintento, el estado se quedaría como
     /// estaba hasta el siguiente cambio de red.
@@ -704,7 +711,10 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
         let screenIsActive = NSScreen.hasActiveDisplay()
         let canBypassScreenCheck = shouldAllowScreenClosedUpdateOnce
         if !screenIsActive && !canBypassScreenCheck {
-            LogManager.shared.log("🛑 No hay pantalla disponible")
+            // No se descarta: si llega justo al abrir la tapa, antes de que la pantalla cuente
+            // como activa, perderla dejaba el estado anterior hasta otro despertar.
+            LogManager.shared.log("📱 No hay pantalla activa - la actualización queda pendiente")
+            waitForActiveDisplay()
             return
         }
         if canBypassScreenCheck {
@@ -739,7 +749,7 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
         if !NSScreen.hasActiveDisplay() {
             // Cerrado no siempre hay ubicación: reintentar cuando el Mac vuelva.
             LogManager.shared.log("📱 Sin ubicación con el portátil cerrado - se reintentará al despertar")
-            hasPendingLocationUpdate = true
+            waitForActiveDisplay()
         } else if !isDenied {
             scheduleLocationRetry()
         }
@@ -766,17 +776,44 @@ extension SlackStatusManager: CLLocationManagerDelegate, ReachabilityDelegate {
         // Si no hay pantalla activa, marcar como pendiente para cuando se abra
         if !NSScreen.hasActiveDisplay() {
             LogManager.shared.log("📱 Pantalla cerrada - marcando actualización como pendiente")
-            hasPendingLocationUpdate = true
+            waitForActiveDisplay()
         } else {
             startTracking()
         }
     }
 
+    /// Deja la actualización pendiente y la lanza si hay pantalla activa en los próximos
+    /// segundos. Si no llega a haberla, sigue pendiente para cuando el Mac despierte.
+    private func waitForActiveDisplay() {
+        hasPendingLocationUpdate = true
+        // Cada espera empieza de cero: una que viniera de un DarkWake anterior podría
+        // agotarse justo al abrir la tapa, antes de que la pantalla esté lista.
+        screenWaitTimer?.invalidate()
+        let deadline = Date().addingTimeInterval(Self.screenWaitTimeout)
+        screenWaitTimer = Timer.scheduledTimer(withTimeInterval: Self.screenCheckInterval, repeats: true) { [weak self] timer in
+            guard let self = self, self.hasPendingLocationUpdate else {
+                timer.invalidate()
+                return
+            }
+            if NSScreen.hasActiveDisplay() {
+                timer.invalidate()
+                self.hasPendingLocationUpdate = false
+                LogManager.shared.log("🖥️ Pantalla activa - ejecutando actualización pendiente")
+                self.startTracking()
+            } else if Date() >= deadline {
+                timer.invalidate()
+            }
+        }
+    }
+
     @objc private func screenDidWake() {
         // Al despertar el sistema llegan las dos notificaciones casi a la vez. La segunda se
-        // ignora salvo que entre medias haya quedado algo pendiente: la red suele volver justo
-        // entonces, con la pantalla aún apagada, y si no se perdería hasta el siguiente despertar.
-        if let last = lastWakeHandledAt, Date().timeIntervalSince(last) < 5, !hasPendingLocationUpdate { return }
+        // ignora salvo que entre medias haya quedado algo pendiente que no se esté esperando
+        // ya a lanzar: la red suele volver justo entonces, con la pantalla aún apagada, y si
+        // no se perdería hasta el siguiente despertar.
+        let isWaitingForScreen = screenWaitTimer?.isValid == true
+        if let last = lastWakeHandledAt, Date().timeIntervalSince(last) < 5,
+           !hasPendingLocationUpdate || isWaitingForScreen { return }
         lastWakeHandledAt = Date()
 
         LogManager.shared.log("🌅 Pantalla activada")
