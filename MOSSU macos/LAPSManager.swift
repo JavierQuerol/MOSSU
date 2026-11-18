@@ -68,7 +68,7 @@ final class LAPSManager {
         syncShortcutAvailability()
         closeHubIfElevated()
         if previous != current {
-            LogManager.shared.log(current ? "🔐 LAPS: admin activo" : "🔐 LAPS: la elevación ha terminado")
+            LogManager.shared.log(current ? "🔐 Magic LAPS: admin activo" : "🔐 Magic LAPS: la elevación ha terminado")
             notifyMenu()
         }
     }
@@ -103,9 +103,9 @@ final class LAPSManager {
         guard !hubs.isEmpty else { return }
 
         for hub in hubs where !hub.terminate() {
-            LogManager.shared.log("🔐 LAPS: el Hub no aceptó cerrarse")
+            LogManager.shared.log("🔐 Magic LAPS: el Hub no aceptó cerrarse")
         }
-        LogManager.shared.log("🔐 LAPS: Hub cerrado tras conseguir admin")
+        LogManager.shared.log("🔐 Magic LAPS: Hub cerrado tras conseguir admin")
     }
 
     // MARK: - Estado
@@ -128,7 +128,7 @@ final class LAPSManager {
             groups = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
             process.waitUntilExit()
         } catch {
-            LogManager.shared.log("🔐 LAPS: no pude comprobar los grupos (\(error.localizedDescription))")
+            LogManager.shared.log("🔐 Magic LAPS: no pude comprobar los grupos (\(error.localizedDescription))")
         }
 
         let isAdmin = groups.split(whereSeparator: { $0 == " " || $0 == "\n" }).contains("admin")
@@ -183,14 +183,14 @@ final class LAPSManager {
         // Defensivo: el atajo está desregistrado y la fila del menú deshabilitada,
         // pero entre la caducidad y el siguiente repaso puede colarse una llamada.
         guard !isAdmin else {
-            LogManager.shared.log("🔐 LAPS: ya eres admin, LAPS no permite renovar")
+            LogManager.shared.log("🔐 Magic LAPS: ya eres admin, LAPS no permite renovar")
             answerAdminWaiters()
             return
         }
 
         // Sin Accesibilidad no se puede pilotar el Hub.
         guard SelectionReader.hasAccessibilityPermission else {
-            LogManager.shared.log("🔐 LAPS cancelado: falta permiso de Accesibilidad")
+            LogManager.shared.log("🔐 Magic LAPS cancelado: falta permiso de Accesibilidad")
             SelectionReader.requestAccessibilityPermission()
             notifyAction?("MOSSU necesita permiso de Accesibilidad",
                           "Actívalo para que MOSSU pueda pilotar el Intelligent Hub.")
@@ -200,7 +200,7 @@ final class LAPSManager {
 
         isRunning = true
         cachedAdminCheck = nil
-        LogManager.shared.log("🔐 LAPS: pidiendo admin 45 min…")
+        LogManager.shared.log("🔐 Magic LAPS: pidiendo admin 45 min…")
         openCiscoIfOffNetwork()
         notifyMenu()
 
@@ -283,7 +283,7 @@ final class LAPSManager {
 
     /// Devuelve si se pidió la elevación, aunque todavía no se haya aplicado.
     private func handle(output: String, error: String) -> Bool {
-        LogManager.shared.log("🔐 LAPS resultado -> salida=[\(output)] error=[\(error)]")
+        LogManager.shared.log("🔐 Magic LAPS resultado -> salida=[\(output)] error=[\(error)]")
 
         guard error.isEmpty else {
             let lowercased = error.lowercased()
@@ -292,7 +292,7 @@ final class LAPSManager {
                               "Activa MOSSU en Ajustes → Privacidad y seguridad → Accesibilidad.")
                 SelectionReader.openAccessibilitySettings()
             } else {
-                notifyAction?("LAPS: no se pudo completar", error)
+                notifyAction?("Magic LAPS: no se pudo completar", error)
             }
             return false
         }
@@ -316,7 +316,7 @@ final class LAPSManager {
         } else if output.contains("SIN_DIALOGO") {
             notifyAction?("No apareció el selector", "LAPS no mostró el diálogo de tiempo. Inténtalo de nuevo en unos segundos.")
         } else {
-            notifyAction?("LAPS", output.isEmpty ? "Terminado." : output)
+            notifyAction?("Magic LAPS", output.isEmpty ? "Terminado." : output)
         }
         return false
     }
@@ -337,22 +337,22 @@ final class LAPSManager {
         guard runningCisco.isEmpty else {
             // Si lo abrió un LAPS anterior que aún espera la elevación, sigue siendo de MOSSU.
             if !openedCisco {
-                LogManager.shared.log("🔐 LAPS: Cisco Secure Client ya estaba abierto, no se cerrará")
+                LogManager.shared.log("🔐 Magic LAPS: Cisco Secure Client ya estaba abierto, no se cerrará")
             }
             return
         }
         guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: Self.ciscoBundleID) else {
-            LogManager.shared.log("🔐 LAPS: fuera de la red de Mercadona, pero no encuentro Cisco Secure Client")
+            LogManager.shared.log("🔐 Magic LAPS: fuera de la red de Mercadona, pero no encuentro Cisco Secure Client")
             return
         }
 
-        LogManager.shared.log("🔐 LAPS: fuera de la red de Mercadona, abro Cisco Secure Client")
+        LogManager.shared.log("🔐 Magic LAPS: fuera de la red de Mercadona, abro Cisco Secure Client")
         openedCisco = true
         NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration()) { [weak self] _, error in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 if let error = error {
-                    LogManager.shared.log("🔐 LAPS: no pude abrir Cisco Secure Client (\(error.localizedDescription))")
+                    LogManager.shared.log("🔐 Magic LAPS: no pude abrir Cisco Secure Client (\(error.localizedDescription))")
                     self.openedCisco = false
                     return
                 }
@@ -372,9 +372,9 @@ final class LAPSManager {
         guard !clients.isEmpty else { return }
 
         for client in clients where !client.terminate() {
-            LogManager.shared.log("🔐 LAPS: Cisco Secure Client no aceptó cerrarse")
+            LogManager.shared.log("🔐 Magic LAPS: Cisco Secure Client no aceptó cerrarse")
         }
-        LogManager.shared.log("🔐 LAPS: Cisco Secure Client cerrado")
+        LogManager.shared.log("🔐 Magic LAPS: Cisco Secure Client cerrado")
     }
 
     // MARK: - Flujo editable
@@ -385,7 +385,7 @@ final class LAPSManager {
            !external.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return external
         }
-        LogManager.shared.log("🔐 LAPS: no pude leer \(Self.flowPath); uso el flujo embebido")
+        LogManager.shared.log("🔐 Magic LAPS: no pude leer \(Self.flowPath); uso el flujo embebido")
         return Self.embeddedFlow
     }
 
@@ -404,7 +404,7 @@ final class LAPSManager {
         let backupPath = Self.flowPath + ".bak"
         try? FileManager.default.removeItem(atPath: backupPath)
         try? FileManager.default.moveItem(atPath: Self.flowPath, toPath: backupPath)
-        LogManager.shared.log("🔐 LAPS: flujo antiguo guardado en \(backupPath)")
+        LogManager.shared.log("🔐 Magic LAPS: flujo antiguo guardado en \(backupPath)")
         writeEmbeddedFlow()
     }
 
@@ -429,7 +429,7 @@ final class LAPSManager {
 
     func restoreDefaultFlow() {
         writeEmbeddedFlow()
-        LogManager.shared.log("🔐 LAPS: flujo restaurado al original")
+        LogManager.shared.log("🔐 Magic LAPS: flujo restaurado al original")
     }
 
     private func writeEmbeddedFlow() {
@@ -437,9 +437,9 @@ final class LAPSManager {
         do {
             try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
             try Self.embeddedFlow.write(toFile: Self.flowPath, atomically: true, encoding: .utf8)
-            LogManager.shared.log("🔐 LAPS: flujo instalado en \(Self.flowPath)")
+            LogManager.shared.log("🔐 Magic LAPS: flujo instalado en \(Self.flowPath)")
         } catch {
-            LogManager.shared.log("🔐 LAPS: no pude instalar el flujo (\(error.localizedDescription))")
+            LogManager.shared.log("🔐 Magic LAPS: no pude instalar el flujo (\(error.localizedDescription))")
         }
     }
 

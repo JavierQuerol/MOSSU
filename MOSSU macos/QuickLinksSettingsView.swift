@@ -105,7 +105,7 @@ struct QuickLinksSettingsView: View {
 
             HStack(alignment: .top, spacing: 8) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Activar admin 45 minutos (LAPS)")
+                    Text("Activar admin 45 minutos (Magic LAPS)")
                     Text("Abre el Intelligent Hub, lanza LAPS y elige 45 minutos sin que toques el ratón. Mientras ya eres administrador el atajo queda inactivo: LAPS no permite renovar.")
                         .font(.caption)
                         .foregroundColor(.secondary)

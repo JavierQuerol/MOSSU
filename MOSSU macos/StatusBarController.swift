@@ -226,7 +226,7 @@ class StatusBarController {
             return
         }
 
-        item.title = "LAPS"
+        item.title = "Magic LAPS"
         item.image = .menuSymbol("lock")
         item.action = #selector(AppDelegate.runLAPS)
         applyShortcut(.lapsElevate, to: item)
