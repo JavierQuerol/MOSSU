@@ -6,8 +6,8 @@
   <title>MOSSU — Tu estado de Slack en piloto automático</title>
   <meta name="description" content="MOSSU es una app para la barra de menús del Mac que actualiza tu estado de Slack según dónde trabajes, te da admin temporal con Magic LAPS y abre tus herramientas con atajos de teclado. Gratis y de código abierto.">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#FBFAF6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121318" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FFCC00" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121C33" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="MOSSU — Tu estado de Slack en piloto automático">
   <meta property="og:description" content="App de código abierto para Mac: estado de Slack automático, Magic LAPS y atajos de teclado.">
@@ -22,198 +22,157 @@
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="github" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
+    <symbol id="download" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></symbol>
+  </svg>
+
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="#" aria-label="MOSSU, inicio">
-        <img src="img/mossu-192.webp" alt="" width="32" height="32">
+  <!-- La cabecera es la barra de menús del Mac: MOSSU vive ahí. El icono y el reloj
+       de la derecha cambian al bajar por «Un día cualquiera con MOSSU». -->
+  <header class="menubar">
+    <div class="wrap menubar-inner">
+      <a class="menubar-app" href="#" aria-label="MOSSU, inicio">
+        <img src="img/mossu-192.webp" alt="" width="22" height="22">
         <span>MOSSU</span>
       </a>
-      <nav class="nav" aria-label="Secciones">
+      <nav class="menubar-menus" aria-label="Secciones">
         <a href="#funciones">Funciones</a>
         <a href="#privacidad">Privacidad</a>
         <a href="#preguntas">Preguntas</a>
+        <a href="https://github.com/JavierQuerol/MOSSU">GitHub</a>
       </nav>
-      <div class="header-actions">
-        <a class="icon-link" href="https://github.com/JavierQuerol/MOSSU" aria-label="Código de MOSSU en GitHub">
-          <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        </a>
-        <a class="btn btn-primary btn-sm" href="MOSSU.zip" download>Descargar</a>
+      <a class="menubar-download" href="MOSSU.zip" download>Descargar</a>
+      <div class="menubar-extras" aria-hidden="true">
+        <span class="menubar-now is-open" data-bar-now><img src="img/vlc1.png" alt="" width="18" height="18"></span>
+        <svg class="menubar-glyph" viewBox="0 0 24 24" width="17" height="17"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M2 8.8a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16.2a5 5 0 0 1 6 0"/><circle cx="12" cy="19.6" r="1.4" fill="currentColor"/></svg>
+        <svg class="menubar-glyph" viewBox="0 0 28 16" width="25" height="14"><rect x="1" y="2" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/><rect x="3" y="4" width="15.5" height="8" rx="2" fill="currentColor"/><path d="M25 6v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".55"/></svg>
+        <span class="menubar-clock" data-bar-clock>vie 9:41</span>
       </div>
     </div>
   </header>
 
   <main id="contenido">
-    <!-- Portada -->
+    <!-- Portada: el menú cuelga de la barra, como en el Mac -->
     <section class="hero">
-      <div class="container hero-grid">
+      <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="dot" aria-hidden="true"></span>App para la barra de menús del Mac</p>
           <h1>Tu estado de Slack, en piloto automático.</h1>
-          <p class="lead">MOSSU sabe si estás en Plaza América, en una colmena, en tienda o en casa, y pone tu estado de Slack sin que tengas que acordarte. Además te da admin con un atajo y abre tus herramientas con el texto que tengas seleccionado.</p>
-          <div class="cta-row">
-            <a class="btn btn-primary btn-lg" href="MOSSU.zip" download>
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+          <p class="hero-lead">MOSSU sabe si estás en Plaza América, en una colmena, en tienda o en casa, y pone tu estado de Slack sin que tengas que acordarte. Además te da admin con un atajo y abre tus herramientas con el texto que tengas seleccionado.</p>
+          <div class="actions">
+            <a class="button" href="MOSSU.zip" download>
               <span>Descargar para Mac</span>
+              <svg width="20" height="20" aria-hidden="true"><use href="#download"/></svg>
             </a>
-            <a class="btn btn-ghost btn-lg" href="https://github.com/JavierQuerol/MOSSU">
-              <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-              <span>Ver en GitHub</span>
+            <a class="link" href="https://github.com/JavierQuerol/MOSSU">
+              <svg width="18" height="18" aria-hidden="true"><use href="#github"/></svg>
+              <span>Ver el código en GitHub</span>
             </a>
           </div>
-          <p class="fine-print"><span data-release>Versión 1.68</span> · macOS 12 o posterior · Gratis y de código abierto</p>
+          <p class="fine"><span data-release>Versión 1.68</span> · macOS 12 o posterior · Gratis y de código abierto</p>
         </div>
 
-        <div class="hero-visual">
-          <div class="desk">
-            <div class="menubar" aria-hidden="true">
-              <span class="menubar-item is-open"><img src="img/vlc1.png" alt="" width="18" height="18"></span>
-              <svg class="menubar-glyph" viewBox="0 0 24 24" width="17" height="17"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M2 8.8a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16.2a5 5 0 0 1 6 0"/><circle cx="12" cy="19.6" r="1.4" fill="currentColor"/></svg>
-              <svg class="menubar-glyph" viewBox="0 0 28 16" width="25" height="14"><rect x="1" y="2" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/><rect x="3" y="4" width="15.5" height="8" rx="2" fill="currentColor"/><path d="M25 6v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".55"/></svg>
-              <span class="menubar-clock">vie 9:41</span>
-            </div>
-            <picture>
-              <source srcset="img/dark-menu.webp" media="(prefers-color-scheme: dark)">
-              <img class="desk-menu" src="img/light-menu.webp" width="429" height="365" alt="Menú de MOSSU en la barra de menús: «Carlos está en Colmena VLC1», última actualización hoy a las 9:41, batería, Actualizar estado, Magic LAPS con el atajo Control Opción L, tres atajos de URL y Ajustes.">
-            </picture>
-          </div>
-          <div class="status-card" aria-label="Así se ve tu estado en Slack">
+        <div class="hero-screen">
+          <picture>
+            <source srcset="img/dark-menu.webp" media="(prefers-color-scheme: dark)">
+            <img class="hero-menu" src="img/light-menu.webp" width="429" height="365" alt="Menú de MOSSU en la barra de menús: «Carlos está en Colmena VLC1», última actualización hoy a las 9:41, batería, Actualizar estado, Magic LAPS con el atajo Control Opción L, tres atajos de URL y Ajustes.">
+          </picture>
+          <div class="notice" aria-label="Así se ve tu estado en Slack">
             <img class="app-icon" src="img/app-icon.webp" alt="" width="40" height="40">
             <div>
-              <p class="status-name">Carlos</p>
-              <p class="status-line"><img src="img/vlc1.png" alt="" width="16" height="16"> En Colmena VLC1</p>
+              <p class="notice-name">Carlos</p>
+              <p class="notice-line"><img src="img/vlc1.png" alt="" width="16" height="16"> En Colmena VLC1</p>
             </div>
-            <span class="status-tag">Slack</span>
+            <span class="notice-tag">Slack</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Sedes -->
-    <section class="places" aria-labelledby="sedes-titulo">
-      <div class="container">
-        <p id="sedes-titulo" class="places-title">Reconoce solo dónde estás</p>
-        <ul class="chips">
-          <li><span class="chip-emoji" aria-hidden="true">🇺🇸</span>Plaza América</li>
-          <li><img src="img/vlc1.png" alt="" width="20" height="20">Colmena VLC1</li>
-          <li><img src="img/bcn1.png" alt="" width="20" height="20">Colmena BCN1</li>
-          <li><img src="img/mad1.png" alt="" width="20" height="20">Colmena MAD1</li>
-          <li><img src="img/mad2.png" alt="" width="20" height="20">Colmena MAD2</li>
-          <li><img src="img/mad3.png" alt="" width="20" height="20">Colmena MAD3</li>
-          <li><img src="img/alc1.png" alt="" width="20" height="20">Colmena ALC1</li>
-          <li><img src="img/svq1.png" alt="" width="20" height="20">Colmena SVQ1</li>
-          <li><span class="chip-emoji" aria-hidden="true">🌳</span>Oficina de Madrid</li>
-          <li><img src="img/mercadona.png" alt="" width="20" height="20">En tienda</li>
-          <li><span class="chip-emoji" aria-hidden="true">🏡</span>En remoto</li>
-          <li><span class="chip-emoji" aria-hidden="true">🌴</span>En vacaciones</li>
+    <!-- Sedes y estados -->
+    <section class="roster" aria-labelledby="sedes-titulo">
+      <div class="wrap roster-inner">
+        <h2 id="sedes-titulo">Reconoce solo dónde estás</h2>
+        <ul>
+          <li><span class="glyph" aria-hidden="true">🇺🇸</span>Plaza América</li>
+          <li><img src="img/vlc1.png" alt="" width="24" height="24">Colmena VLC1</li>
+          <li><img src="img/bcn1.png" alt="" width="24" height="24">Colmena BCN1</li>
+          <li><img src="img/mad1.png" alt="" width="24" height="24">Colmena MAD1</li>
+          <li><img src="img/mad2.png" alt="" width="24" height="24">Colmena MAD2</li>
+          <li><img src="img/mad3.png" alt="" width="24" height="24">Colmena MAD3</li>
+          <li><img src="img/alc1.png" alt="" width="24" height="24">Colmena ALC1</li>
+          <li><img src="img/svq1.png" alt="" width="24" height="24">Colmena SVQ1</li>
+          <li><span class="glyph" aria-hidden="true">🌳</span>Oficina de Madrid</li>
+          <li><img src="img/mercadona.png" alt="" width="24" height="24">En tienda</li>
+          <li><span class="glyph" aria-hidden="true">🏡</span>En remoto</li>
+          <li><span class="glyph" aria-hidden="true">🌴</span>En vacaciones</li>
         </ul>
       </div>
     </section>
 
-    <!-- Cómo funciona -->
-    <section class="section steps-section" aria-labelledby="como-titulo">
-      <div class="container">
-        <div class="section-head">
-          <p class="kicker">Cómo funciona</p>
-          <h2 id="como-titulo">Lo instalas una vez y te olvidas.</h2>
-        </div>
-        <ol class="steps">
-          <li class="step">
-            <span class="step-num">1</span>
-            <h3>Descarga y abre MOSSU</h3>
-            <p>Descomprime el ZIP, arrastra MOSSU a Aplicaciones y ábrelo. Se queda en la barra de menús, sin icono en el Dock.</p>
-          </li>
-          <li class="step">
-            <span class="step-num">2</span>
-            <h3>Conecta tu Slack</h3>
-            <p>Autoriza MOSSU con un clic. Solo pide acceso a tu perfil, para leer y cambiar tu estado.</p>
-          </li>
-          <li class="step">
-            <span class="step-num">3</span>
-            <h3>Sigue con tu día</h3>
-            <p>Al cambiar de Wi-Fi, abrir la tapa o recuperar la conexión, MOSSU mira dónde estás y actualiza tu estado.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
+    <!-- Funciones, contadas como un día de trabajo. data-clock y data-icon son lo
+         que enseña la barra de menús de arriba cuando el bloque pasa por pantalla. -->
+    <section id="funciones" class="day" aria-labelledby="dia-titulo">
+      <div class="wrap">
+        <header class="day-head">
+          <h2 id="dia-titulo">Un día cualquiera con MOSSU</h2>
+          <p>Tú abres el portátil y trabajas. Del estado se encarga la abeja. <span class="day-hint">Mientras bajas, fíjate en el icono y el reloj de la barra de menús.</span></p>
+        </header>
 
-    <!-- Funciones -->
-    <section id="funciones" class="section features" aria-labelledby="funciones-titulo">
-      <div class="container">
-        <div class="section-head">
-          <p class="kicker">Funciones</p>
-          <h2 id="funciones-titulo">Todo lo que hace MOSSU por ti.</h2>
-        </div>
-
-        <article class="feature">
-          <div class="feature-copy">
-            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
-            <h3>Tu estado cambia contigo</h3>
-            <p>MOSSU mira la red Wi-Fi y tu ubicación para saber en qué sede estás. Con eso pone en Slack el emoji y el texto que tocan, y te avisa con una notificación cada vez que cambia.</p>
-            <ul class="checks">
-              <li>Fuera de las redes de Mercadona te marca «En remoto».</li>
+        <article class="event" data-clock="8:30" data-icon="🏡">
+          <p class="event-time"><time datetime="08:30">8:30</time></p>
+          <div class="event-body">
+            <p class="event-status"><span class="glyph" aria-hidden="true">🏡</span>En remoto</p>
+            <h3>Abres el portátil en casa.</h3>
+            <p>MOSSU mira la red Wi-Fi para saber dónde estás. Fuera de las redes de Mercadona te marca «En remoto», sin que hagas nada.</p>
+            <ul class="notes">
+              <li>Se entera al cambiar de Wi-Fi, al abrir la tapa o al recuperar la conexión.</li>
               <li>Si la red falla, lo vuelve a intentar solo.</li>
               <li>«Actualizar estado» en el menú lo fuerza cuando quieras.</li>
             </ul>
           </div>
-          <div class="feature-visual">
-            <ol class="timeline" aria-label="Un día con MOSSU">
-              <li>
-                <time>08:30</time>
-                <span class="tl-emoji" aria-hidden="true">🏡</span>
-                <div><strong>En remoto</strong><span>Te conectas desde casa</span></div>
-              </li>
-              <li>
-                <time>09:41</time>
-                <img class="tl-emoji" src="img/vlc1.png" alt="" width="22" height="22">
-                <div><strong>En Colmena VLC1</strong><span>Wi-Fi de Mercadona y estás a menos de 500&nbsp;m</span></div>
-              </li>
-              <li>
-                <time>11:00</time>
-                <img class="tl-emoji" src="img/reu_colmena.png" alt="" width="22" height="22">
-                <div><strong>En Colmena VLC1</strong><span>Reunión en tu calendario: cambia el emoji</span></div>
-              </li>
-              <li>
-                <time>17:15</time>
-                <img class="tl-emoji" src="img/mercadona.png" alt="" width="22" height="22">
-                <div><strong>En tienda</strong><span>Wi-Fi de Mercadona lejos de las sedes</span></div>
-              </li>
-            </ol>
+          <div class="event-visual">
+            <dl class="rule">
+              <div><dt>Wi-Fi</dt><dd>La de casa</dd></div>
+              <div class="rule-result"><dt>Slack</dt><dd><span class="glyph" aria-hidden="true">🏡</span>En remoto</dd></div>
+            </dl>
           </div>
         </article>
 
-        <article class="feature is-reversed">
-          <div class="feature-copy">
-            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-            <h3>Tu jornada, tus reglas</h3>
-            <p>Marca los días y las horas que trabajas. Fuera de ese horario MOSSU no te pone «En remoto», así que abrir el portátil en casa un sábado no cambia tu estado.</p>
-            <ul class="checks">
-              <li>Deja fuera la hora de comer con un clic.</li>
-              <li>Pausa las actualizaciones cuando quieras.</li>
-              <li>Activa las vacaciones con la fecha de vuelta: pone 🌴 y se reanuda solo ese día.</li>
+        <article class="event" data-clock="9:41" data-icon="img/vlc1.png">
+          <p class="event-time"><time datetime="09:41">9:41</time></p>
+          <div class="event-body">
+            <p class="event-status"><img src="img/vlc1.png" alt="" width="22" height="22">En Colmena VLC1</p>
+            <h3>Llegas a la colmena.</h3>
+            <p>En la Wi-Fi de Mercadona, MOSSU mira también tu ubicación. Si estás a menos de 500&nbsp;m de una sede, pone en Slack su emoji y su nombre, y te avisa con una notificación cada vez que tu estado cambia.</p>
+            <ul class="notes">
+              <li>Varias sedes comparten red Wi-Fi; con la ubicación sabe en cuál estás.</li>
+              <li>Cada colmena tiene su propia abeja.</li>
             </ul>
           </div>
-          <figure class="feature-visual shot">
-            <picture>
-              <source srcset="img/dark-schedule.webp" media="(prefers-color-scheme: dark)">
-              <img src="img/light-schedule.webp" width="860" height="620" loading="lazy" decoding="async" alt="Ajustes de MOSSU, sección Actualizaciones: botón Actualizar ahora, pausa, vacaciones con fecha de vuelta y la selección de días (lunes a viernes) y horas (de 8:00 a 18:00 sin las 14:00).">
-            </picture>
-          </figure>
+          <div class="event-visual">
+            <dl class="rule">
+              <div><dt>Wi-Fi</dt><dd>La de Mercadona</dd></div>
+              <div><dt>Ubicación</dt><dd>A menos de 500&nbsp;m de VLC1</dd></div>
+              <div class="rule-result"><dt>Slack</dt><dd><img src="img/vlc1.png" alt="" width="22" height="22">En Colmena VLC1</dd></div>
+            </dl>
+          </div>
         </article>
 
-        <article class="feature">
-          <div class="feature-copy">
-            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span>
-            <h3>Reuniones sin tocar nada</h3>
+        <article class="event" data-clock="11:00" data-icon="img/reu_colmena.png">
+          <p class="event-time"><time datetime="11:00">11:00</time></p>
+          <div class="event-body">
+            <p class="event-status"><img src="img/reu_colmena.png" alt="" width="22" height="22">En Colmena VLC1</p>
+            <h3>Entras en una reunión.</h3>
             <p>Si lo activas, MOSSU mira tus calendarios y, mientras tengas una reunión en curso, pone el emoji de reunión en tu estado. Al terminar vuelve el de siempre.</p>
-            <ul class="checks">
+            <ul class="notes">
               <li>Elige qué calendarios cuentan, o todos.</li>
               <li>Ignora los eventos de todo el día y los marcados como disponible.</li>
               <li>El título de la reunión nunca sale de tu Mac.</li>
             </ul>
           </div>
-          <figure class="feature-visual shot">
+          <figure class="event-visual shot">
             <picture>
               <source srcset="img/dark-calendar.webp" media="(prefers-color-scheme: dark)">
               <img src="img/light-calendar.webp" width="860" height="532" loading="lazy" decoding="async" alt="Ajustes de MOSSU, sección Calendario: «Cambiar mi estado durante las reuniones» activado y la lista de calendarios observados.">
@@ -221,20 +180,21 @@
           </figure>
         </article>
 
-        <article class="feature is-reversed">
-          <div class="feature-copy">
-            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0"/></svg></span>
-            <h3>Magic LAPS: admin en un atajo</h3>
+        <article class="event" data-clock="12:20" data-icon="img/vlc1.png">
+          <p class="event-time"><time datetime="12:20">12:20</time></p>
+          <div class="event-body">
+            <p class="event-status is-keys"><kbd>⌃</kbd><kbd>⌥</kbd><kbd>L</kbd>Magic LAPS</p>
+            <h3>Necesitas ser administrador.</h3>
             <p>Pulsa <kbd>⌃</kbd><kbd>⌥</kbd><kbd>L</kbd> y MOSSU abre el Intelligent Hub, lanza LAPS y elige los 45 minutos de administrador por ti, sin que toques el ratón.</p>
-            <ul class="checks">
+            <ul class="notes">
               <li>El menú te dice cuántos minutos de admin te quedan.</li>
               <li>Las actualizaciones de MOSSU también lo usan para instalarse.</li>
               <li>El flujo es un AppleScript que puedes ajustar si cambia el Hub.</li>
             </ul>
           </div>
-          <div class="feature-visual laps" aria-hidden="true">
+          <div class="event-visual laps" aria-hidden="true">
             <div class="keys"><kbd>⌃</kbd><kbd>⌥</kbd><kbd>L</kbd></div>
-            <div class="laps-rows">
+            <div class="menu-rows">
               <div class="menu-row"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0"/></svg><span>Magic LAPS</span><span class="menu-shortcut">⌃⌥L</span></div>
               <div class="menu-row is-muted"><svg viewBox="0 0 24 24"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9"/></svg><span>Activando admin…</span></div>
               <div class="menu-row is-done"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 7.5-2"/></svg><span>Admin activo · quedan 45&nbsp;min</span></div>
@@ -242,53 +202,105 @@
           </div>
         </article>
 
-        <article class="feature">
-          <div class="feature-copy">
-            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></span>
-            <h3>Tus herramientas, a un atajo</h3>
+        <article class="event" data-clock="15:40" data-icon="img/vlc1.png">
+          <p class="event-time"><time datetime="15:40">15:40</time></p>
+          <div class="event-body">
+            <p class="event-status is-keys"><kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd>Atajos de URL</p>
+            <h3>Tienes que buscar un código.</h3>
             <p>Asocia una URL a una combinación de teclas. Escribe <code>{selection}</code> donde quieras el texto seleccionado: selecciona un código en cualquier app, pulsa el atajo y MOSSU abre la búsqueda en el navegador.</p>
-            <ul class="checks">
+            <ul class="notes">
               <li>Sin <code>{selection}</code>, el atajo abre la URL tal cual.</li>
               <li>Ves la URL resultante antes de usarla.</li>
               <li>Tus atajos aparecen también en el menú, con sus teclas.</li>
             </ul>
           </div>
-          <figure class="feature-visual shot">
+          <figure class="event-visual shot">
             <picture>
               <source srcset="img/dark-shortcuts.webp" media="(prefers-color-scheme: dark)">
               <img src="img/light-shortcuts.webp" width="860" height="532" loading="lazy" decoding="async" alt="Ajustes de MOSSU, sección Atajos: la acción Magic LAPS con Control Opción L y tres atajos personalizados con su URL, su combinación de teclas y la vista previa.">
             </picture>
           </figure>
         </article>
+
+        <article class="event" data-clock="17:15" data-icon="img/mercadona.png">
+          <p class="event-time"><time datetime="17:15">17:15</time></p>
+          <div class="event-body">
+            <p class="event-status"><img src="img/mercadona.png" alt="" width="22" height="22">En tienda</p>
+            <h3>Te acercas a una tienda.</h3>
+            <p>Si estás en la Wi-Fi de Mercadona pero lejos de las sedes, MOSSU entiende que estás en una tienda y lo pone en Slack.</p>
+          </div>
+          <div class="event-visual">
+            <dl class="rule">
+              <div><dt>Wi-Fi</dt><dd>La de Mercadona</dd></div>
+              <div><dt>Ubicación</dt><dd>Lejos de las sedes</dd></div>
+              <div class="rule-result"><dt>Slack</dt><dd><img src="img/mercadona.png" alt="" width="22" height="22">En tienda</dd></div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="event is-night" data-clock="21:30" data-icon="img/mercadona.png">
+          <p class="event-time"><time datetime="21:30">21:30</time></p>
+          <div class="event-body">
+            <p class="event-status"><span class="glyph" aria-hidden="true">🌙</span>Fuera de tu horario</p>
+            <h3>Abres el portátil en el sofá.</h3>
+            <p>Marca los días y las horas que trabajas. Fuera de ese horario MOSSU no te pone «En remoto», así que abrir el portátil en casa por la noche o un sábado no cambia tu estado.</p>
+            <ul class="notes">
+              <li>Deja fuera la hora de comer con un clic.</li>
+              <li>Pausa las actualizaciones cuando quieras.</li>
+              <li>Activa las vacaciones con la fecha de vuelta: pone 🌴 y se reanuda solo ese día.</li>
+            </ul>
+          </div>
+          <figure class="event-visual shot">
+            <img src="img/dark-schedule.webp" width="860" height="620" loading="lazy" decoding="async" alt="Ajustes de MOSSU, sección Actualizaciones: botón Actualizar ahora, pausa, vacaciones con fecha de vuelta y la selección de días (lunes a viernes) y horas (de 8:00 a 18:00 sin las 14:00).">
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <!-- Instalación -->
+    <section class="setup" aria-labelledby="como-titulo">
+      <div class="wrap">
+        <h2 id="como-titulo">Lo instalas una vez y te olvidas.</h2>
+        <ol class="steps">
+          <li>
+            <h3>Descarga y abre MOSSU</h3>
+            <p>Descomprime el ZIP, arrastra MOSSU a Aplicaciones y ábrelo. Se queda en la barra de menús, sin icono en el Dock.</p>
+          </li>
+          <li>
+            <h3>Conecta tu Slack</h3>
+            <p>Autoriza MOSSU con un clic. Solo pide acceso a tu perfil, para leer y cambiar tu estado.</p>
+          </li>
+          <li>
+            <h3>Sigue con tu día</h3>
+            <p>Al cambiar de Wi-Fi, abrir la tapa o recuperar la conexión, MOSSU mira dónde estás y actualiza tu estado.</p>
+          </li>
+        </ol>
       </div>
     </section>
 
     <!-- Y además -->
-    <section class="section extras" aria-labelledby="extras-titulo">
-      <div class="container extras-grid">
+    <section class="extras" aria-labelledby="extras-titulo">
+      <div class="wrap extras-grid">
         <div>
-          <div class="section-head is-left">
-            <p class="kicker">Y además</p>
-            <h2 id="extras-titulo">Los detalles que se agradecen.</h2>
-          </div>
-          <ul class="extra-list">
-            <li>
-              <h3>Se actualiza solo</h3>
-              <p>Busca e instala versiones nuevas una vez al día. No tienes que volver aquí.</p>
-            </li>
-            <li>
-              <h3>Arranca contigo</h3>
-              <p>Se abre al iniciar sesión, así nunca se queda tu estado sin actualizar.</p>
-            </li>
-            <li>
-              <h3>Barra de menús más limpia</h3>
-              <p>Oculta el icono de batería de macOS mientras el Mac está enchufado. El nivel lo sigues viendo en el menú de MOSSU.</p>
-            </li>
-            <li>
-              <h3>Registro de actividad</h3>
-              <p>«Ver registro…» te cuenta qué ha hecho MOSSU: cambios de estado, red, calendario y atajos.</p>
-            </li>
-          </ul>
+          <h2 id="extras-titulo">Los detalles que se agradecen.</h2>
+          <dl class="extra-list">
+            <div>
+              <dt>Se actualiza solo</dt>
+              <dd>Busca e instala versiones nuevas una vez al día. No tienes que volver aquí.</dd>
+            </div>
+            <div>
+              <dt>Arranca contigo</dt>
+              <dd>Se abre al iniciar sesión, así nunca se queda tu estado sin actualizar.</dd>
+            </div>
+            <div>
+              <dt>Barra de menús más limpia</dt>
+              <dd>Oculta el icono de batería de macOS mientras el Mac está enchufado. El nivel lo sigues viendo en el menú de MOSSU.</dd>
+            </div>
+            <div>
+              <dt>Registro de actividad</dt>
+              <dd>«Ver registro…» te cuenta qué ha hecho MOSSU: cambios de estado, red, calendario y atajos.</dd>
+            </div>
+          </dl>
         </div>
         <figure class="shot">
           <picture>
@@ -299,73 +311,82 @@
       </div>
     </section>
 
-    <!-- Privacidad -->
-    <section id="privacidad" class="section privacy" aria-labelledby="privacidad-titulo">
-      <div class="container">
-        <div class="section-head">
-          <p class="kicker">Privacidad</p>
+    <!-- Privacidad, como la etiqueta de un bote -->
+    <section id="privacidad" class="privacy" aria-labelledby="privacidad-titulo">
+      <div class="wrap privacy-grid">
+        <div class="privacy-intro">
           <h2 id="privacidad-titulo">Lo que pasa en tu Mac, se queda en tu Mac.</h2>
-          <p class="section-lead">MOSSU solo habla con Slack, para leer y cambiar tu estado, y con esta web, para conectar tu cuenta y buscar actualizaciones.</p>
+          <p>MOSSU solo habla con Slack, para leer y cambiar tu estado, y con esta web, para conectar tu cuenta y buscar actualizaciones.</p>
         </div>
-        <div class="privacy-grid">
-          <div class="card">
-            <h3>Qué se envía</h3>
-            <p>A Slack solo le llegan el texto y el emoji de tu estado. Nada más.</p>
-          </div>
-          <div class="card">
-            <h3>Qué no sale nunca</h3>
-            <p>Tu red Wi-Fi, tu ubicación y tus calendarios se consultan en el Mac. Los títulos de las reuniones no se envían.</p>
-          </div>
-          <div class="card">
-            <h3>Sin historial</h3>
-            <p>El registro de actividad vive en memoria, guarda las últimas 100 entradas y desaparece al cerrar la app.</p>
-          </div>
-        </div>
-        <div class="permissions">
-          <h3>Permisos que te pedirá</h3>
+        <div class="label">
+          <p class="label-title">Datos de privacidad</p>
+          <p class="label-serving">Ración: un Mac con MOSSU</p>
           <dl>
-            <div><dt>Ubicación</dt><dd>Varias sedes comparten red Wi-Fi; con la ubicación sabe en cuál estás.</dd></div>
-            <div><dt>Calendario</dt><dd>Solo si activas el cambio de estado en reuniones.</dd></div>
-            <div><dt>Accesibilidad</dt><dd>Para leer el texto seleccionado en los atajos y para pilotar el Intelligent Hub en Magic LAPS.</dd></div>
-            <div><dt>Notificaciones</dt><dd>Para avisarte cuando cambia tu estado.</dd></div>
+            <div>
+              <dt>Qué se envía</dt>
+              <dd>A Slack solo le llegan el texto y el emoji de tu estado. Nada más.</dd>
+            </div>
+            <div>
+              <dt>Qué no sale nunca</dt>
+              <dd>Tu red Wi-Fi, tu ubicación y tus calendarios se consultan en el Mac. Los títulos de las reuniones no se envían.</dd>
+            </div>
+            <div>
+              <dt>Sin historial</dt>
+              <dd>El registro de actividad vive en memoria, guarda las últimas 100 entradas y desaparece al cerrar la app.</dd>
+            </div>
           </dl>
+          <h3 class="label-section">Permisos que te pedirá</h3>
+          <dl>
+            <div>
+              <dt>Ubicación</dt>
+              <dd>Varias sedes comparten red Wi-Fi; con la ubicación sabe en cuál estás.</dd>
+            </div>
+            <div>
+              <dt>Calendario</dt>
+              <dd>Solo si activas el cambio de estado en reuniones.</dd>
+            </div>
+            <div>
+              <dt>Accesibilidad</dt>
+              <dd>Para leer el texto seleccionado en los atajos y para pilotar el Intelligent Hub en Magic LAPS.</dd>
+            </div>
+            <div>
+              <dt>Notificaciones</dt>
+              <dd>Para avisarte cuando cambia tu estado.</dd>
+            </div>
+          </dl>
+          <p class="label-foot">El código es abierto, así que puedes <a href="https://github.com/JavierQuerol/MOSSU">comprobarlo todo</a>.</p>
         </div>
       </div>
     </section>
 
     <!-- Código abierto -->
-    <section class="section" aria-labelledby="abierto-titulo">
-      <div class="container">
-        <div class="oss">
-          <div class="oss-copy">
-            <p class="kicker">Código abierto</p>
-            <h2 id="abierto-titulo">Míralo por dentro.</h2>
-            <p>MOSSU es de código abierto con licencia MIT. Revisa cómo funciona, abre un issue si algo falla o propón mejoras con un pull request.</p>
-            <div class="cta-row">
-              <a class="btn btn-primary" href="https://github.com/JavierQuerol/MOSSU">
-                <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-                <span>Ver el código</span>
-              </a>
-              <a class="btn btn-ghost" href="https://github.com/JavierQuerol/MOSSU/issues">Abrir un issue</a>
-            </div>
+    <section class="oss" aria-labelledby="abierto-titulo">
+      <div class="wrap oss-grid">
+        <div>
+          <p class="stars" aria-hidden="true">★ ★ ★</p>
+          <h2 id="abierto-titulo">Míralo por dentro.</h2>
+          <p>MOSSU es de código abierto con licencia MIT. Revisa cómo funciona, abre un issue si algo falla o propón mejoras con un pull request.</p>
+          <div class="actions">
+            <a class="button" href="https://github.com/JavierQuerol/MOSSU">
+              <svg width="20" height="20" aria-hidden="true"><use href="#github"/></svg>
+              <span>Ver el código</span>
+            </a>
+            <a class="link" href="https://github.com/JavierQuerol/MOSSU/issues">Abrir un issue</a>
           </div>
-          <ul class="stack" aria-label="Hecho con">
-            <li><strong>Swift</strong><span>App nativa de macOS</span></li>
-            <li><strong>SwiftUI</strong><span>Ventana de ajustes</span></li>
-            <li><strong>Sparkle</strong><span>Actualizaciones firmadas</span></li>
-            <li><strong>KeyboardShortcuts</strong><span>Atajos globales</span></li>
-          </ul>
         </div>
+        <ul class="stack" aria-label="Hecho con">
+          <li><strong>Swift</strong><span>App nativa de macOS</span></li>
+          <li><strong>SwiftUI</strong><span>Ventana de ajustes</span></li>
+          <li><strong>Sparkle</strong><span>Actualizaciones firmadas</span></li>
+          <li><strong>KeyboardShortcuts</strong><span>Atajos globales</span></li>
+        </ul>
       </div>
     </section>
 
     <!-- Preguntas -->
-    <section id="preguntas" class="section faq-section" aria-labelledby="preguntas-titulo">
-      <div class="container narrow">
-        <div class="section-head">
-          <p class="kicker">Preguntas</p>
-          <h2 id="preguntas-titulo">Preguntas frecuentes</h2>
-        </div>
+    <section id="preguntas" class="faq-section" aria-labelledby="preguntas-titulo">
+      <div class="wrap faq-grid">
+        <h2 id="preguntas-titulo">Preguntas frecuentes</h2>
         <div class="faq">
           <details>
             <summary>¿Funciona fuera de Mercadona?</summary>
@@ -392,27 +413,27 @@
     </section>
 
     <!-- Llamada final -->
-    <section class="section final">
-      <div class="container">
-        <div class="final-card">
-          <img src="img/mossu-192.webp" alt="" width="96" height="96" class="final-icon">
+    <section class="final">
+      <div class="wrap final-grid">
+        <div>
           <h2>Pon tu estado en piloto automático.</h2>
           <p>Gratis, de código abierto y listo en un minuto.</p>
-          <div class="cta-row is-center">
-            <a class="btn btn-primary btn-lg" href="MOSSU.zip" download>
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+          <div class="actions">
+            <a class="button" href="MOSSU.zip" download>
               <span>Descargar para Mac</span>
+              <svg width="20" height="20" aria-hidden="true"><use href="#download"/></svg>
             </a>
           </div>
-          <p class="fine-print"><span data-release>Versión 1.68</span> · macOS 12 o posterior</p>
+          <p class="fine"><span data-release>Versión 1.68</span> · macOS 12 o posterior</p>
         </div>
+        <img class="final-bee" src="img/bee.webp" alt="" width="579" height="600" loading="lazy" decoding="async">
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="brand">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
         <img src="img/mossu-192.webp" alt="" width="24" height="24">
         <span>MOSSU</span>
       </div>
@@ -430,6 +451,47 @@
   </dialog>
 
   <script>
+    // La barra de menús sigue el día: enseña la hora y el icono del bloque que
+    // cruza el centro de la pantalla, y vuelve a las 9:41 al subir a la portada.
+    (function () {
+      const now = document.querySelector('[data-bar-now]');
+      const clock = document.querySelector('[data-bar-clock]');
+      const hero = document.querySelector('.hero');
+      if (!now || !clock || !hero || !('IntersectionObserver' in window)) return;
+      document.documentElement.classList.add('js');
+
+      const initial = { icon: 'img/vlc1.png', clock: clock.textContent };
+      let shown = initial.icon + initial.clock;
+
+      const show = (icon, time) => {
+        if (icon + time === shown) return;
+        shown = icon + time;
+        const glyph = icon.startsWith('img/')
+          ? Object.assign(new Image(18, 18), { src: icon, alt: '' })
+          : document.createTextNode(icon);
+        now.replaceChildren(glyph);
+        clock.textContent = time;
+        for (const el of [now, clock]) {
+          el.classList.remove('is-tick');
+          void el.offsetWidth;
+          el.classList.add('is-tick');
+        }
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          const el = entry.target;
+          if (el === hero) now.classList.toggle('is-open', entry.isIntersecting);
+          if (!entry.isIntersecting) continue;
+          if (el === hero) show(initial.icon, initial.clock);
+          else show(el.dataset.icon, 'vie ' + el.dataset.clock);
+        }
+      }, { rootMargin: '-40% 0px -55% 0px' });
+
+      observer.observe(hero);
+      document.querySelectorAll('.event[data-clock]').forEach((el) => observer.observe(el));
+    })();
+
     // Las capturas se amplían al pulsarlas; un clic o Esc cierra el diálogo.
     (function () {
       const dialog = document.querySelector('.lightbox');
