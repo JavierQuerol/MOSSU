@@ -1,166 +1,485 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>MOSSU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MOSSU — Tu estado de Slack en piloto automático</title>
+  <meta name="description" content="MOSSU es una app para la barra de menús del Mac que actualiza tu estado de Slack según dónde trabajes, te da admin temporal con Magic LAPS y abre tus herramientas con atajos de teclado. Gratis y de código abierto.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#FBFAF6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121318" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MOSSU — Tu estado de Slack en piloto automático">
+  <meta property="og:description" content="App de código abierto para Mac: estado de Slack automático, Magic LAPS y atajos de teclado.">
+  <meta property="og:url" content="https://mossu.vercel.app/">
+  <meta property="og:image" content="https://mossu.vercel.app/icon.png">
   <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="site.css">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="bg-container"></div>
-    <div class="bg-dots"></div>
-    <div class="grid-overlay"></div>
-    
-    <div class="floating-particles">
-        <!-- Grupo 1: Estrellas pequeñas rápidas -->
-        <div class="particle star-1" style="left: 5%; animation-delay: 0s;"></div>
-        <div class="particle star-1" style="left: 15%; animation-delay: -1s;"></div>
-        <div class="particle star-1" style="left: 25%; animation-delay: -2s;"></div>
-        <div class="particle star-1" style="left: 35%; animation-delay: -3s;"></div>
-        <div class="particle star-1" style="left: 45%; animation-delay: -4s;"></div>
-        <div class="particle star-1" style="left: 55%; animation-delay: -5s;"></div>
-        <div class="particle star-1" style="left: 65%; animation-delay: -1.5s;"></div>
-        <div class="particle star-1" style="left: 75%; animation-delay: -2.5s;"></div>
-        <div class="particle star-1" style="left: 85%; animation-delay: -3.5s;"></div>
-        <div class="particle star-1" style="left: 95%; animation-delay: -4.5s;"></div>
-        
-        <!-- Grupo 2: Estrellas medianas -->
-        <div class="particle star-2" style="left: 8%; animation-delay: -0.5s;"></div>
-        <div class="particle star-2" style="left: 18%; animation-delay: -1.5s;"></div>
-        <div class="particle star-2" style="left: 28%; animation-delay: -2.5s;"></div>
-        <div class="particle star-2" style="left: 38%; animation-delay: -3.5s;"></div>
-        <div class="particle star-2" style="left: 48%; animation-delay: -4.5s;"></div>
-        <div class="particle star-2" style="left: 58%; animation-delay: -5.5s;"></div>
-        <div class="particle star-2" style="left: 68%; animation-delay: -1.2s;"></div>
-        <div class="particle star-2" style="left: 78%; animation-delay: -2.2s;"></div>
-        <div class="particle star-2" style="left: 88%; animation-delay: -3.2s;"></div>
-        <div class="particle star-2" style="left: 98%; animation-delay: -4.2s;"></div>
-        
-        <!-- Grupo 3: Estrellas azules -->
-        <div class="particle star-3" style="left: 3%; animation-delay: -0.8s;"></div>
-        <div class="particle star-3" style="left: 13%; animation-delay: -1.8s;"></div>
-        <div class="particle star-3" style="left: 23%; animation-delay: -2.8s;"></div>
-        <div class="particle star-3" style="left: 33%; animation-delay: -3.8s;"></div>
-        <div class="particle star-3" style="left: 43%; animation-delay: -4.8s;"></div>
-        <div class="particle star-3" style="left: 53%; animation-delay: -0.3s;"></div>
-        <div class="particle star-3" style="left: 63%; animation-delay: -1.3s;"></div>
-        <div class="particle star-3" style="left: 73%; animation-delay: -2.3s;"></div>
-        <div class="particle star-3" style="left: 83%; animation-delay: -3.3s;"></div>
-        <div class="particle star-3" style="left: 93%; animation-delay: -4.3s;"></div>
-        
-        <!-- Grupo 4: Estrellas grandes -->
-        <div class="particle star-4" style="left: 10%; animation-delay: -1.2s;"></div>
-        <div class="particle star-4" style="left: 20%; animation-delay: -2.2s;"></div>
-        <div class="particle star-4" style="left: 30%; animation-delay: -3.2s;"></div>
-        <div class="particle star-4" style="left: 40%; animation-delay: -4.2s;"></div>
-        <div class="particle star-4" style="left: 50%; animation-delay: -5.2s;"></div>
-        <div class="particle star-4" style="left: 60%; animation-delay: -0.7s;"></div>
-        <div class="particle star-4" style="left: 70%; animation-delay: -1.7s;"></div>
-        <div class="particle star-4" style="left: 80%; animation-delay: -2.7s;"></div>
-        <div class="particle star-4" style="left: 90%; animation-delay: -3.7s;"></div>
-        
-        <!-- Grupo 5: Estrellas rosas -->
-        <div class="particle star-5" style="left: 7%; animation-delay: -0.4s;"></div>
-        <div class="particle star-5" style="left: 17%; animation-delay: -1.4s;"></div>
-        <div class="particle star-5" style="left: 27%; animation-delay: -2.4s;"></div>
-        <div class="particle star-5" style="left: 37%; animation-delay: -3.4s;"></div>
-        <div class="particle star-5" style="left: 47%; animation-delay: -4.4s;"></div>
-        <div class="particle star-5" style="left: 57%; animation-delay: -5.4s;"></div>
-        <div class="particle star-5" style="left: 67%; animation-delay: -0.9s;"></div>
-        <div class="particle star-5" style="left: 77%; animation-delay: -1.9s;"></div>
-        <div class="particle star-5" style="left: 87%; animation-delay: -2.9s;"></div>
-        <div class="particle star-5" style="left: 97%; animation-delay: -3.9s;"></div>
-        
-        <!-- Grupo 6: Estrellas azul claro -->
-        <div class="particle star-6" style="left: 12%; animation-delay: -0.6s;"></div>
-        <div class="particle star-6" style="left: 22%; animation-delay: -1.6s;"></div>
-        <div class="particle star-6" style="left: 32%; animation-delay: -2.6s;"></div>
-        <div class="particle star-6" style="left: 42%; animation-delay: -3.6s;"></div>
-        <div class="particle star-6" style="left: 52%; animation-delay: -4.6s;"></div>
-        <div class="particle star-6" style="left: 62%; animation-delay: -5.6s;"></div>
-        <div class="particle star-6" style="left: 72%; animation-delay: -0.1s;"></div>
-        <div class="particle star-6" style="left: 82%; animation-delay: -1.1s;"></div>
-        <div class="particle star-6" style="left: 92%; animation-delay: -2.1s;"></div>
-        
-        <!-- Estrellas brillantes especiales -->
-        <div class="particle star-bright" style="left: 25%; animation-delay: -2s;"></div>
-        <div class="particle star-bright" style="left: 55%; animation-delay: -4s;"></div>
-        <div class="particle star-bright" style="left: 75%; animation-delay: -6s;"></div>
-        <div class="particle star-bright" style="left: 45%; animation-delay: -8s;"></div>
-        <div class="particle star-bright" style="left: 85%; animation-delay: -10s;"></div>
-        
-        <!-- Estrellas con parpadeo -->
-        <div class="particle star-2 twinkle" style="left: 14%; animation-delay: -1s;"></div>
-        <div class="particle star-3 twinkle" style="left: 34%; animation-delay: -3s;"></div>
-        <div class="particle star-4 twinkle" style="left: 54%; animation-delay: -5s;"></div>
-        <div class="particle star-5 twinkle" style="left: 74%; animation-delay: -7s;"></div>
-        <div class="particle star-6 twinkle" style="left: 94%; animation-delay: -9s;"></div>
-        <div class="particle star-1 twinkle" style="left: 6%; animation-delay: -2s;"></div>
-        <div class="particle star-2 twinkle" style="left: 26%; animation-delay: -4s;"></div>
-        <div class="particle star-3 twinkle" style="left: 46%; animation-delay: -6s;"></div>
-        <div class="particle star-4 twinkle" style="left: 66%; animation-delay: -8s;"></div>
-        <div class="particle star-5 twinkle" style="left: 86%; animation-delay: -10s;"></div>
-        
-        <!-- Más estrellas adicionales para densidad -->
-        <div class="particle star-1" style="left: 1%; animation-delay: -0.2s;"></div>
-        <div class="particle star-2" style="left: 11%; animation-delay: -1.3s;"></div>
-        <div class="particle star-3" style="left: 21%; animation-delay: -2.7s;"></div>
-        <div class="particle star-4" style="left: 31%; animation-delay: -3.9s;"></div>
-        <div class="particle star-5" style="left: 41%; animation-delay: -4.1s;"></div>
-        <div class="particle star-6" style="left: 51%; animation-delay: -5.3s;"></div>
-        <div class="particle star-1" style="left: 61%; animation-delay: -0.8s;"></div>
-        <div class="particle star-2" style="left: 71%; animation-delay: -1.9s;"></div>
-        <div class="particle star-3" style="left: 81%; animation-delay: -2.4s;"></div>
-        <div class="particle star-4" style="left: 91%; animation-delay: -3.6s;"></div>
-        
-        <!-- Estrellas fugaces -->
-        <div class="shooting-star" style="left: 20%; top: 20%; animation-delay: 0s;"></div>
-        <div class="shooting-star" style="left: 60%; top: 40%; animation-delay: -8s;"></div>
-        <div class="shooting-star" style="left: 80%; top: 10%; animation-delay: -15s;"></div>
-        <div class="shooting-star" style="left: 10%; top: 70%; animation-delay: -22s;"></div>
-        <div class="shooting-star" style="left: 40%; top: 60%; animation-delay: -29s;"></div>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#" aria-label="MOSSU, inicio">
+        <img src="img/mossu-192.webp" alt="" width="32" height="32">
+        <span>MOSSU</span>
+      </a>
+      <nav class="nav" aria-label="Secciones">
+        <a href="#funciones">Funciones</a>
+        <a href="#privacidad">Privacidad</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+      <div class="header-actions">
+        <a class="icon-link" href="https://github.com/JavierQuerol/MOSSU" aria-label="Código de MOSSU en GitHub">
+          <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <a class="btn btn-primary btn-sm" href="MOSSU.zip" download>Descargar</a>
+      </div>
     </div>
-	<div class="content">
-	    <img src="icon.png" alt="Icono de MOSSU" style="width: 200px; height: 200px;" id="bee" class="wing-flap"/>
-			<h1 class="subtitle">MOSSU</h1>
-			<h3 class="title">Mercadona Online</h3>
-		  <h3 class="title">Support &amp; Shortcuts Utility</h3>
-		<button class="dl-card" aria-label="Descarga de MOSSU" type="button" onclick="downloadOnly()">
-		  <div class="dl-card__meta">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;">
-				<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-				<polyline points="7 10 12 15 17 10"/>
-				<line x1="12" y1="15" x2="12" y2="3"/>
-			</svg>
-			Descargar <span id="app-version"></span>
-		  </div>
-		</button>
-	  </div>
-	  <script>
-	    function downloadOnly() {
-	      const a = document.createElement('a');
-	      a.href = 'MOSSU.zip';
-	      a.download = 'MOSSU.zip';
-	      a.style.display = 'none';
-	      document.body.appendChild(a);
-	      a.click();
-	      document.body.removeChild(a);
-	    }
+  </header>
 
-		async function fetchAppVersion() {
-			const response = await fetch('appcast.xml');
-			const xmlText = await response.text();
-			const parser = new DOMParser();
-			const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
-			const version = xmlDoc.getElementsByTagName('sparkle:shortVersionString')[0].textContent;
-			document.getElementById('app-version').textContent = `v${version}`;
-		}
+  <main id="contenido">
+    <!-- Portada -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span>App para la barra de menús del Mac</p>
+          <h1>Tu estado de Slack, en piloto automático.</h1>
+          <p class="lead">MOSSU sabe si estás en Plaza América, en una colmena, en tienda o en casa, y pone tu estado de Slack sin que tengas que acordarte. Además te da admin con un atajo y abre tus herramientas con el texto que tengas seleccionado.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary btn-lg" href="MOSSU.zip" download>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+              <span>Descargar para Mac</span>
+            </a>
+            <a class="btn btn-ghost btn-lg" href="https://github.com/JavierQuerol/MOSSU">
+              <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+              <span>Ver en GitHub</span>
+            </a>
+          </div>
+          <p class="fine-print"><span data-release>Versión 1.68</span> · macOS 12 o posterior · Gratis y de código abierto</p>
+        </div>
 
-		document.addEventListener('DOMContentLoaded', fetchAppVersion);
-	  </script>
+        <div class="hero-visual">
+          <div class="desk">
+            <div class="menubar" aria-hidden="true">
+              <span class="menubar-item is-open"><img src="img/vlc1.png" alt="" width="18" height="18"></span>
+              <svg class="menubar-glyph" viewBox="0 0 24 24" width="17" height="17"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M2 8.8a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16.2a5 5 0 0 1 6 0"/><circle cx="12" cy="19.6" r="1.4" fill="currentColor"/></svg>
+              <svg class="menubar-glyph" viewBox="0 0 28 16" width="25" height="14"><rect x="1" y="2" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/><rect x="3" y="4" width="15.5" height="8" rx="2" fill="currentColor"/><path d="M25 6v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".55"/></svg>
+              <span class="menubar-clock">vie 9:41</span>
+            </div>
+            <picture>
+              <source srcset="img/dark-menu.webp" media="(prefers-color-scheme: dark)">
+              <img class="desk-menu" src="img/light-menu.webp" width="429" height="365" alt="Menú de MOSSU en la barra de menús: «Laura está en Colmena VLC1», última actualización hoy a las 9:41, batería, Actualizar estado, Magic LAPS con el atajo Control Opción L, tres atajos de URL y Ajustes.">
+            </picture>
+          </div>
+          <div class="status-card" aria-label="Así se ve tu estado en Slack">
+            <span class="avatar" aria-hidden="true">L</span>
+            <div>
+              <p class="status-name">Laura</p>
+              <p class="status-line"><img src="img/vlc1.png" alt="" width="16" height="16"> En Colmena VLC1</p>
+            </div>
+            <span class="status-tag">Slack</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sedes -->
+    <section class="places" aria-labelledby="sedes-titulo">
+      <div class="container">
+        <p id="sedes-titulo" class="places-title">Reconoce solo dónde estás</p>
+        <ul class="chips">
+          <li>🇺🇸 Plaza América</li>
+          <li>🐝 Colmena VLC1</li>
+          <li>🐝 Colmena BCN1</li>
+          <li>🐝 Colmena MAD1</li>
+          <li>🐝 Colmena MAD2</li>
+          <li>🐝 Colmena MAD3</li>
+          <li>🐝 Colmena ALC1</li>
+          <li>🐝 Colmena SVQ1</li>
+          <li>🌳 Oficina de Madrid</li>
+          <li>🛒 En tienda</li>
+          <li>🏡 En remoto</li>
+          <li>🌴 En vacaciones</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Cómo funciona -->
+    <section class="section steps-section" aria-labelledby="como-titulo">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Cómo funciona</p>
+          <h2 id="como-titulo">Lo instalas una vez y te olvidas.</h2>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num">1</span>
+            <h3>Descarga y abre MOSSU</h3>
+            <p>Descomprime el ZIP, arrastra MOSSU a Aplicaciones y ábrelo. Se queda en la barra de menús, sin icono en el Dock.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">2</span>
+            <h3>Conecta tu Slack</h3>
+            <p>Autoriza MOSSU con un clic. Solo pide acceso a tu perfil, para leer y cambiar tu estado.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">3</span>
+            <h3>Sigue con tu día</h3>
+            <p>Al cambiar de Wi-Fi, abrir la tapa o recuperar la conexión, MOSSU mira dónde estás y actualiza tu estado.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Funciones -->
+    <section id="funciones" class="section features" aria-labelledby="funciones-titulo">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Funciones</p>
+          <h2 id="funciones-titulo">Todo lo que hace MOSSU por ti.</h2>
+        </div>
+
+        <article class="feature">
+          <div class="feature-copy">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+            <h3>Tu estado cambia contigo</h3>
+            <p>MOSSU mira la red Wi-Fi y tu ubicación para saber en qué sede estás. Con eso pone en Slack el emoji y el texto que tocan, y te avisa con una notificación cada vez que cambia.</p>
+            <ul class="checks">
+              <li>Fuera de las redes de Mercadona te marca «En remoto».</li>
+              <li>Si la red falla, lo vuelve a intentar solo.</li>
+              <li>«Actualizar estado» en el menú lo fuerza cuando quieras.</li>
+            </ul>
+          </div>
+          <div class="feature-visual">
+            <ol class="timeline" aria-label="Un día con MOSSU">
+              <li>
+                <time>08:30</time>
+                <span class="tl-emoji" aria-hidden="true">🏡</span>
+                <div><strong>En remoto</strong><span>Te conectas desde casa</span></div>
+              </li>
+              <li>
+                <time>09:41</time>
+                <img class="tl-emoji" src="img/vlc1.png" alt="" width="22" height="22">
+                <div><strong>En Colmena VLC1</strong><span>Wi-Fi de Mercadona y estás a menos de 500&nbsp;m</span></div>
+              </li>
+              <li>
+                <time>11:00</time>
+                <img class="tl-emoji" src="img/reu_colmena.png" alt="" width="22" height="22">
+                <div><strong>En Colmena VLC1</strong><span>Reunión en tu calendario: cambia el emoji</span></div>
+              </li>
+              <li>
+                <time>17:15</time>
+                <img class="tl-emoji" src="img/mercadona.png" alt="" width="22" height="22">
+                <div><strong>En tienda</strong><span>Wi-Fi de Mercadona lejos de las sedes</span></div>
+              </li>
+            </ol>
+          </div>
+        </article>
+
+        <article class="feature is-reversed">
+          <div class="feature-copy">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <h3>Tu jornada, tus reglas</h3>
+            <p>Marca los días y las horas que trabajas. Fuera de ese horario MOSSU no te pone «En remoto», así que abrir el portátil en casa un sábado no cambia tu estado.</p>
+            <ul class="checks">
+              <li>Deja fuera la hora de comer con un clic.</li>
+              <li>Pausa las actualizaciones cuando quieras.</li>
+              <li>Activa las vacaciones con la fecha de vuelta: pone 🌴 y se reanuda solo ese día.</li>
+            </ul>
+          </div>
+          <figure class="feature-visual shot">
+            <picture>
+              <source srcset="img/dark-schedule.webp" media="(prefers-color-scheme: dark)">
+              <img src="img/light-schedule.webp" width="860" height="620" loading="lazy" decoding="async" alt="Ajustes de MOSSU, sección Actualizaciones: botón Actualizar ahora, pausa, vacaciones con fecha de vuelta y la selección de días (lunes a viernes) y horas (de 8:00 a 18:00 sin las 14:00).">
+            </picture>
+          </figure>
+        </article>
+
+        <article class="feature">
+          <div class="feature-copy">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span>
+            <h3>Reuniones sin tocar nada</h3>
+            <p>Si lo activas, MOSSU mira tus calendarios y, mientras tengas una reunión en curso, pone el emoji de reunión en tu estado. Al terminar vuelve el de siempre.</p>
+            <ul class="checks">
+              <li>Elige qué calendarios cuentan, o todos.</li>
+              <li>Ignora los eventos de todo el día y los marcados como disponible.</li>
+              <li>El título de la reunión nunca sale de tu Mac.</li>
+            </ul>
+          </div>
+          <figure class="feature-visual shot">
+            <picture>
+              <source srcset="img/dark-calendar.webp" media="(prefers-color-scheme: dark)">
+              <img src="img/light-calendar.webp" width="860" height="532" loading="lazy" decoding="async" alt="Ajustes de MOSSU, sección Calendario: «Cambiar mi estado durante las reuniones» activado y la lista de calendarios observados.">
+            </picture>
+          </figure>
+        </article>
+
+        <article class="feature is-reversed">
+          <div class="feature-copy">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0"/></svg></span>
+            <h3>Magic LAPS: admin en un atajo</h3>
+            <p>Pulsa <kbd>⌃</kbd><kbd>⌥</kbd><kbd>L</kbd> y MOSSU abre el Intelligent Hub, lanza LAPS y elige los 45 minutos de administrador por ti, sin que toques el ratón.</p>
+            <ul class="checks">
+              <li>El menú te dice cuántos minutos de admin te quedan.</li>
+              <li>Las actualizaciones de MOSSU también lo usan para instalarse.</li>
+              <li>El flujo es un AppleScript que puedes ajustar si cambia el Hub.</li>
+            </ul>
+          </div>
+          <div class="feature-visual laps" aria-hidden="true">
+            <div class="keys"><kbd>⌃</kbd><kbd>⌥</kbd><kbd>L</kbd></div>
+            <div class="laps-rows">
+              <div class="menu-row"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0"/></svg><span>Magic LAPS</span><span class="menu-shortcut">⌃⌥L</span></div>
+              <div class="menu-row is-muted"><svg viewBox="0 0 24 24"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9"/></svg><span>Activando admin…</span></div>
+              <div class="menu-row is-done"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 7.5-2"/></svg><span>Admin activo · quedan 45&nbsp;min</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="feature">
+          <div class="feature-copy">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></span>
+            <h3>Tus herramientas, a un atajo</h3>
+            <p>Asocia una URL a una combinación de teclas. Escribe <code>{selection}</code> donde quieras el texto seleccionado: selecciona un código en cualquier app, pulsa el atajo y MOSSU abre la búsqueda en el navegador.</p>
+            <ul class="checks">
+              <li>Sin <code>{selection}</code>, el atajo abre la URL tal cual.</li>
+              <li>Ves la URL resultante antes de usarla.</li>
+              <li>Tus atajos aparecen también en el menú, con sus teclas.</li>
+            </ul>
+          </div>
+          <figure class="feature-visual shot">
+            <picture>
+              <source srcset="img/dark-shortcuts.webp" media="(prefers-color-scheme: dark)">
+              <img src="img/light-shortcuts.webp" width="860" height="532" loading="lazy" decoding="async" alt="Ajustes de MOSSU, sección Atajos: la acción Magic LAPS con Control Opción L y tres atajos personalizados con su URL, su combinación de teclas y la vista previa.">
+            </picture>
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <!-- Y además -->
+    <section class="section extras" aria-labelledby="extras-titulo">
+      <div class="container extras-grid">
+        <div>
+          <div class="section-head is-left">
+            <p class="kicker">Y además</p>
+            <h2 id="extras-titulo">Los detalles que se agradecen.</h2>
+          </div>
+          <ul class="extra-list">
+            <li>
+              <h3>Se actualiza solo</h3>
+              <p>Busca e instala versiones nuevas una vez al día. No tienes que volver aquí.</p>
+            </li>
+            <li>
+              <h3>Arranca contigo</h3>
+              <p>Se abre al iniciar sesión, así nunca se queda tu estado sin actualizar.</p>
+            </li>
+            <li>
+              <h3>Barra de menús más limpia</h3>
+              <p>Oculta el icono de batería de macOS mientras el Mac está enchufado. El nivel lo sigues viendo en el menú de MOSSU.</p>
+            </li>
+            <li>
+              <h3>Registro de actividad</h3>
+              <p>«Ver registro…» te cuenta qué ha hecho MOSSU: cambios de estado, red, calendario y atajos.</p>
+            </li>
+          </ul>
+        </div>
+        <figure class="shot">
+          <picture>
+            <source srcset="img/dark-general.webp" media="(prefers-color-scheme: dark)">
+            <img src="img/light-general.webp" width="860" height="532" loading="lazy" decoding="async" alt="Ajustes de MOSSU, sección General: abrir al iniciar sesión, ocultar el icono de batería mientras está enchufado, versión 1.68 y el botón Ver registro.">
+          </picture>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Privacidad -->
+    <section id="privacidad" class="section privacy" aria-labelledby="privacidad-titulo">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Privacidad</p>
+          <h2 id="privacidad-titulo">Lo que pasa en tu Mac, se queda en tu Mac.</h2>
+          <p class="section-lead">MOSSU solo habla con Slack, para leer y cambiar tu estado, y con esta web, para conectar tu cuenta y buscar actualizaciones.</p>
+        </div>
+        <div class="privacy-grid">
+          <div class="card">
+            <h3>Qué se envía</h3>
+            <p>A Slack solo le llegan el texto y el emoji de tu estado. Nada más.</p>
+          </div>
+          <div class="card">
+            <h3>Qué no sale nunca</h3>
+            <p>Tu red Wi-Fi, tu ubicación y tus calendarios se consultan en el Mac. Los títulos de las reuniones no se envían.</p>
+          </div>
+          <div class="card">
+            <h3>Sin historial</h3>
+            <p>El registro de actividad vive en memoria, guarda las últimas 100 entradas y desaparece al cerrar la app.</p>
+          </div>
+        </div>
+        <div class="permissions">
+          <h3>Permisos que te pedirá</h3>
+          <dl>
+            <div><dt>Ubicación</dt><dd>Varias sedes comparten red Wi-Fi; con la ubicación sabe en cuál estás.</dd></div>
+            <div><dt>Calendario</dt><dd>Solo si activas el cambio de estado en reuniones.</dd></div>
+            <div><dt>Accesibilidad</dt><dd>Para leer el texto seleccionado en los atajos y para pilotar el Intelligent Hub en Magic LAPS.</dd></div>
+            <div><dt>Notificaciones</dt><dd>Para avisarte cuando cambia tu estado.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Código abierto -->
+    <section class="section" aria-labelledby="abierto-titulo">
+      <div class="container">
+        <div class="oss">
+          <div class="oss-copy">
+            <p class="kicker">Código abierto</p>
+            <h2 id="abierto-titulo">Míralo por dentro.</h2>
+            <p>MOSSU es de código abierto con licencia MIT. Revisa cómo funciona, abre un issue si algo falla o propón mejoras con un pull request.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="https://github.com/JavierQuerol/MOSSU">
+                <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                <span>Ver el código</span>
+              </a>
+              <a class="btn btn-ghost" href="https://github.com/JavierQuerol/MOSSU/issues">Abrir un issue</a>
+            </div>
+          </div>
+          <ul class="stack" aria-label="Hecho con">
+            <li><strong>Swift</strong><span>App nativa de macOS</span></li>
+            <li><strong>SwiftUI</strong><span>Ventana de ajustes</span></li>
+            <li><strong>Sparkle</strong><span>Actualizaciones firmadas</span></li>
+            <li><strong>KeyboardShortcuts</strong><span>Atajos globales</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preguntas -->
+    <section id="preguntas" class="section faq-section" aria-labelledby="preguntas-titulo">
+      <div class="container narrow">
+        <div class="section-head">
+          <p class="kicker">Preguntas</p>
+          <h2 id="preguntas-titulo">Preguntas frecuentes</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>¿Funciona fuera de Mercadona?</summary>
+            <p>MOSSU está hecho para Mercadona Online: reconoce las redes y las sedes de Mercadona y usa los emojis de nuestro Slack. Desde cualquier otra red te marca «En remoto».</p>
+          </details>
+          <details>
+            <summary>¿Qué Mac necesito?</summary>
+            <p>Cualquier Mac con macOS 12 Monterey o posterior.</p>
+          </details>
+          <details>
+            <summary>¿Cómo lo actualizo?</summary>
+            <p>No tienes que hacer nada: busca e instala actualizaciones una vez al día. Si no quieres esperar, ve a Ajustes › General › Buscar ahora…</p>
+          </details>
+          <details>
+            <summary>¿Puedo pararlo un rato?</summary>
+            <p>Sí. En Ajustes › Actualizaciones puedes pausarlo cuando quieras o activar las vacaciones, que se terminan solas el día que vuelves.</p>
+          </details>
+          <details>
+            <summary>Algo no va bien, ¿qué hago?</summary>
+            <p>Abre Ajustes › General › Ver registro… para ver qué ha hecho MOSSU. Si sigue sin cuadrar, <a href="https://github.com/JavierQuerol/MOSSU/issues">abre un issue en GitHub</a>.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Llamada final -->
+    <section class="section final">
+      <div class="container">
+        <div class="final-card">
+          <img src="img/mossu-192.webp" alt="" width="96" height="96" class="final-icon">
+          <h2>Pon tu estado en piloto automático.</h2>
+          <p>Gratis, de código abierto y listo en un minuto.</p>
+          <div class="cta-row is-center">
+            <a class="btn btn-primary btn-lg" href="MOSSU.zip" download>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+              <span>Descargar para Mac</span>
+            </a>
+          </div>
+          <p class="fine-print"><span data-release>Versión 1.68</span> · macOS 12 o posterior</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="brand">
+        <img src="img/mossu-192.webp" alt="" width="24" height="24">
+        <span>MOSSU</span>
+      </div>
+      <p>Mercadona Online Support &amp; Shortcuts Utility</p>
+      <nav aria-label="Enlaces">
+        <a href="https://github.com/JavierQuerol/MOSSU">GitHub</a>
+        <a href="https://github.com/JavierQuerol/MOSSU/blob/main/LICENSE">Licencia MIT</a>
+        <a href="https://github.com/JavierQuerol/MOSSU/issues">Issues</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="lightbox" aria-label="Captura ampliada">
+    <img alt="">
+  </dialog>
+
+  <script>
+    // Las capturas se amplían al pulsarlas; un clic o Esc cierra el diálogo.
+    (function () {
+      const dialog = document.querySelector('.lightbox');
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+      const large = dialog.querySelector('img');
+
+      document.querySelectorAll('.shot img').forEach((img) => {
+        img.tabIndex = 0;
+        img.setAttribute('role', 'button');
+        img.setAttribute('aria-label', 'Ampliar: ' + img.alt);
+        const open = () => {
+          large.src = img.currentSrc || img.src;
+          large.alt = img.alt;
+          dialog.showModal();
+        };
+        img.addEventListener('click', open);
+        img.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            open();
+          }
+        });
+      });
+
+      dialog.addEventListener('click', () => dialog.close());
+    })();
+
+    // La versión, el tamaño y la fecha salen del appcast de Sparkle, que deploy.sh
+    // regenera en cada versión. Si no carga, se queda el texto por defecto.
+    (async function () {
+      try {
+        const response = await fetch('appcast.xml', { cache: 'no-cache' });
+        const xml = new DOMParser().parseFromString(await response.text(), 'application/xml');
+        const item = xml.querySelector('item');
+        const version = item.getElementsByTagName('sparkle:shortVersionString')[0].textContent;
+        const bytes = Number(item.querySelector('enclosure').getAttribute('length'));
+        const date = new Date(item.querySelector('pubDate').textContent);
+
+        const size = (bytes / 1048576).toLocaleString('es-ES', { maximumFractionDigits: 1 }) + ' MB';
+        const day = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+        const text = `Versión ${version} · ${size}`;
+
+        document.querySelectorAll('[data-release]').forEach((el) => {
+          el.textContent = text;
+          el.title = `Publicada el ${day}`;
+        });
+      } catch (error) {
+        // Sin appcast no pasa nada: el botón descarga igual.
+      }
+    })();
+  </script>
 </body>
 </html>
