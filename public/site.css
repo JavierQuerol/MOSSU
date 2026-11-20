@@ -206,8 +206,9 @@ code {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 26px;
-  border-radius: 10px;
+  min-height: 54px;
+  padding: 0 28px;
+  border-radius: 999px;
   background: var(--button);
   color: var(--button-ink);
   font-size: 18px;
