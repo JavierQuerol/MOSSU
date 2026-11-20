@@ -120,33 +120,14 @@
           <p>Tú abres el portátil y trabajas. Del estado se encarga la abeja. <span class="day-hint">Mientras bajas, fíjate en el icono y el reloj de la barra de menús.</span></p>
         </header>
 
-        <article class="event" data-clock="8:30" data-icon="🏡">
-          <p class="event-time"><time datetime="08:30">8:30</time></p>
-          <div class="event-body">
-            <p class="event-status"><span class="glyph" aria-hidden="true">🏡</span>En remoto</p>
-            <h3>Abres el portátil en casa.</h3>
-            <p>MOSSU mira la red Wi-Fi para saber dónde estás. Fuera de las redes de Mercadona te marca «En remoto», sin que hagas nada.</p>
-            <ul class="notes">
-              <li>Se entera al cambiar de Wi-Fi, al abrir la tapa o al recuperar la conexión.</li>
-              <li>Si la red falla, lo vuelve a intentar solo.</li>
-              <li>«Actualizar estado» en el menú lo fuerza cuando quieras.</li>
-            </ul>
-          </div>
-          <div class="event-visual">
-            <dl class="rule">
-              <div><dt>Wi-Fi</dt><dd>La de casa</dd></div>
-              <div class="rule-result"><dt>Slack</dt><dd><span class="glyph" aria-hidden="true">🏡</span>En remoto</dd></div>
-            </dl>
-          </div>
-        </article>
-
         <article class="event" data-clock="9:41" data-icon="img/vlc1.png">
           <p class="event-time"><time datetime="09:41">9:41</time></p>
           <div class="event-body">
             <p class="event-status"><img src="img/vlc1.png" alt="" width="22" height="22">En Colmena VLC1</p>
             <h3>Llegas a la colmena.</h3>
-            <p>En la Wi-Fi de Mercadona, MOSSU mira también tu ubicación. Si estás a menos de 500&nbsp;m de una sede, pone en Slack su emoji y su nombre, y te avisa con una notificación cada vez que tu estado cambia.</p>
+            <p>MOSSU mira la red Wi-Fi y tu ubicación para saber dónde estás. En la Wi-Fi de Mercadona y a menos de 500&nbsp;m de una sede, pone en Slack su emoji y su nombre, y te avisa con una notificación cada vez que tu estado cambia.</p>
             <ul class="notes">
+              <li>Se entera al cambiar de Wi-Fi, al abrir la tapa o al recuperar la conexión.</li>
               <li>Varias sedes comparten red Wi-Fi; con la ubicación sabe en cuál estás.</li>
               <li>Cada colmena tiene su propia abeja.</li>
             </ul>
@@ -202,8 +183,8 @@
           </div>
         </article>
 
-        <article class="event" data-clock="15:40" data-icon="img/vlc1.png">
-          <p class="event-time"><time datetime="15:40">15:40</time></p>
+        <article class="event" data-clock="13:10" data-icon="img/vlc1.png">
+          <p class="event-time"><time datetime="13:10">13:10</time></p>
           <div class="event-body">
             <p class="event-status is-keys"><kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd>Atajos de URL</p>
             <h3>Tienes que buscar un código.</h3>
@@ -222,23 +203,29 @@
           </figure>
         </article>
 
-        <article class="event" data-clock="17:15" data-icon="img/mercadona.png">
-          <p class="event-time"><time datetime="17:15">17:15</time></p>
+        <article class="event" data-clock="15:00" data-icon="🇺🇸">
+          <p class="event-time"><time datetime="15:00">15:00</time></p>
           <div class="event-body">
-            <p class="event-status"><img src="img/mercadona.png" alt="" width="22" height="22">En tienda</p>
-            <h3>Te acercas a una tienda.</h3>
-            <p>Si estás en la Wi-Fi de Mercadona pero lejos de las sedes, MOSSU entiende que estás en una tienda y lo pone en Slack.</p>
+            <p class="event-status"><span class="glyph" aria-hidden="true">🇺🇸</span>En Plaza América</p>
+            <h3>Te vas a Plaza América.</h3>
+            <p>La Wi-Fi es la misma que en la colmena, pero la ubicación no. En cuanto estás a menos de 500&nbsp;m de Plaza América, MOSSU cambia tu estado.</p>
+            <ul class="notes">
+              <li>En la Wi-Fi de Mercadona pero lejos de las sedes, te marca «En tienda».</li>
+              <li>En cualquier otra red, «En remoto».</li>
+              <li>Si la red falla, lo vuelve a intentar solo.</li>
+              <li>«Actualizar estado» en el menú lo fuerza cuando quieras.</li>
+            </ul>
           </div>
           <div class="event-visual">
             <dl class="rule">
               <div><dt>Wi-Fi</dt><dd>La de Mercadona</dd></div>
-              <div><dt>Ubicación</dt><dd>Lejos de las sedes</dd></div>
-              <div class="rule-result"><dt>Slack</dt><dd><img src="img/mercadona.png" alt="" width="22" height="22">En tienda</dd></div>
+              <div><dt>Ubicación</dt><dd>A menos de 500&nbsp;m de Plaza</dd></div>
+              <div class="rule-result"><dt>Slack</dt><dd><span class="glyph" aria-hidden="true">🇺🇸</span>En Plaza América</dd></div>
             </dl>
           </div>
         </article>
 
-        <article class="event is-night" data-clock="21:30" data-icon="img/mercadona.png">
+        <article class="event is-night" data-clock="21:30" data-icon="🇺🇸">
           <p class="event-time"><time datetime="21:30">21:30</time></p>
           <div class="event-body">
             <p class="event-status"><span class="glyph" aria-hidden="true">🌙</span>Fuera de tu horario</p>
