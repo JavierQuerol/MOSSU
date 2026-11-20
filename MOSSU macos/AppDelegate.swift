@@ -76,7 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
                 let token = queryItems.first(where: { $0.name == "token" })?.value
                 
-                LogManager.shared.log("Received token from url: \(token ?? "nil")")
+                LogManager.shared.log(token == nil ? "OAuth URL received without a token" : "Received token from OAuth URL")
                 
                 if let token = token {
                     slackManager.token = token
