@@ -510,6 +510,9 @@ code {
 }
 
 .chips li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 7px 14px;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -517,6 +520,23 @@ code {
   font-size: 15px;
   font-weight: 500;
   white-space: nowrap;
+}
+
+.chips img,
+.chip-emoji {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.chips img {
+  object-fit: contain;
+}
+
+.chip-emoji {
+  font-size: 17px;
+  line-height: 20px;
+  text-align: center;
 }
 
 /* Secciones */
