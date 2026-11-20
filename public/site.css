@@ -7,7 +7,6 @@
 :root {
   --honey: #FFCC00;
   --honey-soft: #FFF3BF;
-  --red: #C22D33;
   --navy: #16233F;
 
   --paper: #FFFFFF;
@@ -230,6 +229,45 @@ code {
   flex: none;
 }
 
+/* El botón de GitHub lleva su propia píldora, con los colores de los botones de github.com. */
+.github-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 26px 0 20px;
+  border: 1px solid rgba(31, 35, 40, 0.2);
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: #1F2328;
+  font-family: var(--system);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.github-pill:hover {
+  transform: translateY(-2px);
+}
+
+.github-pill:active {
+  transform: translateY(0);
+}
+
+.github-pill svg {
+  flex: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .github-pill {
+    border-color: #3D444D;
+    background: #212830;
+    color: #F0F6FC;
+  }
+}
+
 .link {
   display: inline-flex;
   align-items: center;
@@ -387,7 +425,18 @@ code {
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.02em;
-  text-wrap: balance;
+}
+
+/* El título se parte a mano en cuatro líneas. El icono de Slack va pegado a su palabra. */
+.slack-word {
+  white-space: nowrap;
+}
+
+.slack-mark {
+  width: 0.72em;
+  height: 0.72em;
+  margin-right: 0.16em;
+  vertical-align: -0.03em;
 }
 
 .hero-lead {
@@ -465,11 +514,11 @@ code {
   opacity: 0.6;
 }
 
-/* Sedes y estados: una banda azul con las rayas de la abeja */
+/* Sedes y estados: una banda azul */
 
 .roster {
-  padding: 62px 0 46px;
-  background: linear-gradient(var(--red) 0 6px, #FFFFFF 6px 12px, var(--red) 12px 18px, transparent 18px) top / 100% 18px no-repeat, var(--band);
+  padding: 46px 0;
+  background: var(--band);
   color: #FFFFFF;
 }
 
@@ -1295,7 +1344,8 @@ code {
     min-width: 0;
   }
 
-  .button {
+  .button,
+  .github-pill {
     width: 100%;
     justify-content: center;
   }
